@@ -10,4 +10,8 @@
     <ProjectReference Include="..\FCG.Domain\FCG.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
 </Project>
