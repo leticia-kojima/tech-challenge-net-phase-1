@@ -1,8 +1,11 @@
 using FCG.API.Endpoints;
 using FCG.Application.Commands.Users;
+using FCG.Infrastructure._Common.Mapping;
 using FCG.Infrastructure.Contexts.FCGCommands;
+using FCG.Infrastructure.Contexts.FCGQueries;
 using FCG.Infrastructure.Repositories.Commands;
 using Microsoft.EntityFrameworkCore;
+using MongoFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,17 +23,26 @@ services.AddDbContext<FCGCommandsDbContext>(options => options
     )
 );
 
+services.AddSingleton<IMongoDbConnection>(sp =>
+    MongoDbConnection.FromConnectionString(configuration.GetConnectionString("FCGQueries"))
+);
+
+services.AddScoped<FCGQueriesDbContext>();
+
 services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateUserCommandHandler>());
 
-builder.Services.Scan(scan => scan
+services.Scan(scan => scan
     .FromAssemblyOf<UserCommandRepository>()
     .AddClasses(classes => classes
-        .Where(c => c.Name.EndsWith("CommandRepository")))
+        .Where(c => c.Name.EndsWith("CommandRepository")
+            || c.Name.EndsWith("QueryRepository")))
         .AsImplementedInterfaces()
         .WithScopedLifetime()
 );
 
 #endregion
+
+QueryMappings.RegisterMappings();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using FCG.Application.Contracts.Users;
+﻿using FCG.Application.Contracts.Users.Commands;
+using FCG.Application.Contracts.Users.Queries;
 using MediatR;
 
 namespace FCG.API.Endpoints;
@@ -9,8 +10,15 @@ public static class UserEndpoints
     {
         var usersGroup = app.MapGroup("/users");
 
+        usersGroup.MapGet("/", GetUsersAsync);
         usersGroup.MapPost("/", CreateUserAsync);
     }
+
+    private static async Task<IEnumerable<UserQueryResponse>> GetUsersAsync(
+        ListUsersQueryRequest request,
+        IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(request, cancellationToken);
 
     private static async Task<CreateUserCommandResponse> CreateUserAsync(
         CreateUserCommandRequest request,

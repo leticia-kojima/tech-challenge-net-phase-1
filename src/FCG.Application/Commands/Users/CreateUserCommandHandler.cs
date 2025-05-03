@@ -1,9 +1,9 @@
-﻿using FCG.Application.Contracts.Users;
+﻿using FCG.Application._Common;
+using FCG.Application.Contracts.Users.Commands;
 using FCG.Domain.Users;
-using MediatR;
 
 namespace FCG.Application.Commands.Users;
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
+public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
     private readonly IUserCommandRepository _userCommandRepository;
 

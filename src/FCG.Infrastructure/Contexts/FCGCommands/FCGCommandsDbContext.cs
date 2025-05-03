@@ -1,7 +1,6 @@
 ﻿using FCG.Domain._Common;
 using FCG.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace FCG.Infrastructure.Contexts.FCGCommands;
 public class FCGCommandsDbContext : DbContext
@@ -27,7 +26,10 @@ public class FCGCommandsDbContext : DbContext
                 entry.Entity.WasUpdated();
 
             if (entry.State == EntityState.Deleted)
+            {
                 entry.Entity.WasDeleted();
+                entry.State = EntityState.Modified;
+            }
         }
 
         return base.SaveChangesAsync(cancellationToken);
