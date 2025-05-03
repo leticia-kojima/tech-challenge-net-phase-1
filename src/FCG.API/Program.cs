@@ -1,7 +1,7 @@
 using FCG.API.Endpoints;
-using FCG.Domain._Common;
-using FCG.Domain.Users;
+using FCG.Application.Commands.Users;
 using FCG.Infrastructure.Contexts.FCGCommands;
+using FCG.Infrastructure.Repositories.Commands;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,11 +20,12 @@ services.AddDbContext<FCGCommandsDbContext>(options => options
     )
 );
 
-services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateUserCommandHandler>());
 
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<IUserCommandRepository>()
-    .AddClasses(classes => classes.InNamespaces("FCG.Infrastructure.Repositories"))
+    .FromAssemblyOf<UserCommandRepository>()
+    .AddClasses(classes => classes
+        .Where(c => c.Name.EndsWith("CommandRepository")))
         .AsImplementedInterfaces()
         .WithScopedLifetime()
 );
