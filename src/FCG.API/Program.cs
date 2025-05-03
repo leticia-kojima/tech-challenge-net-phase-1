@@ -1,4 +1,6 @@
 using FCG.API.Endpoints;
+using FCG.Domain._Common;
+using FCG.Domain.Users;
 using FCG.Infrastructure.Contexts.FCGCommands;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +18,15 @@ services.AddDbContext<FCGCommandsDbContext>(options => options
         configuration.GetConnectionString("FCGCommands"),
         ServerVersion.AutoDetect(configuration.GetConnectionString("FCGCommands"))
     )
+);
+
+services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<IUserCommandRepository>()
+    .AddClasses(classes => classes.InNamespaces("FCG.Infrastructure.Repositories"))
+        .AsImplementedInterfaces()
+        .WithScopedLifetime()
 );
 
 #endregion

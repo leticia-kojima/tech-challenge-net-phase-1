@@ -1,4 +1,5 @@
-﻿using FCG.Domain.Users;
+﻿using FCG.Domain._Common;
+using FCG.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -16,5 +17,19 @@ public class FCGCommandsDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(FCGCommandsDbContext).Assembly);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<EntityBase>())
+        {
+            if (entry.State == EntityState.Modified)
+                entry.Entity.WasUpdated();
+
+            if (entry.State == EntityState.Deleted)
+                entry.Entity.WasDeleted();
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

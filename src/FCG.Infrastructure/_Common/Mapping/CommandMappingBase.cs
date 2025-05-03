@@ -27,12 +27,14 @@ public abstract class CommandMappingBase<TEntity> : IEntityTypeConfiguration<TEn
         
         builder
             .Property(e => e.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
+            .HasColumnType("datetime(6)")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+
         builder
             .Property(e => e.UpdatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
+            .HasColumnType("datetime(6)")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+
         builder
             .Property(e => e.DeletedAt)
             .HasDefaultValue(null);
