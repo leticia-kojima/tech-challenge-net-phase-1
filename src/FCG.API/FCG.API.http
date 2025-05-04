@@ -1,13 +1,14 @@
 @FCG.API_HostAddress = http://localhost:5045
 
-GET {{FCG.API_HostAddress}}/users?search=test
+GET {{FCG.API_HostAddress}}/users?search=jo
 Accept: application/json
 
+###
 POST {{FCG.API_HostAddress}}/users/
 Accept: application/json
 Content-Type: application/json
 {
-  "fistName": "John",
+  "FirstName": "John",
   "lastName": "Doe"
 }
 ###

@@ -1,6 +1,7 @@
 ﻿using FCG.Domain._Common;
 using FCG.Domain.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace FCG.Infrastructure.Contexts.FCGCommands;
 public class FCGCommandsDbContext : DbContext
@@ -18,9 +19,23 @@ public class FCGCommandsDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(FCGCommandsDbContext).Assembly);
     }
 
+    public override int SaveChanges()
+    {
+        HandleEntityStateTransitions(ChangeTracker);
+
+        return base.SaveChanges();
+    }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<EntityBase>())
+        HandleEntityStateTransitions(ChangeTracker);
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private static void HandleEntityStateTransitions(ChangeTracker changeTracker)
+    {
+        foreach (var entry in changeTracker.Entries<EntityBase>())
         {
             if (entry.State == EntityState.Modified)
                 entry.Entity.WasUpdated();
@@ -31,7 +46,5 @@ public class FCGCommandsDbContext : DbContext
                 entry.State = EntityState.Modified;
             }
         }
-
-        return base.SaveChangesAsync(cancellationToken);
     }
 }

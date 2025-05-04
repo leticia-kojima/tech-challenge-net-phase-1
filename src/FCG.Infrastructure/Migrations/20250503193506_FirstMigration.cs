@@ -19,13 +19,13 @@ namespace FCG.Infrastructure.Migrations
                 columns: table => new
                 {
                     Key = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    FistName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    FirstName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)"),
-                    DeletedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    DeletedAt = table.Column<DateTime?>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

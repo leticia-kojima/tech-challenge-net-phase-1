@@ -13,7 +13,7 @@ public abstract class EntityBase
     
     public DateTime UpdatedAt { get; private set; }
     
-    public DateTime DeletedAt { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
 
     public bool IsDeleted => DeletedAt != default;
 

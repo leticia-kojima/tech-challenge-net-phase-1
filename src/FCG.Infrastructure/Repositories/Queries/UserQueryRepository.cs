@@ -8,10 +8,24 @@ public class UserQueryRepository : FCGQueryRepositoryBase<User>, IUserQueryRepos
 {
     public UserQueryRepository(FCGQueriesDbContext context) : base(context)
     {
+
     }
 
-    public async Task<IEnumerable<User>> SearchAsync(string search, CancellationToken cancellationToken)
+    public async Task<IEnumerable<User>> SearchAsync(string? search, CancellationToken cancellationToken)
     {
-        return await _dbSet.SearchText(search).ToArrayAsync(cancellationToken);
+        var query = _dbSet
+            .Where(u => u.DeletedAt == null);
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            var loweredSearch = search.ToLower();
+
+            query = query.Where(u =>
+                u.FirstName.ToLower().Contains(loweredSearch) ||
+                u.LastName.ToLower().Contains(loweredSearch)
+            );
+        }
+
+        return await query.ToArrayAsync(cancellationToken);
     }
 }

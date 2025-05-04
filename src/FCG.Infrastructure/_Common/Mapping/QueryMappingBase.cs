@@ -1,17 +1,25 @@
 ﻿using FCG.Domain._Common;
-using MongoDB.Bson.Serialization;
+using FCG.Domain.Users;
+using MongoFramework.Infrastructure.Mapping;
 
 namespace FCG.Infrastructure._Common.Mapping;
 public abstract class QueryMappingBase<TEntity> where TEntity : EntityBase
 {
-    protected virtual void ConfigureCollection(BsonClassMap<TEntity> builder) { }
+    private readonly string _collectionName;
+    private readonly EntityDefinitionBuilder<User> _builder;
 
-    public QueryMappingBase()
+    protected QueryMappingBase(EntityDefinitionBuilder<User> builder, string collectionName)
     {
-        BsonClassMap.RegisterClassMap<TEntity>(cm =>
-        {
-            cm.AutoMap();
-            ConfigureCollection(cm);
-        });
+        _builder = builder;
+        _collectionName = collectionName;
+    }
+
+    protected abstract void ConfigureCollection(EntityDefinitionBuilder<User> builder);
+
+    public void Configure()
+    {
+        _builder.ToCollection(_collectionName);
+
+        ConfigureCollection(_builder);
     }
 }

@@ -5,12 +5,12 @@ namespace FCG.Domain.Users;
 // TODO: Review this entity, this is just a demo!
 public class User : EntityBase
 {
-    public User(string fistName, string lastName) : base()
+    public User(string firstName, string lastName) : base()
     {
-        FistName = fistName;
+        FirstName = firstName;
         LastName = lastName;
     }
 
-    public string FistName { get; private set; }
+    public string FirstName { get; private set; }
     public string LastName { get; private set; }
 }

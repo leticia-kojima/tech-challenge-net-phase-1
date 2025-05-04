@@ -9,10 +9,10 @@ public abstract class UserCommandModelBase
 
     public UserCommandModelBase(User user)
     {
-        FistName = user.FistName;
+        FirstName = user.FirstName;
         LastName = user.LastName;
     }
 
-    public string FistName { get; set; }
+    public string FirstName { get; set; }
     public string LastName { get; set; }
 }

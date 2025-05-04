@@ -1,22 +1,44 @@
 ﻿using FCG.Application._Common;
 using FCG.Application.Contracts.Users.Commands;
+using FCG.Application.Contracts.Users.Events;
+using FCG.Domain._Common;
 using FCG.Domain.Users;
+using MediatR;
 
 namespace FCG.Application.Commands.Users;
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
     private readonly IUserCommandRepository _userCommandRepository;
+    private readonly IMediator _mediator;
 
-    public CreateUserCommandHandler(IUserCommandRepository userCommandRepository)
+    public CreateUserCommandHandler(
+        IUserCommandRepository userCommandRepository,
+        IMediator mediator
+    )
     {
         _userCommandRepository = userCommandRepository;
+        _mediator = mediator;
     }
 
     public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        var user = new User(request.FistName, request.LastName);
+        if (string.IsNullOrWhiteSpace(request.FirstName))
+            throw new FCGValidationException(
+                nameof(request.FirstName),
+                $"{nameof(request.FirstName)} is required."
+            );
+
+        if (string.IsNullOrWhiteSpace(request.LastName))
+            throw new FCGValidationException(
+                nameof(request.LastName),
+                $"{nameof(request.LastName)} is required."
+            );
+
+        var user = new User(request.FirstName, request.LastName);
 
         await _userCommandRepository.AddAsync(user, cancellationToken);
+
+        await _mediator.Publish(new UserCreatedEvent(user), cancellationToken);
 
         return new CreateUserCommandResponse(user);
     }

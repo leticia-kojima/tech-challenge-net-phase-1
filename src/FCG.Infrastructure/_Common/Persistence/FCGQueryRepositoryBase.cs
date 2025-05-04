@@ -29,12 +29,16 @@ public class FCGQueryRepositoryBase<TEntity> : IRepository<TEntity> where TEntit
 
     public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _dbSet.ToArrayAsync(cancellationToken);
+        return await _dbSet
+            .Where(u => u.DeletedAt == null)
+            .ToArrayAsync(cancellationToken);
     }
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbSet.FirstOrDefaultAsync(e => e.Key == id, cancellationToken);
+        return await _dbSet
+            .Where(u => u.DeletedAt == null)
+            .FirstOrDefaultAsync(e => e.Key == id, cancellationToken);
     }
 
     public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)

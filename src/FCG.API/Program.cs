@@ -1,6 +1,5 @@
 using FCG.API.Endpoints;
 using FCG.Application.Commands.Users;
-using FCG.Infrastructure._Common.Mapping;
 using FCG.Infrastructure.Contexts.FCGCommands;
 using FCG.Infrastructure.Contexts.FCGQueries;
 using FCG.Infrastructure.Repositories.Commands;
@@ -23,7 +22,7 @@ services.AddDbContext<FCGCommandsDbContext>(options => options
     )
 );
 
-services.AddSingleton<IMongoDbConnection>(sp =>
+services.AddScoped<IMongoDbConnection>(sp =>
     MongoDbConnection.FromConnectionString(configuration.GetConnectionString("FCGQueries"))
 );
 
@@ -41,8 +40,6 @@ services.Scan(scan => scan
 );
 
 #endregion
-
-QueryMappings.RegisterMappings();
 
 var app = builder.Build();
 

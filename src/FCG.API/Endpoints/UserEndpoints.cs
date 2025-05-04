@@ -1,6 +1,7 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.API.Endpoints;
 
@@ -15,14 +16,14 @@ public static class UserEndpoints
     }
 
     private static async Task<IEnumerable<UserQueryResponse>> GetUsersAsync(
-        ListUsersQueryRequest request,
-        IMediator mediator,
+        [AsParameters] ListUsersQueryRequest request,
+        [FromServices] IMediator mediator,
         CancellationToken cancellationToken
     ) => await mediator.Send(request, cancellationToken);
 
     private static async Task<CreateUserCommandResponse> CreateUserAsync(
-        CreateUserCommandRequest request,
-        IMediator mediator,
+        [FromBody] CreateUserCommandRequest request,
+        [FromServices] IMediator mediator,
         CancellationToken cancellationToken
     ) => await mediator.Send(request, cancellationToken);
 }
