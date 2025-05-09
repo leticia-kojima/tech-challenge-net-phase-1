@@ -1,11 +1,7 @@
-﻿using AutoBogus;
-using FCG.Application.Commands.Users;
+﻿using FCG.Application.Commands.Users;
 using FCG.Application.Contracts.Users.Commands;
 using FCG.Domain._Common;
 using FCG.Domain.Users;
-using FCG.UnitTests._Common;
-using MediatR;
-using NSubstitute;
 
 namespace FCG.UnitTests.Users;
 public class CreateUserCommandHandlerTest : TestBase

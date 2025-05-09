@@ -22,6 +22,10 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Using Include="AutoBogus" />
+    <Using Include="NSubstitute" />
+    <Using Include="MediatR" />
+    <Using Include="FCG.UnitTests._Common" />
   </ItemGroup>
 
 </Project>

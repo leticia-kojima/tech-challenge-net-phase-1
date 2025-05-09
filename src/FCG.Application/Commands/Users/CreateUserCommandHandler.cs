@@ -1,9 +1,7 @@
-﻿using FCG.Application._Common;
-using FCG.Application.Contracts.Users.Commands;
+﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
 using FCG.Domain._Common;
 using FCG.Domain.Users;
-using MediatR;
 
 namespace FCG.Application.Commands.Users;
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>

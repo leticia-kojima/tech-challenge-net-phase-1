@@ -1,6 +1,5 @@
 ﻿using FCG.Domain._Common;
 using FCG.Domain.Users;
-using MongoFramework.Infrastructure.Mapping;
 
 namespace FCG.Infrastructure._Common.Mapping;
 public abstract class QueryMappingBase<TEntity> where TEntity : EntityBase

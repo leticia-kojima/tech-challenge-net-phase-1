@@ -8,7 +8,6 @@ POST {{FCG.API_HostAddress}}/users/
 Accept: application/json
 Content-Type: application/json
 {
-  "FirstName": "John",
+  "firstName": "John",
   "lastName": "Doe"
 }
-###

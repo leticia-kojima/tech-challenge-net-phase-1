@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FCG.Application\FCG.Application.csproj" />
     <ProjectReference Include="..\FCG.Domain\FCG.Domain.csproj" />
   </ItemGroup>
 
@@ -20,6 +21,17 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
     <PackageReference Include="MongoFramework" Version="0.29.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Scrutor" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="FCG.Infrastructure._Common.Persistence" />
+    <Using Include="FCG.Infrastructure.Contexts.FCGCommands" />
+    <Using Include="FCG.Infrastructure.Contexts.FCGQueries" />
+    <Using Include="MongoFramework.Infrastructure.Mapping" />
+    <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
+    <Using Include="FCG.Infrastructure._Common.Mapping" />
   </ItemGroup>
 
 </Project>

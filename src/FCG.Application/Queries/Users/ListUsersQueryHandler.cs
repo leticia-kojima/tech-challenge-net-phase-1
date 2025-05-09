@@ -1,9 +1,8 @@
-﻿using FCG.Application._Common;
-using FCG.Application.Contracts.Users.Queries;
+﻿using FCG.Application.Contracts.Users.Queries;
 using FCG.Domain.Users;
 
 namespace FCG.Application.Queries.Users;
-public class ListUsersQueryHandler : IQueryHandler<ListUsersQueryRequest, IEnumerable<UserQueryResponse>>
+public class ListUsersQueryHandler : IQueryHandler<ListUsersQueryRequest, IReadOnlyCollection<UserQueryResponse>>
 {
     private readonly IUserQueryRepository _userQueryRepository;
 
@@ -12,7 +11,7 @@ public class ListUsersQueryHandler : IQueryHandler<ListUsersQueryRequest, IEnume
         _userQueryRepository = userQueryRepository;
     }
 
-    public async Task<IEnumerable<UserQueryResponse>> Handle(ListUsersQueryRequest request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<UserQueryResponse>> Handle(ListUsersQueryRequest request, CancellationToken cancellationToken)
     {
         var users = await _userQueryRepository.SearchAsync(request.Search, cancellationToken);
 

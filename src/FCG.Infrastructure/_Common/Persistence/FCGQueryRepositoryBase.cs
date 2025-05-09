@@ -1,5 +1,4 @@
 ﻿using FCG.Domain._Common;
-using FCG.Infrastructure.Contexts.FCGQueries;
 using Microsoft.EntityFrameworkCore;
 using MongoFramework;
 
@@ -15,9 +14,18 @@ public class FCGQueryRepositoryBase<TEntity> : IRepository<TEntity> where TEntit
         _dbSet = _context.Set<TEntity>();
     }
 
+    protected IQueryable<TEntity> Query => _dbSet
+        .Where(e => e.DeletedAt == null);
+
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
         _dbSet.Add(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+    {
+        _dbSet.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
@@ -29,15 +37,13 @@ public class FCGQueryRepositoryBase<TEntity> : IRepository<TEntity> where TEntit
 
     public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _dbSet
-            .Where(u => u.DeletedAt == null)
+        return await Query
             .ToArrayAsync(cancellationToken);
     }
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbSet
-            .Where(u => u.DeletedAt == null)
+        return await Query
             .FirstOrDefaultAsync(e => e.Key == id, cancellationToken);
     }
 

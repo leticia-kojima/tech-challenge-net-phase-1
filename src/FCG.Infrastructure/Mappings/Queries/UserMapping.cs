@@ -1,7 +1,4 @@
 ﻿using FCG.Domain.Users;
-using FCG.Infrastructure._Common.Mapping;
-using FCG.Infrastructure.Contexts.FCGQueries;
-using MongoFramework.Infrastructure.Mapping;
 
 namespace FCG.Infrastructure.Mappings.Queries;
 public class UserMapping : QueryMappingBase<User>

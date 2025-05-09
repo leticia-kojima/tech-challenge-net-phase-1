@@ -1,10 +1,5 @@
 using FCG.API.Endpoints;
-using FCG.Application.Commands.Users;
-using FCG.Infrastructure.Contexts.FCGCommands;
-using FCG.Infrastructure.Contexts.FCGQueries;
-using FCG.Infrastructure.Repositories.Commands;
-using Microsoft.EntityFrameworkCore;
-using MongoFramework;
+using FCG.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,31 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-services.AddOpenApi();
-
-services.AddDbContext<FCGCommandsDbContext>(options => options
-    .UseMySql(
-        configuration.GetConnectionString("FCGCommands"),
-        ServerVersion.AutoDetect(configuration.GetConnectionString("FCGCommands"))
-    )
-);
-
-services.AddScoped<IMongoDbConnection>(sp =>
-    MongoDbConnection.FromConnectionString(configuration.GetConnectionString("FCGQueries"))
-);
-
-services.AddScoped<FCGQueriesDbContext>();
-
-services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateUserCommandHandler>());
-
-services.Scan(scan => scan
-    .FromAssemblyOf<UserCommandRepository>()
-    .AddClasses(classes => classes
-        .Where(c => c.Name.EndsWith("CommandRepository")
-            || c.Name.EndsWith("QueryRepository")))
-        .AsImplementedInterfaces()
-        .WithScopedLifetime()
-);
+services.AddOpenApi()
+    .AddDatabases(configuration)
+    .AddRepositories()
+    .AddInfrastructureServices();
 
 #endregion
 
