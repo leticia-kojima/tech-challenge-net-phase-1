@@ -20,10 +20,7 @@ public class UserQueryRepository : FCGQueryRepositoryBase<User>, IUserQueryRepos
         {
             var loweredSearch = search.ToLower();
 
-            query = query.Where(u =>
-                u.FirstName.ToLower().Contains(loweredSearch) ||
-                u.LastName.ToLower().Contains(loweredSearch)
-            );
+            query = query.Where(u => u.FullName.ToLower().Contains(loweredSearch));
         }
 
         return await query.ToArrayAsync(cancellationToken);

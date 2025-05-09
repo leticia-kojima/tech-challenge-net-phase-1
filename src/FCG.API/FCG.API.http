@@ -4,11 +4,100 @@ GET {{FCG.API_HostAddress}}/users?search=jo
 Accept: application/json
 
 ###
+GET {{FCG.API_HostAddress}}/users/{{$guid}}
+Accept: application/json
+
+###
 POST {{FCG.API_HostAddress}}/users/
 Accept: application/json
 Content-Type: application/json
 {
-  "FirstName": "John",
+  "firstName": "John",
   "lastName": "Doe"
 }
+
 ###
+PUT {{FCG.API_HostAddress}}/users/{{$guid}}
+Accept: application/json
+Content-Type: application/json
+{
+  "firstName": "John",
+  "lastName": "Doe1"
+}
+
+###
+DELETE {{FCG.API_HostAddress}}/users/{{$guid}}
+Accept: application/json
+
+###
+GET {{FCG.API_HostAddress}}/catalogs?name=cloud
+Accept: application/json
+
+###
+GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}
+Accept: application/json
+
+###
+POST {{FCG.API_HostAddress}}/catalogs/
+Accept: application/json
+Content-Type: application/json
+{
+  "name": "Cloud",
+  "description": "Azure Functions..."
+}
+
+###
+PUT {{FCG.API_HostAddress}}/catalogs/{{$guid}}
+Accept: application/json
+Content-Type: application/json
+{
+  "name": "Cloud",
+  "description": "Azure Functions Updated..."
+}
+
+###
+DELETE {{FCG.API_HostAddress}}/catalogs/{{$guid}}
+Accept: application/json
+
+###
+GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games?title=azure
+Accept: application/json
+
+###
+GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}
+Accept: application/json
+
+###
+POST {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/
+Accept: application/json
+Content-Type: application/json
+{
+  "title": "Triggers in Azure",
+  "description": "Triggers in practice..."
+}
+
+###
+POST {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/evaluate
+Accept: application/json
+Content-Type: application/json
+{
+  "stars": 5,
+  "comment": "I've learned a lot with this game :)"
+}
+
+###
+GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/download
+Accept: application/json
+
+###
+PUT {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}
+Accept: application/json
+Content-Type: application/json
+{
+  "title": "Triggers in Azure",
+  "description": "Triggers in practice updated..."
+}
+
+###
+DELETE {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}
+Accept: application/json

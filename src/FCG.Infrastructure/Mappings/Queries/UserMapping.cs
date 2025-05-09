@@ -11,8 +11,9 @@ public class UserMapping : QueryMappingBase<User>
 
     protected override void ConfigureCollection(EntityDefinitionBuilder<User> builder)
     {
-        builder
-            .HasIndex(u => u.FirstName)
-            .HasIndex(u => u.LastName);
+        // TODO: Finish the mapping for User collection
+        //builder
+        //    .HasIndex(u => u.FirstName)
+        //    .HasIndex(u => u.LastName);
     }
 }

@@ -34,7 +34,8 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
                 $"{nameof(request.LastName)} is required."
             );
 
-        var user = new User(request.FirstName, request.LastName);
+        // TODO: Set the properties of the user entity based on the request
+        var user = new User();
 
         await _userCommandRepository.AddAsync(user, cancellationToken);
 

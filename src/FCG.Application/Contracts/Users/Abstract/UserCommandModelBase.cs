@@ -9,8 +9,9 @@ public abstract class UserCommandModelBase
 
     public UserCommandModelBase(User user)
     {
-        FirstName = user.FirstName;
-        LastName = user.LastName;
+        // TODO: Update it
+        //FirstName = user.FirstName;
+        //LastName = user.LastName;
     }
 
     public string FirstName { get; set; }

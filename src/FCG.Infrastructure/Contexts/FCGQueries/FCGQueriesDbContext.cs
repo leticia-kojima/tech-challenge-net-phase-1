@@ -1,4 +1,5 @@
 ﻿using FCG.Domain._Common;
+using FCG.Domain.Catalogs;
 using FCG.Domain.Users;
 using FCG.Infrastructure.Mappings.Queries;
 using MongoFramework;
@@ -9,6 +10,7 @@ public class FCGQueriesDbContext : MongoDbContext
     public FCGQueriesDbContext(IMongoDbConnection connection) : base(connection) { }
 
     public MongoDbSet<User> Users { get; set; }
+    public MongoDbSet<Catalog> Catalogs { get; set; }
 
     protected override void OnConfigureMapping(MappingBuilder mappingBuilder)
     {

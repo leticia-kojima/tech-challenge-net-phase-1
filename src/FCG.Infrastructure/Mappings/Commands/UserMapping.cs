@@ -10,14 +10,15 @@ public class UserMapping : CommandMappingBase<User>
 
     protected override void ConfigureEntity(EntityTypeBuilder<User> builder)
     {
-        builder
-            .Property(e => e.FirstName)
-            .IsRequired()
-            .HasMaxLength(50);
+        // TODO: Finish the mapping for User entity
+        //builder
+        //    .Property(e => e.FirstName)
+        //    .IsRequired()
+        //    .HasMaxLength(50);
 
-        builder
-            .Property(e => e.LastName)
-            .IsRequired()
-            .HasMaxLength(50);
+        //builder
+        //    .Property(e => e.LastName)
+        //    .IsRequired()
+        //    .HasMaxLength(50);
     }
 }

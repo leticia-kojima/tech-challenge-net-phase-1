@@ -7,5 +7,6 @@ public class UserCommandRepository : FCGCommandRepositoryBase<User>, IUserComman
 {
     public UserCommandRepository(FCGCommandsDbContext context) : base(context)
     {
+
     }
 }
