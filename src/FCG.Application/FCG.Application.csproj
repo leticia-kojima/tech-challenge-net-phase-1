@@ -14,4 +14,9 @@
     <ProjectReference Include="..\FCG.Domain\FCG.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="MediatR" />
+    <Using Include="FCG.Application._Common.Handlers" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,4 @@
 ﻿using FCG.Domain.Users;
-using FCG.Infrastructure._Common.Mapping;
-using FCG.Infrastructure.Contexts.FCGCommands;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FCG.Infrastructure.Mappings.Commands;
 public class UserMapping : CommandMappingBase<User>

@@ -1,7 +1,5 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Queries;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FCG.API.Endpoints;
 

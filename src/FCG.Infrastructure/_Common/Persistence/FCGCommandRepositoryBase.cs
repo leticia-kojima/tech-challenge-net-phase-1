@@ -1,5 +1,4 @@
 ﻿using FCG.Domain._Common;
-using FCG.Infrastructure.Contexts.FCGCommands;
 using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure._Common.Persistence;
@@ -17,6 +16,12 @@ public abstract class FCGCommandRepositoryBase<TEntity> : IRepository<TEntity> w
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
         await _dbSet.AddAsync(entity, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+    {
+        _dbSet.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
     }
 

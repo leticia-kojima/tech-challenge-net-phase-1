@@ -1,6 +1,4 @@
-﻿using AutoBogus;
-
-namespace FCG.UnitTests;
+﻿namespace FCG.UnitTests;
 public class FCGFixture : IDisposable
 {
     private readonly CancellationTokenSource _cancellationTokenSource;

@@ -3,11 +3,11 @@
 namespace FCG.Application.Contracts.Users.Abstract;
 public abstract class UserCommandModelBase
 {
-    public UserCommandModelBase()
+    protected UserCommandModelBase()
     {        
     }
 
-    public UserCommandModelBase(User user)
+    protected UserCommandModelBase(User user)
     {
         // TODO: Update it
         //FirstName = user.FirstName;

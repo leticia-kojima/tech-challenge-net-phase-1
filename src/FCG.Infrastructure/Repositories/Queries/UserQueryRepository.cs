@@ -1,7 +1,6 @@
 ﻿using FCG.Domain.Users;
-using FCG.Infrastructure._Common.Persistence;
-using FCG.Infrastructure.Contexts.FCGQueries;
 using MongoFramework.Linq;
+using System.Text.RegularExpressions;
 
 namespace FCG.Infrastructure.Repositories.Queries;
 public class UserQueryRepository : FCGQueryRepositoryBase<User>, IUserQueryRepository
@@ -13,14 +12,13 @@ public class UserQueryRepository : FCGQueryRepositoryBase<User>, IUserQueryRepos
 
     public async Task<IEnumerable<User>> SearchAsync(string? search, CancellationToken cancellationToken)
     {
-        var query = _dbSet
-            .Where(u => u.DeletedAt == null);
+        var query = Query;
 
         if (!string.IsNullOrEmpty(search))
         {
-            var loweredSearch = search.ToLower();
+            var searchRegex = new Regex(Regex.Escape(search), RegexOptions.IgnoreCase);
 
-            query = query.Where(u => u.FullName.ToLower().Contains(loweredSearch));
+            query = query.Where(u => searchRegex.IsMatch(u.FullName));
         }
 
         return await query.ToArrayAsync(cancellationToken);

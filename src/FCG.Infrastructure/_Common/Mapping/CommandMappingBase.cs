@@ -1,6 +1,5 @@
 ﻿using FCG.Domain._Common;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FCG.Infrastructure._Common.Mapping;
 public abstract class CommandMappingBase<TEntity> : IEntityTypeConfiguration<TEntity>
@@ -38,6 +37,9 @@ public abstract class CommandMappingBase<TEntity> : IEntityTypeConfiguration<TEn
         builder
             .Property(e => e.DeletedAt)
             .HasDefaultValue(null);
+
+        builder
+            .HasQueryFilter(e => e.DeletedAt == null);
 
         ConfigureEntity(builder);
     }

@@ -1,9 +1,8 @@
 ﻿using FCG.Application.Contracts.Users.Events;
 using FCG.Domain.Users;
-using MediatR;
 
 namespace FCG.Application.Events.Users;
-public class UserCreatedEventHandler : INotificationHandler<UserCreatedEvent>
+public class UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
 {
     private readonly IUserQueryRepository _userQueryRepository;
 
