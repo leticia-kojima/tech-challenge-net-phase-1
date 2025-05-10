@@ -35,7 +35,7 @@ public class FCGQueryRepositoryBase<TEntity> : IRepository<TEntity> where TEntit
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<TEntity>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await Query
             .ToArrayAsync(cancellationToken);

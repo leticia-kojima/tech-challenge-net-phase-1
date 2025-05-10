@@ -3,7 +3,7 @@ public interface IRepository<TEntity> where TEntity : EntityBase
 {
     Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyCollection<TEntity>> GetAllAsync(CancellationToken cancellationToken);
 
     Task AddAsync(TEntity entity, CancellationToken cancellationToken);
 

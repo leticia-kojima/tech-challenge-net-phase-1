@@ -1,13 +1,26 @@
-﻿using FCG.Domain._Common;
-using FCG.Domain.Catalogs;
+﻿using FCG.Domain.Catalogs;
 
 namespace FCG.Domain.Games;
 public class Game : EntityBase
 {
+    protected Game() : base() { }
+
+    public Game(
+        string title,
+        string description,
+        Guid catalogKey
+    ) : base()
+    {
+        Title = title;
+        Description = description;
+        CatalogKey = catalogKey;
+    }
+
     public string Title { get; private set; }
     public string Description { get; private set; }
     public Guid CatalogKey { get; private set; }
 
     public virtual Catalog Catalog { get; private set; }
-    public virtual IEnumerable<GameEvaluation> Evaluations { get; private set; }
+    public virtual IReadOnlyCollection<GameEvaluation> Evaluations { get; private set; }
+    public virtual IReadOnlyCollection<GameDownload> Downloads { get; private set; }
 }

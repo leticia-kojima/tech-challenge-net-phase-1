@@ -33,7 +33,12 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
             );
 
         // TODO: Set the properties of the user entity based on the request
-        var user = new User();
+        var user = new User(
+            $"{request.FirstName} {request.LastName}",
+            $"{Guid.NewGuid()}@email.test.com",
+            ERole.User,
+            Guid.NewGuid().ToString()
+        );
 
         await _userCommandRepository.AddAsync(user, cancellationToken);
 

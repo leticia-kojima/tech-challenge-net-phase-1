@@ -1,23 +1,14 @@
 ﻿using FCG.Domain._Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace FCG.Infrastructure._Common.Mapping;
-public abstract class CommandMappingBase<TEntity> : IEntityTypeConfiguration<TEntity>
+namespace FCG.Infrastructure._Common.Mapping.Commands;
+public abstract class EntityMappingBase<TEntity> : IEntityTypeConfiguration<TEntity>
     where TEntity : EntityBase
 {
-    private readonly string _tableName;
-
-    protected CommandMappingBase(string tableName)
-    {
-        _tableName = tableName;
-    }
-
     protected abstract void ConfigureEntity(EntityTypeBuilder<TEntity> builder);
 
     public void Configure(EntityTypeBuilder<TEntity> builder)
     {
-        builder.ToTable(_tableName);
-
         builder.HasKey(e => e.Key);
         
         builder

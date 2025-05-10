@@ -10,7 +10,7 @@ public class UserQueryRepository : FCGQueryRepositoryBase<User>, IUserQueryRepos
 
     }
 
-    public async Task<IEnumerable<User>> SearchAsync(string? search, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<User>> SearchAsync(string? search, CancellationToken cancellationToken)
     {
         var query = Query;
 

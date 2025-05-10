@@ -1,11 +1,25 @@
-﻿using FCG.Domain._Common;
-using FCG.Domain.Users;
+﻿using FCG.Domain.Users;
 
 namespace FCG.Domain.Games;
 public class GameEvaluation : EntityBase
 {
-    public int Stars { get; private set; }
-    public int Comment { get; private set; }
+    protected GameEvaluation() : base() { }
+
+    public GameEvaluation(
+        EFiveStars stars,
+        string? comment,
+        Guid userKey,
+        Guid gameKey
+    )
+    {
+        Stars = stars;
+        Comment = comment;
+        UserKey = userKey;
+        GameKey = gameKey;
+    }
+
+    public EFiveStars Stars { get; private set; }
+    public string? Comment { get; private set; }
     public Guid UserKey { get; private set; }
     public Guid GameKey { get; private set; }
 

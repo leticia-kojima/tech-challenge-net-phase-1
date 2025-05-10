@@ -2,8 +2,23 @@
 
 public class User : EntityBase
 {
+    protected User() : base() { }
+
+    public User(
+        string fullName,
+        string email,
+        ERole role,
+        string passwordHash
+    ) : base()
+    {
+        FullName = fullName;
+        Email = email;
+        Role = role;
+        PasswordHash = passwordHash;
+    }
+
     public string FullName { get; private set; }
     public string Email { get; private set; }
     public ERole Role { get; private set; }
-    public string Password { get; private set; }
+    public string PasswordHash { get; private set; }
 }

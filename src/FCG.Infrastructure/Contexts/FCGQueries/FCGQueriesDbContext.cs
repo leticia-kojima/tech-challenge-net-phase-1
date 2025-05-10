@@ -1,7 +1,9 @@
 ﻿using FCG.Domain._Common;
 using FCG.Domain.Catalogs;
+using FCG.Domain.Games;
 using FCG.Domain.Users;
-using FCG.Infrastructure.Mappings.Queries;
+using FCG.Infrastructure.Mappings.Queries.Collections;
+using FCG.Infrastructure.Mappings.Queries.Objects;
 using MongoFramework;
 
 namespace FCG.Infrastructure.Contexts.FCGQueries;
@@ -18,7 +20,12 @@ public class FCGQueriesDbContext : MongoDbContext
             .Entity<EntityBase>()
             .HasKey(e => e.Key);
 
-        new UserMapping(mappingBuilder.Entity<User>()).Configure();
+        new UserCollectionMapping(mappingBuilder.Entity<User>()).Configure();
+        new CatalogCollectionMapping(mappingBuilder.Entity<Catalog>()).Configure();
+        
+        new GameObjectMapping(mappingBuilder.Entity<Game>()).Configure();
+        new GameDownloadObjectMapping(mappingBuilder.Entity<GameDownload>()).Configure();
+        new GameEvaluationObjectMapping(mappingBuilder.Entity<GameEvaluation>()).Configure();
 
         base.OnConfigureMapping(mappingBuilder);
     }

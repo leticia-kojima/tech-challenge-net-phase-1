@@ -13,7 +13,7 @@ public static class UserEndpoints
         usersGroup.MapPost("/", CreateUserAsync);
     }
 
-    private static async Task<IEnumerable<UserQueryResponse>> GetUsersAsync(
+    private static async Task<IReadOnlyCollection<UserQueryResponse>> GetUsersAsync(
         [AsParameters] ListUsersQueryRequest request,
         [FromServices] IMediator mediator,
         CancellationToken cancellationToken

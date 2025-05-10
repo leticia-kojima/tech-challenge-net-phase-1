@@ -32,7 +32,7 @@ public abstract class FCGCommandRepositoryBase<TEntity> : IRepository<TEntity> w
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<TEntity>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _dbSet.ToArrayAsync(cancellationToken);
     }
