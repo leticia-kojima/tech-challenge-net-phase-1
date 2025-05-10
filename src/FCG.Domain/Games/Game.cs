@@ -6,10 +6,11 @@ public class Game : EntityBase
     protected Game() : base() { }
 
     public Game(
+        Guid key,
         string title,
         string description,
         Guid catalogKey
-    ) : base()
+    ) : base(key)
     {
         Title = title;
         Description = description;

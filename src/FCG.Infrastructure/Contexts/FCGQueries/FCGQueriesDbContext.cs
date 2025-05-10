@@ -4,7 +4,9 @@ using FCG.Domain.Games;
 using FCG.Domain.Users;
 using FCG.Infrastructure.Mappings.Queries.Collections;
 using FCG.Infrastructure.Mappings.Queries.Objects;
+using FCG.Infrastructure.Seeders;
 using MongoFramework;
+using MongoFramework.Linq;
 
 namespace FCG.Infrastructure.Contexts.FCGQueries;
 public class FCGQueriesDbContext : MongoDbContext
@@ -28,5 +30,14 @@ public class FCGQueriesDbContext : MongoDbContext
         new GameEvaluationObjectMapping(mappingBuilder.Entity<GameEvaluation>()).Configure();
 
         base.OnConfigureMapping(mappingBuilder);
+    }
+
+    public async Task SeedAllDataAsync(CancellationToken cancellationToken)
+    {
+        if (!await Users.AnyAsync()) Users.AddRange(new UserSeeder().GetData());
+        
+        if (!await Catalogs.AnyAsync()) Catalogs.AddRange(new CatalogSeeder().GetData());
+
+        await SaveChangesAsync(cancellationToken);
     }
 }

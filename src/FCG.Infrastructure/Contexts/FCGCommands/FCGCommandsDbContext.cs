@@ -2,6 +2,7 @@
 using FCG.Domain.Catalogs;
 using FCG.Domain.Games;
 using FCG.Domain.Users;
+using FCG.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -21,6 +22,14 @@ public class FCGCommandsDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(FCGCommandsDbContext).Assembly);
+
+        modelBuilder
+            .Entity<User>()
+            .HasData(new UserSeeder().GetData());
+
+        modelBuilder
+            .Entity<Catalog>()
+            .HasData(new CatalogSeeder().GetData());
     }
 
     public override int SaveChanges()
@@ -41,12 +50,15 @@ public class FCGCommandsDbContext : DbContext
     {
         foreach (var entry in changeTracker.Entries<EntityBase>())
         {
+            if (entry.State == EntityState.Added)
+                entry.CurrentValues[nameof(EntityBase.CreatedAt)] = DateTime.UtcNow;
+
             if (entry.State == EntityState.Modified)
-                entry.Entity.WasUpdated();
+                entry.CurrentValues[nameof(EntityBase.UpdatedAt)] = DateTime.UtcNow;
 
             if (entry.State == EntityState.Deleted)
             {
-                entry.Entity.WasDeleted();
+                entry.CurrentValues[nameof(EntityBase.DeletedAt)] = DateTime.UtcNow;
                 entry.State = EntityState.Modified;
             }
         }

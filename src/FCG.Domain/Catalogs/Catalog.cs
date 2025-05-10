@@ -6,9 +6,10 @@ public class Catalog : EntityBase
     protected Catalog() : base() { }
 
     public Catalog(
+        Guid key,
         string name,
         string description
-    )
+    ) : base(key)
     {
         Name = name;
         Description = description;

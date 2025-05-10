@@ -5,11 +5,12 @@ public class User : EntityBase
     protected User() : base() { }
 
     public User(
+        Guid key,
         string fullName,
         string email,
         ERole role,
         string passwordHash
-    ) : base()
+    ) : base(key)
     {
         FullName = fullName;
         Email = email;
