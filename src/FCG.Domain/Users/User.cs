@@ -1,4 +1,6 @@
-﻿namespace FCG.Domain.Users;
+﻿using FCG.Domain.ValueObjects;
+
+namespace FCG.Domain.Users;
 
 public class User : EntityBase
 {
@@ -7,9 +9,9 @@ public class User : EntityBase
     public User(
         Guid key,
         string fullName,
-        string email,
+        Email email,  
         ERole role,
-        string passwordHash
+        Password passwordHash
     ) : base(key)
     {
         FullName = fullName;
@@ -19,7 +21,7 @@ public class User : EntityBase
     }
 
     public string FullName { get; private set; }
-    public string Email { get; private set; }
+    public Email Email { get; private set; }
     public ERole Role { get; private set; }
-    public string PasswordHash { get; private set; }
+    public Password PasswordHash { get; private set; }
 }

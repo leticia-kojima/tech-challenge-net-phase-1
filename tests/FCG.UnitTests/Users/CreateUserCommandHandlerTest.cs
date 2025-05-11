@@ -20,13 +20,21 @@ public class CreateUserCommandHandlerTest : TestBase
     public async Task ShouldCreateUserAsync()
     {
         var request = AutoFaker.Generate<CreateUserCommandRequest>();
+
+        request.FullName = "Colt Macias";
+        request.Email = "colt@email.com";
+        request.Role = UserRole.User;
+        request.PasswordHash = "hashed_password_example";
+
         var command = new CreateUserCommandHandler(_repository, _mediator);
 
         var result = await command.Handle(request, _cancellationToken);
 
         Assert.NotEqual(Guid.Empty, result.Key);
-        Assert.Equal(request.FirstName, result.FirstName);
-        Assert.Equal(request.LastName, result.LastName);
+        Assert.Equal(request.FullName, result.FullName);
+        Assert.Equal(request.Email, result.Email);
+        Assert.Equal(request.Role, result.Role);
+        Assert.Equal(request.PasswordHash, result.PasswordHash);
         await _repository
             .Received(1)
             .AddAsync(
@@ -36,20 +44,32 @@ public class CreateUserCommandHandlerTest : TestBase
     }
 
     [Theory]
-    [InlineData(null, "Macias", "FirstName is required.")]
-    [InlineData("", "Macias", "FirstName is required.")]
-    [InlineData(" ", "Macias", "FirstName is required.")]
-    [InlineData("Colt", null, "LastName is required.")]
-    [InlineData("Colt", "", "LastName is required.")]
-    [InlineData("Colt", " ", "LastName is required.")]
+    [Theory]
+    [InlineData(null, "colt@email.com", UserRole.User, "hashed_password_example", "FullName is required.")]
+    [InlineData("", "colt@email.com", UserRole.User, "hashed_password_example", "FullName is required.")]
+    [InlineData(" ", "colt@email.com", UserRole.User, "hashed_password_example", "FullName is required.")]
+    [InlineData("Colt Macias", null, UserRole.User, "hashed_password_example", "Email is required.")]
+    [InlineData("Colt Macias", "", UserRole.User, "hashed_password_example", "Email is required.")]
+    [InlineData("Colt Macias", " ", UserRole.User, "hashed_password_example", "Email is required.")]
+    [InlineData("Colt Macias", "colt@email.com", UserRole.User, null, "PasswordHash is required.")]
+    [InlineData("Colt Macias", "colt@email.com", UserRole.User, "", "PasswordHash is required.")]
+    [InlineData("Colt Macias", "colt@email.com", UserRole.User, " ", "PasswordHash is required.")]
     // This is a demo unit test!
     public async Task ShouldThrowValidationExceptionAsync(
-        string? firstName,
-        string? lastName,
+        string? fullName,
+        string? email,
+        UserRole role,
+        string? passwordHash,
         string expectedMessage
     )
     {
-        var request = new CreateUserCommandRequest { FirstName = firstName, LastName = lastName };
+        var request = new CreateUserCommandRequest
+        {
+            FullName = fullName,
+            Email = email,
+            Role = role,
+            PasswordHash = passwordHash
+        };
         var command = new CreateUserCommandHandler(_repository, _mediator);
 
         var validationException = await Assert.ThrowsAsync<FCGValidationException>(

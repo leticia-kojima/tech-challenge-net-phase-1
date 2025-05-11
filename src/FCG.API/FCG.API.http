@@ -12,8 +12,10 @@ POST {{FCG.API_HostAddress}}/users/
 Accept: application/json
 Content-Type: application/json
 {
-  "firstName": "John",
-  "lastName": "Doe"
+  "fullName": "John Doe",
+  "email": "john.doe@email.com",
+  "role": "Admin"
+  "passwordHash": "hashpassword"
 }
 
 ###

@@ -20,25 +20,37 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
 
     public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.FirstName))
+        if (string.IsNullOrWhiteSpace(request.FullName))
             throw new FCGValidationException(
-                nameof(request.FirstName),
-                $"{nameof(request.FirstName)} is required."
+                nameof(request.FullName),
+                $"{nameof(request.FullName)} is required."
             );
 
-        if (string.IsNullOrWhiteSpace(request.LastName))
+        if (string.IsNullOrWhiteSpace(request.Email))
             throw new FCGValidationException(
-                nameof(request.LastName),
-                $"{nameof(request.LastName)} is required."
+                nameof(request.Email),
+                $"{nameof(request.Email)} is required."
+            );
+
+        if (string.IsNullOrWhiteSpace(request.Role))
+            throw new FCGValidationException(
+                nameof(request.Role),
+                $"{nameof(request.Role)} is required."
+            );
+
+        if (string.IsNullOrWhiteSpace(request.PasswordHash))
+            throw new FCGValidationException(
+                nameof(request.PasswordHash),
+                $"{nameof(request.PasswordHash)} is required."
             );
 
         // TODO: Set the properties of the user entity based on the request
         var user = new User(
             Guid.NewGuid(),
-            $"{request.FirstName} {request.LastName}",
-            $"{Guid.NewGuid()}@email.test.com",
-            ERole.User,
-            Guid.NewGuid().ToString()
+            FullName = request.FullName,
+            Email = request.Email,
+            Role = request.Role,
+            PasswordHash = request.PasswordHash
         );
 
         await _userCommandRepository.AddAsync(user, cancellationToken);

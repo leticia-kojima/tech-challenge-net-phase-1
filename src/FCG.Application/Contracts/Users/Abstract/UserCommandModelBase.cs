@@ -9,11 +9,17 @@ public abstract class UserCommandModelBase
 
     protected UserCommandModelBase(User user)
     {
-        // TODO: Update it
-        //FirstName = user.FirstName;
-        //LastName = user.LastName;
+
+        FullName = user.FullName;
+        Email = user.Email;
+        Role = user.Role;
+        PasswordHash = user.PasswordHash;
+
     }
 
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    public string FullName { get; set; }
+    public string Email { get; set; }
+    public ERole Role { get; set; }
+    public string PasswordHash { get; set; }
+
 }

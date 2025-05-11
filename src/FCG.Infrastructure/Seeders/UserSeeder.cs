@@ -1,4 +1,5 @@
 ﻿using FCG.Domain.Users;
+using FCG.Domain.ValueObjects;
 using FCG.Infrastructure._Common.Interfaces;
 
 namespace FCG.Infrastructure.Seeders;
@@ -18,7 +19,7 @@ public class UserSeeder : ISeeder<User>
             "Usuário",
             "user@fcg.test.com.br",
             ERole.User,
-            "7d6721d6-6cb4-4ade-aab2-38a549964b09"
+            passwordHash = Password("Senhaforte");
         )
     };
 }
