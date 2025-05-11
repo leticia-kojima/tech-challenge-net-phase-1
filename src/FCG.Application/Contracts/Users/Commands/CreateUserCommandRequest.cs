@@ -7,4 +7,6 @@ public class CreateUserCommandRequest : UserCommandModelBase, ICommand<CreateUse
     public CreateUserCommandRequest()
     {
     }
+
+    public string Password { get; set; }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using FCG.Domain._Common;
-using BCrypt.Net;
 
 namespace FCG.Domain.ValueObjects;
 

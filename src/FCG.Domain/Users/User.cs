@@ -24,4 +24,12 @@ public class User : EntityBase
     public Email Email { get; private set; }
     public ERole Role { get; private set; }
     public Password PasswordHash { get; private set; }
+
+    public void SetData(string fullName, string email, ERole role)
+    {
+        FullName = fullName;
+        Email = new(email);
+        Role = role;
+        WasUpdated();
+    }
 }

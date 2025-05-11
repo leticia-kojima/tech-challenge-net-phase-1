@@ -12,4 +12,6 @@ public abstract class EntityBase
     public DateTime UpdatedAt { get; private set; }
     
     public DateTime? DeletedAt { get; private set; }
+
+    protected void WasUpdated() => UpdatedAt = DateTime.UtcNow;
 }

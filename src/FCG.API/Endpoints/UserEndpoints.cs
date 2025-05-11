@@ -11,6 +11,7 @@ public static class UserEndpoints
 
         usersGroup.MapGet("/", GetUsersAsync);
         usersGroup.MapPost("/", CreateUserAsync);
+        usersGroup.MapPut("/{key:guid}", UpdateUserAsync);
     }
 
     private static async Task<IReadOnlyCollection<UserQueryResponse>> GetUsersAsync(
@@ -24,4 +25,15 @@ public static class UserEndpoints
         [FromServices] IMediator mediator,
         CancellationToken cancellationToken
     ) => await mediator.Send(request, cancellationToken);
+
+    private static async Task<UpdateUserCommandResponse> UpdateUserAsync(
+        [FromRoute] Guid key,
+        [FromBody] UpdateUserCommandRequest request,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    )
+    {
+        request.Key = key;
+        return await mediator.Send(request, cancellationToken);
+    }
 }

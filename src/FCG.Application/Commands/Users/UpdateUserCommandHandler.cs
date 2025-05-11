@@ -4,12 +4,12 @@ using FCG.Domain._Common;
 using FCG.Domain.Users;
 
 namespace FCG.Application.Commands.Users;
-public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>
+public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommandRequest, UpdateUserCommandResponse>
 {
     private readonly IUserCommandRepository _userCommandRepository;
     private readonly IMediator _mediator;
 
-    public CreateUserCommandHandler(
+    public UpdateUserCommandHandler(
         IUserCommandRepository userCommandRepository,
         IMediator mediator
     )
@@ -18,7 +18,7 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
         _mediator = mediator;
     }
 
-    public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
+    public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.FullName))
             throw new FCGValidationException(
@@ -38,25 +38,15 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
                 $"{nameof(request.Role)} is required."
             );
 
-        if (string.IsNullOrWhiteSpace(request.Password))
-            throw new FCGValidationException(
-                nameof(request.Password),
-                $"{nameof(request.Password)} is required."
-            );
+        var user = await _userCommandRepository.GetByIdAsync(request.Key, cancellationToken);
 
-        // TODO: Set the properties of the user entity based on the request
-        var user = new User(
-            Guid.NewGuid(),
-            request.FullName,
-            new(request.Email),
-            request.Role,
-            new(request.Password)
-        );
+        //TODO: only the administrator can change the role of the user
+        user.SetData(request.FullName, request.Email, request.Role);
 
-        await _userCommandRepository.AddAsync(user, cancellationToken);
+        await _userCommandRepository.UpdateAsync(user, cancellationToken);
 
         await _mediator.Publish(new UserCreatedEvent(user), cancellationToken);
 
-        return new CreateUserCommandResponse(user);
+        return new UpdateUserCommandResponse(user);
     }
 }

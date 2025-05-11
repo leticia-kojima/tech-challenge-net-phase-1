@@ -11,15 +11,13 @@ public abstract class UserCommandModelBase
     {
 
         FullName = user.FullName;
-        Email = user.Email;
+        Email = user.Email.ToString();
         Role = user.Role;
-        PasswordHash = user.PasswordHash;
 
     }
 
     public string FullName { get; set; }
     public string Email { get; set; }
     public ERole Role { get; set; }
-    public string PasswordHash { get; set; }
 
 }
