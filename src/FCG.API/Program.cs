@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 #region Dependency Injection - DI
 
 var services = builder.Services;
+// Adiciona serviços do Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var configuration = builder.Configuration;
 
 services.AddOpenApi()
@@ -18,7 +22,12 @@ services.AddOpenApi()
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment()) 
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.MapOpenApi();
+};
 
 app.UseHttpsRedirection();
 
