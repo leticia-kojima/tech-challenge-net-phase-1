@@ -1,7 +1,8 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common;
+using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
+using FCG.Domain.ValueObjects;
 
 namespace FCG.Application.Commands.Users;
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>
@@ -44,13 +45,12 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
                 $"{nameof(request.Password)} is required."
             );
 
-        // TODO: Set the properties of the user entity based on the request
         var user = new User(
             Guid.NewGuid(),
             request.FullName,
-            new(request.Email),
+            new Email(request.Email),
             request.Role,
-            new(request.Password)
+            new Password(request.Password)
         );
 
         await _userCommandRepository.AddAsync(user, cancellationToken);

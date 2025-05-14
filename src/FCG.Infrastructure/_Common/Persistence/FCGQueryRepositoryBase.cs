@@ -1,4 +1,5 @@
 ﻿using FCG.Domain._Common;
+using FCG.Domain._Common.Abstract;
 using Microsoft.EntityFrameworkCore;
 using MongoFramework;
 

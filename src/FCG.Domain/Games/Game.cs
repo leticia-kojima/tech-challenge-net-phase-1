@@ -1,4 +1,5 @@
-﻿using FCG.Domain.Catalogs;
+﻿using FCG.Domain._Common.Abstract;
+using FCG.Domain.Catalogs;
 
 namespace FCG.Domain.Games;
 public class Game : EntityBase

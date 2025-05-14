@@ -1,9 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using FCG.Domain._Common;
+﻿using FCG.Domain._Common.Abstract;
+using FCG.Domain._Common.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace FCG.Domain.ValueObjects;
 
-public class Email
+public class Email : ValueObjectBase<Email>
 {
     private readonly string _email;
 
@@ -20,4 +21,12 @@ public class Email
 
     public override string ToString() => _email;
 
+    public static implicit operator string(Email email) => email._email;
+
+    public static implicit operator Email(string email) => new (email);
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return _email;
+    }
 }

@@ -1,12 +1,16 @@
-﻿using System.Text.RegularExpressions;
+﻿using FCG.Domain._Common.Abstract;
+using FCG.Domain._Common.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace FCG.Domain.ValueObjects;
 
-public class Password
+public class Password : ValueObjectBase<Password>
 {
     public string Hash { get; private set; }
 
-	public Password(string password)
+    private Password() { }
+
+    public Password(string password)
 	{
         if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
             throw new FCGValidationException(
@@ -22,5 +26,14 @@ public class Password
 
         Hash = BCrypt.Net.BCrypt.HashPassword(password);
 
+    }
+
+    public static Password FromHash(string hash) => new Password { Hash = hash };
+    
+    public static implicit operator Password(string password) => new(password);
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Hash;
     }
 }

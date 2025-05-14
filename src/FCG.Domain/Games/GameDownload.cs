@@ -1,4 +1,5 @@
-﻿using FCG.Domain.Users;
+﻿using FCG.Domain._Common.Abstract;
+using FCG.Domain.Users;
 
 namespace FCG.Domain.Games;
 public class GameDownload : EntityBase

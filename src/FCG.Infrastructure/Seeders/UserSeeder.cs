@@ -12,14 +12,14 @@ public class UserSeeder : ISeeder<User>
             "Administrador",
             new("admin@fcg.test.com.br"),
             ERole.Admin,
-            new("RVfVOYRzs&04Px7VwS")
+            Password.FromHash("$2a$11$bmADClM6Rg/A51PbN4YZA.8iMU2p9mPakBp1TaJB8FtMZS22AFqHG")
         ),
         new (
             new ("7d1456ec-272a-4ad6-9ee7-2281e84d68c0"),
             "Usuário",
             new("user@fcg.test.com.br"),
             ERole.User,
-            new("r6nrAbnFK%5ypjJy6k")
+            Password.FromHash("$2a$11$1RZ55jTgKvXaaK2jN4qmF.x1DNI2vJqS27.ePmYE1smPSTyB7AXDO")
         )
     };
 }

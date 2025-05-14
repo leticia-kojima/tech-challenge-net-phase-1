@@ -1,4 +1,4 @@
-﻿namespace FCG.Domain._Common;
+﻿namespace FCG.Domain._Common.Abstract;
 public abstract class EntityBase
 {
     protected EntityBase() { }

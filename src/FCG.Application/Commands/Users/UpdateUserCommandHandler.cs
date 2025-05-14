@@ -1,6 +1,6 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common;
+using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.Application.Commands.Users;

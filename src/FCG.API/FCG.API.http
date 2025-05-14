@@ -14,8 +14,8 @@ Content-Type: application/json
 {
   "fullName": "John Doe",
   "email": "john.doe@email.com",
-  "role": "Admin"
-  "passwordHash": "hashpassword"
+  "role": 1,
+  "password": "FX9v&6sKx8<6"
 }
 
 ###
@@ -23,8 +23,9 @@ PUT {{FCG.API_HostAddress}}/users/{{$guid}}
 Accept: application/json
 Content-Type: application/json
 {
-  "firstName": "John",
-  "lastName": "Doe1"
+  "fullName": "John Ricardo Doe",
+  "email": "john.doe@email.com",
+  "role": 1
 }
 
 ###

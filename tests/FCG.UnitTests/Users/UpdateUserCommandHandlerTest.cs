@@ -1,6 +1,6 @@
 ﻿using FCG.Application.Commands.Users;
 using FCG.Application.Contracts.Users.Commands;
-using FCG.Domain._Common;
+using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.UnitTests.Users;

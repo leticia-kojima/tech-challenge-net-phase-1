@@ -9,5 +9,4 @@ public class UpdateUserCommandRequest : UserCommandModelBase, ICommand<UpdateUse
     }
 
     public Guid Key { get; set; }
-
 }

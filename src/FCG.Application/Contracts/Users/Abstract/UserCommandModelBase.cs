@@ -13,11 +13,9 @@ public abstract class UserCommandModelBase
         FullName = user.FullName;
         Email = user.Email.ToString();
         Role = user.Role;
-
     }
 
     public string FullName { get; set; }
     public string Email { get; set; }
     public ERole Role { get; set; }
-
 }
