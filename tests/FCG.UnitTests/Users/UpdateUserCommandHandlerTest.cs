@@ -1,7 +1,7 @@
 ﻿using FCG.Application.Commands.Users;
-using FCG.Application.Contracts.Users.Commands;
 using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
+using FCG.UnitTests._Common.Abstract;
 
 namespace FCG.UnitTests.Users;
 public class UpdateUserCommandHandlerTest : TestBase
@@ -18,14 +18,12 @@ public class UpdateUserCommandHandlerTest : TestBase
     [Fact]
     public async Task ShouldUpdateUserAsync()
     {
-        var user = AutoFaker.Generate<User>();
-        _repository.GetByIdAsync(user.Key, _cancellationToken).Returns(user);
-        var request = AutoFaker.Generate<UpdateUserCommandRequest>();
+        var user = _entityBuilder.User.Generate();
+        var request = _modelBuilder.UpdateUserCommandRequest
+            .RuleFor(u => u.Key, user.Key)
+            .Generate();
 
-        request.Key = user.Key;
-        request.FullName = "Colt Macias";
-        request.Email = "colt@email.com";
-        request.Role = ERole.User;
+        _repository.GetByIdAsync(user.Key, _cancellationToken).Returns(user);
 
         var command = new UpdateUserCommandHandler(_repository, _mediator);
 
@@ -46,6 +44,28 @@ public class UpdateUserCommandHandlerTest : TestBase
             );
     }
 
+    [Fact]
+    public async Task ShouldThrowExcpetionForUserDuplicationAsync()
+    {
+        var user = _entityBuilder.User.Generate();
+        var request = _modelBuilder.UpdateUserCommandRequest
+            .RuleFor(u => u.Key, user.Key)
+            .Generate();
+
+        _repository.GetByIdAsync(user.Key, _cancellationToken).Returns(user);
+        _repository.ExistByEmailAsync(request.Email, request.Key, _cancellationToken)
+            .Returns(true);
+
+        var command = new UpdateUserCommandHandler(_repository, _mediator);
+
+        var duplicateException = await Assert.ThrowsAsync<FCGDuplicateException>(
+            () => command.Handle(request, _cancellationToken)
+        );
+
+        Assert.NotNull(duplicateException);
+        Assert.Equal("An user with this email already exists.", duplicateException.Message);
+    }
+
     [Theory]
     [InlineData(null, "colt@email.com", ERole.User, "FullName is required.")]
     [InlineData("", "colt@email.com", ERole.User, "FullName is required.")]
@@ -61,12 +81,11 @@ public class UpdateUserCommandHandlerTest : TestBase
         string expectedMessage
     )
     {
-        var request = new UpdateUserCommandRequest
-        {
-            FullName = fullName,
-            Email = email,
-            Role = role,
-        };
+        var request = _modelBuilder.UpdateUserCommandRequest
+            .RuleFor(u => u.FullName, fullName)
+            .RuleFor(u => u.Email, email)
+            .RuleFor(u => u.Role, role)
+            .Generate();
         var command = new UpdateUserCommandHandler(_repository, _mediator);
 
         var validationException = await Assert.ThrowsAsync<FCGValidationException>(

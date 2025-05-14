@@ -45,6 +45,9 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
                 $"{nameof(request.Password)} is required."
             );
 
+        var existUserWithSameEmail = await _userCommandRepository.ExistByEmailAsync(request.Email, cancellationToken: cancellationToken);
+        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), "An user with this email already exists.");
+
         var user = new User(
             Guid.NewGuid(),
             request.FullName,

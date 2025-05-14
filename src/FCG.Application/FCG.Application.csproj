@@ -17,6 +17,7 @@
   <ItemGroup>
     <Using Include="MediatR" />
     <Using Include="FCG.Application._Common.Handlers" />
+    <Using Include="FCG.Domain.ValueObjects" />
   </ItemGroup>
 
 </Project>

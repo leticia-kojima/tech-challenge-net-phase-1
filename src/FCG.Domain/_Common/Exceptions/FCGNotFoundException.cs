@@ -1,10 +1,12 @@
 ﻿namespace FCG.Domain._Common.Exceptions;
 public class FCGNotFoundException : Exception
 {
-    public string Entity { get; private set; }
-
-    public FCGNotFoundException(string entity, string message) : base(message)
+    public FCGNotFoundException(Guid key, string entity, string message) : base(message)
     {
+        Key = key;
         Entity = entity;
     }
+
+    public Guid Key { get; private set; }
+    public string Entity { get; private set; }
 }

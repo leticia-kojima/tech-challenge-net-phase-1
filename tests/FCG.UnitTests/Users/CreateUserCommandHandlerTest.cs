@@ -1,5 +1,4 @@
 ﻿using FCG.Application.Commands.Users;
-using FCG.Application.Contracts.Users.Commands;
 using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
@@ -18,13 +17,7 @@ public class CreateUserCommandHandlerTest : TestBase
     [Fact]
     public async Task ShouldCreateUserAsync()
     {
-        var request = AutoFaker.Generate<CreateUserCommandRequest>();
-
-        request.FullName = "Colt Macias";
-        request.Email = "colt@email.com";
-        request.Role = ERole.User;
-        request.Password = "password_example";
-
+        var request = _modelBuilder.CreateUserCommandRequest.Generate();
         var command = new CreateUserCommandHandler(_repository, _mediator);
 
         var result = await command.Handle(request, _cancellationToken);
@@ -41,13 +34,30 @@ public class CreateUserCommandHandlerTest : TestBase
             );
     }
 
+    [Fact]
+    public async Task ShouldThrowExcpetionForUserDuplicationAsync()
+    {
+        var request = _modelBuilder.CreateUserCommandRequest.Generate();
+
+        _repository.ExistByEmailAsync(request.Email, cancellationToken: _cancellationToken)
+            .Returns(true);
+
+        var command = new CreateUserCommandHandler(_repository, _mediator);
+        var duplicateException = await Assert.ThrowsAsync<FCGDuplicateException>(
+            () => command.Handle(request, _cancellationToken)
+        );
+
+        Assert.NotNull(duplicateException);
+        Assert.Equal("An user with this email already exists.", duplicateException.Message);
+    }
+
     [Theory]
-    [InlineData(null, "colt@email.com", ERole.User, "password_example", "FullName is required.")]
-    [InlineData("", "colt@email.com", ERole.User, "password_example", "FullName is required.")]
-    [InlineData(" ", "colt@email.com", ERole.User, "password_example", "FullName is required.")]
-    [InlineData("Colt Macias", null, ERole.User, "password_example", "Email is required.")]
-    [InlineData("Colt Macias", "", ERole.User, "password_example", "Email is required.")]
-    [InlineData("Colt Macias", " ", ERole.User, "password_example", "Email is required.")]
+    [InlineData(null, "colt@email.com", ERole.User, "3rNDl7}<Y3^4", "FullName is required.")]
+    [InlineData("", "colt@email.com", ERole.User, "3rNDl7}<Y3^4", "FullName is required.")]
+    [InlineData(" ", "colt@email.com", ERole.User, "3rNDl7}<Y3^4", "FullName is required.")]
+    [InlineData("Colt Macias", null, ERole.User, "3rNDl7}<Y3^4", "Email is required.")]
+    [InlineData("Colt Macias", "", ERole.User, "3rNDl7}<Y3^4", "Email is required.")]
+    [InlineData("Colt Macias", " ", ERole.User, "3rNDl7}<Y3^4", "Email is required.")]
     [InlineData("Colt Macias", "colt@email.com", ERole.User, null, "Password is required.")]
     [InlineData("Colt Macias", "colt@email.com", ERole.User, "", "Password is required.")]
     [InlineData("Colt Macias", "colt@email.com", ERole.User, " ", "Password is required.")]
@@ -59,13 +69,12 @@ public class CreateUserCommandHandlerTest : TestBase
         string expectedMessage
     )
     {
-        var request = new CreateUserCommandRequest
-        {
-            FullName = fullName,
-            Email = email,
-            Role = role,
-            Password = password
-        };
+        var request = _modelBuilder.CreateUserCommandRequest
+            .RuleFor(u => u.FullName, fullName)
+            .RuleFor(u => u.Email, email)
+            .RuleFor(u => u.Role, role)
+            .RuleFor(u => u.Password, password)
+            .Generate();
         var command = new CreateUserCommandHandler(_repository, _mediator);
 
         var validationException = await Assert.ThrowsAsync<FCGValidationException>(

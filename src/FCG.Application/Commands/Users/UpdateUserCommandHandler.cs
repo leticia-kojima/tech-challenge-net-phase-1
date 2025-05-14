@@ -40,7 +40,15 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommandRequest
 
         var user = await _userCommandRepository.GetByIdAsync(request.Key, cancellationToken);
 
-        //TODO: only the administrator can change the role of the user
+        if (user is null) throw new FCGNotFoundException(request.Key, nameof(User), "User not found.");
+
+        var existUserWithSameEmail = await _userCommandRepository.ExistByEmailAsync(
+            request.Email,
+            request.Key,
+            cancellationToken
+        );
+        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), "An user with this email already exists.");
+
         user.SetData(request.FullName, request.Email, request.Role);
 
         await _userCommandRepository.UpdateAsync(user, cancellationToken);

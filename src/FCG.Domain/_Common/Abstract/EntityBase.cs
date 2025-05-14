@@ -1,7 +1,9 @@
 ﻿namespace FCG.Domain._Common.Abstract;
 public abstract class EntityBase
 {
-    protected EntityBase() { }
+    protected EntityBase() {
+        Key = Guid.NewGuid();
+    }
 
     protected EntityBase(Guid key) => Key = key;
 

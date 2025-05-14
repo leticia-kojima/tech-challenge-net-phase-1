@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Using Include="FCG.Domain._Common" />
+    <Using Include="FCG.Domain.ValueObjects" />
   </ItemGroup>
 
   <ItemGroup>

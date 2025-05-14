@@ -1,5 +1,4 @@
 ﻿using FCG.Domain._Common.Abstract;
-using FCG.Domain.ValueObjects;
 
 namespace FCG.Domain.Users;
 
