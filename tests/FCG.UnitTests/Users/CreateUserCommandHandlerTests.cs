@@ -19,10 +19,10 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
 
         var result = await Handler.Handle(request, _cancellationToken);
 
-        Assert.NotEqual(Guid.Empty, result.Key);
-        Assert.Equal(request.FullName, result.FullName);
-        Assert.Equal(request.Email, result.Email);
-        Assert.Equal(request.Role, result.Role);
+        result.Key.ShouldNotBe(Guid.Empty);
+        result.FullName.ShouldBe(request.FullName);
+        result.Email.ShouldBe(request.Email);
+        result.Role.ShouldBe(request.Role);
         await _repository
             .Received(1)
             .AddAsync(
@@ -39,12 +39,12 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
         _repository.ExistByEmailAsync(request.Email, cancellationToken: _cancellationToken)
             .Returns(true);
 
-        var duplicateException = await Assert.ThrowsAsync<FCGDuplicateException>(
+        var duplicateException = await Should.ThrowAsync<FCGDuplicateException>(
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        Assert.NotNull(duplicateException);
-        Assert.Equal("An user with this email already exists.", duplicateException.Message);
+        duplicateException.ShouldNotBeNull();
+        duplicateException.Message.ShouldBe("An user with this email already exists.");
     }
 
     [Theory]
@@ -72,12 +72,12 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
             .RuleFor(u => u.Password, password)
             .Generate();
 
-        var validationException = await Assert.ThrowsAsync<FCGValidationException>(
+        var validationException = await Should.ThrowAsync<FCGValidationException>(
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        Assert.NotNull(validationException);
-        Assert.Equal(expectedMessage, validationException.Message);
+        validationException.ShouldNotBeNull();
+        validationException.Message.ShouldBe(expectedMessage);
         await _repository
             .DidNotReceive()
             .AddAsync(

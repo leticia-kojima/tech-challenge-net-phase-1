@@ -4,15 +4,13 @@ using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.UnitTests.Users;
-public class DeleteUserCommandHandlerTests : TestBase
+public class DeleteUserCommandHandlerTests : TestHandlerBase<DeleteUserCommandHandler>
 {
-    private readonly DeleteUserCommandHandler _handler;
     private readonly IUserCommandRepository _repository;
 
     public DeleteUserCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
-        _repository = Substitute.For<IUserCommandRepository>();
-        _handler = new DeleteUserCommandHandler();
+        _repository = GetMock<IUserCommandRepository>();
     }
 
     [Fact]
@@ -20,11 +18,11 @@ public class DeleteUserCommandHandlerTests : TestBase
     {
         var user = _entityBuilder.User.Generate();
         var request = new DeleteUserCommandRequest { Key = user.Key };
-        
+
         _repository.GetByIdAsync(user.Key, _cancellationToken)
             .Returns(user);
 
-        await _handler.Handle(request, _cancellationToken);
+        await Handler.Handle(request, _cancellationToken);
 
         await _repository
             .Received(1)
@@ -42,10 +40,10 @@ public class DeleteUserCommandHandlerTests : TestBase
         _repository.GetByIdAsync(request.Key, _cancellationToken)
             .Returns(null as User);
 
-        var exception = await Assert.ThrowsAsync<FCGNotFoundException>(
-            () => _handler.Handle(request, _cancellationToken)
+        var exception = await Should.ThrowAsync<FCGNotFoundException>(
+            () => Handler.Handle(request, _cancellationToken)
         );
 
-        Assert.Equal("User not found.", exception.Message);
+        exception.Message.ShouldBe("User not found.");
     }
 }

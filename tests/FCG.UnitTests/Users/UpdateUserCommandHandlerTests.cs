@@ -24,10 +24,10 @@ public class UpdateUserCommandHandlerTests : TestHandlerBase<UpdateUserCommandHa
 
         var result = await Handler.Handle(request, _cancellationToken);
 
-        Assert.NotEqual(Guid.Empty, result.Key);
-        Assert.Equal(request.FullName, result.FullName);
-        Assert.Equal(request.Email, result.Email);
-        Assert.Equal(request.Role, result.Role);
+        result.Key.ShouldNotBe(Guid.Empty);
+        result.FullName.ShouldBe(request.FullName);
+        result.Email.ShouldBe(request.Email);
+        result.Role.ShouldBe(request.Role);
         await _repository
             .Received(1)
             .UpdateAsync(
@@ -51,12 +51,12 @@ public class UpdateUserCommandHandlerTests : TestHandlerBase<UpdateUserCommandHa
         _repository.ExistByEmailAsync(request.Email, request.Key, _cancellationToken)
             .Returns(true);
 
-        var duplicateException = await Assert.ThrowsAsync<FCGDuplicateException>(
+        var duplicateException = await Should.ThrowAsync<FCGDuplicateException>(
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        Assert.NotNull(duplicateException);
-        Assert.Equal("An user with this email already exists.", duplicateException.Message);
+        duplicateException.ShouldNotBeNull();
+        duplicateException.Message.ShouldBe("An user with this email already exists.");
     }
 
     [Theory]
@@ -66,7 +66,6 @@ public class UpdateUserCommandHandlerTests : TestHandlerBase<UpdateUserCommandHa
     [InlineData("Colt Macias", null, ERole.User, "Email is required.")]
     [InlineData("Colt Macias", "", ERole.User, "Email is required.")]
     [InlineData("Colt Macias", " ", ERole.User, "Email is required.")]
-
     public async Task ShouldThrowValidationExceptionAsync(
         string? fullName,
         string? email,
@@ -80,12 +79,12 @@ public class UpdateUserCommandHandlerTests : TestHandlerBase<UpdateUserCommandHa
             .RuleFor(u => u.Role, role)
             .Generate();
 
-        var validationException = await Assert.ThrowsAsync<FCGValidationException>(
+        var validationException = await Should.ThrowAsync<FCGValidationException>(
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        Assert.NotNull(validationException);
-        Assert.Equal(expectedMessage, validationException.Message);
+        validationException.ShouldNotBeNull();
+        validationException.Message.ShouldBe(expectedMessage);
         await _repository
             .DidNotReceive()
             .UpdateAsync(

@@ -1,6 +1,5 @@
 ﻿using AutoBogus.Conventions;
-using FCG.Domain._Common.Abstract;
-using FCG.UnitTests.Builders;
+using Bogus;
 
 namespace FCG.UnitTests;
 public class FCGFixture : IDisposable
@@ -12,6 +11,7 @@ public class FCGFixture : IDisposable
         _cancellationTokenSource = new();
         EntityBuilder = new();
         ModelBuilder = new();
+        Faker = new();
         CancellationToken = _cancellationTokenSource.Token;
 
         AutoFaker.Configure(builder =>
@@ -27,6 +27,8 @@ public class FCGFixture : IDisposable
     public FCGEntityBuilder EntityBuilder { get; private set; }
 
     public FCGModelBuilder ModelBuilder { get; private set; }
+
+    public Faker Faker { get; private set; }
 
     public void Dispose() => _cancellationTokenSource.Cancel();
 }
