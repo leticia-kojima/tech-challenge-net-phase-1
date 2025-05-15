@@ -3,24 +3,21 @@ using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.UnitTests.Users;
-public class CreateUserCommandHandlerTest : TestBase
+public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHandler>
 {
     private readonly IUserCommandRepository _repository;
-    private readonly IMediator _mediator;
 
-    public CreateUserCommandHandlerTest(FCGFixture fixture) : base(fixture)
+    public CreateUserCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
-        _repository = Substitute.For<IUserCommandRepository>();
-        _mediator = Substitute.For<IMediator>();
+        _repository = GetMock<IUserCommandRepository>();
     }
 
     [Fact]
     public async Task ShouldCreateUserAsync()
     {
         var request = _modelBuilder.CreateUserCommandRequest.Generate();
-        var command = new CreateUserCommandHandler(_repository, _mediator);
 
-        var result = await command.Handle(request, _cancellationToken);
+        var result = await Handler.Handle(request, _cancellationToken);
 
         Assert.NotEqual(Guid.Empty, result.Key);
         Assert.Equal(request.FullName, result.FullName);
@@ -42,9 +39,8 @@ public class CreateUserCommandHandlerTest : TestBase
         _repository.ExistByEmailAsync(request.Email, cancellationToken: _cancellationToken)
             .Returns(true);
 
-        var command = new CreateUserCommandHandler(_repository, _mediator);
         var duplicateException = await Assert.ThrowsAsync<FCGDuplicateException>(
-            () => command.Handle(request, _cancellationToken)
+            () => Handler.Handle(request, _cancellationToken)
         );
 
         Assert.NotNull(duplicateException);
@@ -75,10 +71,9 @@ public class CreateUserCommandHandlerTest : TestBase
             .RuleFor(u => u.Role, role)
             .RuleFor(u => u.Password, password)
             .Generate();
-        var command = new CreateUserCommandHandler(_repository, _mediator);
 
         var validationException = await Assert.ThrowsAsync<FCGValidationException>(
-            () => command.Handle(request, _cancellationToken)
+            () => Handler.Handle(request, _cancellationToken)
         );
 
         Assert.NotNull(validationException);
