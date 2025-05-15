@@ -1,10 +1,11 @@
 @FCG.API_HostAddress = http://localhost:5045
+@UserKey = fb39f42b-b85d-4d10-9a6a-ad79c474f02c
 
 GET {{FCG.API_HostAddress}}/users?search=jo
 Accept: application/json
 
 ###
-GET {{FCG.API_HostAddress}}/users/{{$guid}}
+GET {{FCG.API_HostAddress}}/users/{{UserKey}}
 Accept: application/json
 
 ###
@@ -19,7 +20,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{FCG.API_HostAddress}}/users/{{$guid}}
+PUT {{FCG.API_HostAddress}}/users/{{UserKey}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -29,7 +30,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{FCG.API_HostAddress}}/users/{{$guid}}
+DELETE {{FCG.API_HostAddress}}/users/{{UserKey}}
 Accept: application/json
 
 ###
