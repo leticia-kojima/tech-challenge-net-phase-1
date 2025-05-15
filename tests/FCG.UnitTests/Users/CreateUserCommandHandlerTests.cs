@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Commands.Users;
+using FCG.Application.Contracts.Users.Events;
 using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
@@ -27,6 +28,12 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
             .Received(1)
             .AddAsync(
                 Arg.Any<User>(),
+                _cancellationToken
+            );
+        await GetMock<IMediator>()
+            .Received()
+            .Publish(
+                Arg.Any<UserCreatedEvent>(),
                 _cancellationToken
             );
     }

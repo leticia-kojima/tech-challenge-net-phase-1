@@ -1,5 +1,6 @@
 ﻿using FCG.Application.Commands.Users;
 using FCG.Application.Contracts.Users.Commands;
+using FCG.Application.Contracts.Users.Events;
 using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
@@ -28,6 +29,12 @@ public class DeleteUserCommandHandlerTests : TestHandlerBase<DeleteUserCommandHa
             .Received(1)
             .DeleteAsync(
                 Arg.Is<User>(x => x.Key == user.Key),
+                _cancellationToken
+            );
+        await GetMock<IMediator>()
+            .Received()
+            .Publish(
+                Arg.Any<UserDeletedEvent>(),
                 _cancellationToken
             );
     }

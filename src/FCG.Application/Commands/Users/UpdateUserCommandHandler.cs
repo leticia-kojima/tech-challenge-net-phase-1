@@ -53,7 +53,7 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommandRequest
 
         await _userCommandRepository.UpdateAsync(user, cancellationToken);
 
-        await _mediator.Publish(new UserCreatedEvent(user), cancellationToken);
+        await _mediator.Publish(new UserUpdatedEvent(user), cancellationToken);
 
         return new UpdateUserCommandResponse(user);
     }

@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Commands.Users;
+using FCG.Application.Contracts.Users.Events;
 using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
@@ -35,6 +36,12 @@ public class UpdateUserCommandHandlerTests : TestHandlerBase<UpdateUserCommandHa
                     && u.FullName == request.FullName
                     && u.Email.ToString() == request.Email
                     && u.Role == request.Role),
+                _cancellationToken
+            );
+        await GetMock<IMediator>()
+            .Received()
+            .Publish(
+                Arg.Any<UserUpdatedEvent>(),
                 _cancellationToken
             );
     }

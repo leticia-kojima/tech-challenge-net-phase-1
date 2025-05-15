@@ -1,9 +1,9 @@
 ﻿using FCG.Domain.Users;
 
 namespace FCG.Application.Contracts.Users.Events;
-public class UserCreatedEvent : IEvent
+public class UserUpdatedEvent : IEvent
 {
-    public UserCreatedEvent(User user)
+    public UserUpdatedEvent(User user)
     {
         User = user;
     }
