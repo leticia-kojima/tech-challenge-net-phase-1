@@ -1,6 +1,24 @@
 @FCG.API_HostAddress = http://localhost:5045
 @UserKey = fb39f42b-b85d-4d10-9a6a-ad79c474f02c
 
+POST {{FCG.API_HostAddress}}/auth/login/
+Accept: application/json
+Content-Type: application/json
+{
+  "email": "admin@fcg.test.com.br",
+  "password": "adm@demoPass312"
+}
+
+###
+POST {{FCG.API_HostAddress}}/auth/login/
+Accept: application/json
+Content-Type: application/json
+{
+  "email": "user@fcg.test.com.br",
+  "password": "usr@demoPass312"
+}
+
+###
 GET {{FCG.API_HostAddress}}/users?search=jo
 Accept: application/json
 

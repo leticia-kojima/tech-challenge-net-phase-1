@@ -10,6 +10,7 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 services.AddOpenApi()
+    .ConfigureSettings(configuration)
     .AddDatabases(configuration)
     .AddRepositories()
     .AddInfrastructureServices();
@@ -24,6 +25,7 @@ app.UseHttpsRedirection();
 
 #region Endpoints
 
+app.MapAuthEndpoints();
 app.MapUserEndpoints();
 
 #endregion

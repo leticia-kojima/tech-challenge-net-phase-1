@@ -1,15 +1,30 @@
 ﻿using FCG.Application.Commands.Auth;
+using FCG.Domain._Common.Settings;
 using FCG.Domain.Users;
+using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace FCG.UnitTests.Auth;
-public class LoginCommandHandlerTests : TestHandlerBase<LoginCommandHandler>
+public class LoginCommandHandlerTests : TestBase
 {
+    private readonly LoginCommandHandler _handler;
     private readonly IUserCommandRepository _userCommandRepository;
 
     public LoginCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
-        _userCommandRepository = GetMock<IUserCommandRepository>();
+        var jwtSettings = new JwtSettings
+        {
+            Secret = "yHTE1H5d27zH0nxDGBE7quDPg2BRuYkJ8efWrKCMZfQ=",
+            Issuer = "FCG",
+            Audience = "FCG",
+            ExpirationInHours = 24
+        };
+
+        _userCommandRepository = Substitute.For<IUserCommandRepository>();
+        _handler = new LoginCommandHandler(
+            Options.Create(jwtSettings),
+            _userCommandRepository
+        );
     }
 
     [Fact]
@@ -25,7 +40,7 @@ public class LoginCommandHandlerTests : TestHandlerBase<LoginCommandHandler>
             .GetByEmailAsync(user.Email, _cancellationToken)
             .Returns(request.Email == user.Email ? user : null);
 
-        var result = await Handler.Handle(request, _cancellationToken);
+        var result = await _handler.Handle(request, _cancellationToken);
         
         result.ShouldNotBeNull();
         result.Token.ShouldNotBeNullOrEmpty();
@@ -37,6 +52,30 @@ public class LoginCommandHandlerTests : TestHandlerBase<LoginCommandHandler>
         utcNow.ShouldBeLessThan(jwt.ValidTo);
         utcNow.ShouldBeLessThan(result.Expiration);
         jwt.Claims.ShouldNotBeEmpty();
+    }
+
+    [Theory]
+    [InlineData(null, "somepassword", "Email is required.")]
+    [InlineData("", "somepassword", "Email is required.")]
+    [InlineData("user@fcg.test.com", null, "Password is required.")]
+    [InlineData("user@fcg.test.com", "", "Password is required.")]
+    public async Task ShouldThrowExceptionForMissingEmailOrPasswordAsync(
+        string? email,
+        string? password,
+        string expectedMessage
+    )
+    {
+        var request = _modelBuilder.LoginCommandRequest
+            .RuleFor(r => r.Email, email)
+            .RuleFor(r => r.Password, password)
+            .Generate();
+
+        var validationException = await Should.ThrowAsync<FCGValidationException>(
+            () => _handler.Handle(request, _cancellationToken)
+        );
+
+        validationException.Message
+            .ShouldBe(expectedMessage);
     }
 
     [Theory]
@@ -61,7 +100,7 @@ public class LoginCommandHandlerTests : TestHandlerBase<LoginCommandHandler>
             .Returns(request.Email == user.Email ? user : null);
 
         var validationException = await Should.ThrowAsync<FCGValidationException>(
-            () => Handler.Handle(request, _cancellationToken)
+            () => _handler.Handle(request, _cancellationToken)
         );
 
         validationException.Message
