@@ -7,4 +7,6 @@ public interface IUserCommandRepository : IUserRepository
         Guid? ignoreKey = null,
         CancellationToken? cancellationToken = null
     );
+
+    Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken);
 }

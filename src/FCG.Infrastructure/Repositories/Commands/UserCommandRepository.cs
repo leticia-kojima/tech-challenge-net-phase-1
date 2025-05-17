@@ -11,4 +11,9 @@ public class UserCommandRepository : FCGCommandRepositoryBase<User>, IUserComman
 
     public Task<bool> ExistByEmailAsync(string email, Guid? ignoreKey = null, CancellationToken? cancellationToken = null)
         => _dbSet.AnyAsync(u => u.Email == email && u.Key != ignoreKey);
+
+    public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
