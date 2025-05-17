@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <Using Include="FCG.Domain._Common" />
+    <Using Include="FCG.Domain.ValueObjects" />
+    <Using Include="FCG.Domain._Common.Abstract" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using FCG.Domain._Common;
+﻿using FCG.Domain._Common.Abstract;
 
 namespace FCG.Infrastructure._Common.Mapping.Queries;
 public abstract class ObjectMappingBase<TObject> where TObject : EntityBase

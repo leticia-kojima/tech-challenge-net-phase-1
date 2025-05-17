@@ -1,4 +1,4 @@
-﻿using FCG.Domain._Common;
+﻿using FCG.Domain._Common.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure._Common.Mapping.Commands;

@@ -1,44 +1,51 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common;
 using FCG.Domain.Users;
 
 namespace FCG.Application.Commands.Users;
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
-    private readonly IUserCommandRepository _userCommandRepository;
     private readonly IMediator _mediator;
+    private readonly IUserCommandRepository _userCommandRepository;
 
     public CreateUserCommandHandler(
-        IUserCommandRepository userCommandRepository,
-        IMediator mediator
+        IMediator mediator,
+        IUserCommandRepository userCommandRepository
     )
     {
-        _userCommandRepository = userCommandRepository;
         _mediator = mediator;
+        _userCommandRepository = userCommandRepository;
     }
 
     public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.FirstName))
+        if (string.IsNullOrWhiteSpace(request.FullName))
             throw new FCGValidationException(
-                nameof(request.FirstName),
-                $"{nameof(request.FirstName)} is required."
+                nameof(request.FullName),
+                $"{nameof(request.FullName)} is required."
             );
 
-        if (string.IsNullOrWhiteSpace(request.LastName))
+        if (string.IsNullOrWhiteSpace(request.Email))
             throw new FCGValidationException(
-                nameof(request.LastName),
-                $"{nameof(request.LastName)} is required."
+                nameof(request.Email),
+                $"{nameof(request.Email)} is required."
             );
 
-        // TODO: Set the properties of the user entity based on the request
+        if (string.IsNullOrWhiteSpace(request.Password))
+            throw new FCGValidationException(
+                nameof(request.Password),
+                $"{nameof(request.Password)} is required."
+            );
+
+        var existUserWithSameEmail = await _userCommandRepository.ExistByEmailAsync(request.Email, cancellationToken: cancellationToken);
+        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), $"The email '{request.Email}' is already in use.");
+
         var user = new User(
             Guid.NewGuid(),
-            $"{request.FirstName} {request.LastName}",
-            $"{Guid.NewGuid()}@email.test.com",
+            request.FullName,
+            new Email(request.Email),
             ERole.User,
-            Guid.NewGuid().ToString()
+            new Password(request.Password)
         );
 
         await _userCommandRepository.AddAsync(user, cancellationToken);

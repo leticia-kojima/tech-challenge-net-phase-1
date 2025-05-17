@@ -186,9 +186,6 @@ namespace FCG.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("GameKey1")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("Key")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
@@ -204,8 +201,6 @@ namespace FCG.Infrastructure.Migrations
                     b.HasKey("UserKey", "GameKey");
 
                     b.HasIndex("GameKey");
-
-                    b.HasIndex("GameKey1");
 
                     b.ToTable("GameEvaluation");
                 });
@@ -261,7 +256,7 @@ namespace FCG.Infrastructure.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@fcg.test.com.br",
                             FullName = "Administrador",
-                            PasswordHash = "7d6721d6-6cb4-4ade-aab2-38a549964b09",
+                            PasswordHash = "$2a$11$bmADClM6Rg/A51PbN4YZA.8iMU2p9mPakBp1TaJB8FtMZS22AFqHG",
                             Role = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -271,7 +266,7 @@ namespace FCG.Infrastructure.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@fcg.test.com.br",
                             FullName = "Usuário",
-                            PasswordHash = "7d6721d6-6cb4-4ade-aab2-38a549964b09",
+                            PasswordHash = "$2a$11$1RZ55jTgKvXaaK2jN4qmF.x1DNI2vJqS27.ePmYE1smPSTyB7AXDO",
                             Role = 2,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -310,14 +305,10 @@ namespace FCG.Infrastructure.Migrations
             modelBuilder.Entity("FCG.Domain.Games.GameEvaluation", b =>
                 {
                     b.HasOne("FCG.Domain.Games.Game", "Game")
-                        .WithMany()
+                        .WithMany("Evaluations")
                         .HasForeignKey("GameKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("FCG.Domain.Games.Game", null)
-                        .WithMany("Evaluations")
-                        .HasForeignKey("GameKey1");
 
                     b.HasOne("FCG.Domain.Users.User", "User")
                         .WithMany()

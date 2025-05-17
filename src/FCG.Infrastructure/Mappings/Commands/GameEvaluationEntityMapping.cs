@@ -15,7 +15,7 @@ public class GameEvaluationEntityMapping : EntityMappingBase<GameEvaluation>
 
         builder
             .HasOne(ge => ge.Game)
-            .WithMany()
+            .WithMany(g => g.Evaluations)
             .HasForeignKey(ge => ge.GameKey);
     }
 }

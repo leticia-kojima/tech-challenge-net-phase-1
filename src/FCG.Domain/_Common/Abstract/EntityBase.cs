@@ -1,7 +1,9 @@
-﻿namespace FCG.Domain._Common;
+﻿namespace FCG.Domain._Common.Abstract;
 public abstract class EntityBase
 {
-    protected EntityBase() { }
+    protected EntityBase() {
+        Key = Guid.NewGuid();
+    }
 
     protected EntityBase(Guid key) => Key = key;
 
@@ -12,4 +14,6 @@ public abstract class EntityBase
     public DateTime UpdatedAt { get; private set; }
     
     public DateTime? DeletedAt { get; private set; }
+
+    protected void WasUpdated() => UpdatedAt = DateTime.UtcNow;
 }
