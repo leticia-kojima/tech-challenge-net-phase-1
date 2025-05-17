@@ -178,6 +178,4 @@ As migrações do banco de dados são aplicadas automaticamente quando a aplica�
     Update-Database
     ```
 
-Esses comandos utilizam o Entity Framework Core para gerenciar o versionamento do esquema do banco de dados. Consulte a documentação oficial do EF Core para opções avançadas ou resolução de problemas.
-
-Também é possível fazer a remoção e reversão das *migrations* e alterações no banco de dados, caso necessário consulte a opção de ajuda do EF Core `Get-Help EntityFramework`.
+Também é possível fazer a remoção e reversão das *migrations* e alterações no banco de dados, caso necessário consulte a opção de ajuda do EF Core `Get-Help EntityFramework`. Para informações detalhadas sobre comandos, parâmetros adicionais ou solução de problemas, consulte a [documentação oficial do EF Core](https://learn.microsoft.com/ef/core/cli/powershell). 
