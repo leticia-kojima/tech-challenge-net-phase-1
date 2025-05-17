@@ -1,5 +1,4 @@
-﻿using Bogus;
-using FCG.Domain.Users;
+﻿using FCG.Domain.Users;
 
 namespace FCG.UnitTests.Builders;
 public class FCGEntityBuilder

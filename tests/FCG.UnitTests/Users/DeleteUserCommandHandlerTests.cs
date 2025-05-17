@@ -1,17 +1,18 @@
 ﻿using FCG.Application.Commands.Users;
 using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.UnitTests.Users;
 public class DeleteUserCommandHandlerTests : TestHandlerBase<DeleteUserCommandHandler>
 {
-    private readonly IUserCommandRepository _repository;
+    private readonly IMediator _mediator;
+    private readonly IUserCommandRepository _userCommandRepository;
 
     public DeleteUserCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
-        _repository = GetMock<IUserCommandRepository>();
+        _mediator = GetMock<IMediator>();
+        _userCommandRepository = GetMock<IUserCommandRepository>();
     }
 
     [Fact]
@@ -20,18 +21,18 @@ public class DeleteUserCommandHandlerTests : TestHandlerBase<DeleteUserCommandHa
         var user = _entityBuilder.User.Generate();
         var request = new DeleteUserCommandRequest { Key = user.Key };
 
-        _repository.GetByIdAsync(user.Key, _cancellationToken)
+        _userCommandRepository.GetByIdAsync(user.Key, _cancellationToken)
             .Returns(user);
 
         await Handler.Handle(request, _cancellationToken);
 
-        await _repository
+        await _userCommandRepository
             .Received(1)
             .DeleteAsync(
                 Arg.Is<User>(x => x.Key == user.Key),
                 _cancellationToken
             );
-        await GetMock<IMediator>()
+        await _mediator
             .Received()
             .Publish(
                 Arg.Any<UserDeletedEvent>(),
@@ -44,13 +45,13 @@ public class DeleteUserCommandHandlerTests : TestHandlerBase<DeleteUserCommandHa
     {
         var request = new DeleteUserCommandRequest { Key = Guid.NewGuid() };
 
-        _repository.GetByIdAsync(request.Key, _cancellationToken)
+        _userCommandRepository.GetByIdAsync(request.Key, _cancellationToken)
             .Returns(null as User);
 
-        var exception = await Should.ThrowAsync<FCGNotFoundException>(
+        var notFoundException = await Should.ThrowAsync<FCGNotFoundException>(
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        exception.Message.ShouldBe("User not found.");
+        notFoundException.Message.ShouldBe($"User with key '{request.Key}' was not found.");
     }
 }

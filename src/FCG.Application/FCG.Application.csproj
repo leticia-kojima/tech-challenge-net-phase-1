@@ -19,6 +19,7 @@
     <Using Include="FCG.Application._Common.Handlers" />
     <Using Include="FCG.Application._Common.Contracts" />
     <Using Include="FCG.Domain.ValueObjects" />
+    <Using Include="FCG.Domain._Common.Exceptions" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 ﻿using AutoBogus.Conventions;
-using Bogus;
 
 namespace FCG.UnitTests;
 public class FCGFixture : IDisposable

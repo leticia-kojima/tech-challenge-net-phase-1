@@ -1,12 +1,10 @@
-﻿using Bogus;
-
-namespace FCG.UnitTests._Common.Abstract;
+﻿namespace FCG.UnitTests._Common.Abstract;
 public abstract class TestBase : IClassFixture<FCGFixture>
 {
-    protected CancellationToken _cancellationToken;
-    protected FCGEntityBuilder _entityBuilder;
-    protected FCGModelBuilder _modelBuilder;
-    protected Faker _faker;
+    protected readonly CancellationToken _cancellationToken;
+    protected readonly FCGEntityBuilder _entityBuilder;
+    protected readonly FCGModelBuilder _modelBuilder;
+    protected readonly Faker _faker;
 
     protected TestBase(FCGFixture fixture)
     {

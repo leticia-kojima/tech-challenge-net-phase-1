@@ -1,5 +1,4 @@
-﻿using FCG.Domain._Common.Abstract;
-using FCG.Domain._Common.Exceptions;
+﻿using FCG.Domain._Common.Exceptions;
 using System.Text.RegularExpressions;
 
 namespace FCG.Domain.ValueObjects;

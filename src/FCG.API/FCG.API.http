@@ -15,7 +15,6 @@ Content-Type: application/json
 {
   "fullName": "John Doe",
   "email": "john.doe@email.com",
-  "role": 1,
   "password": "FX9v&6sKx8<6"
 }
 
@@ -25,8 +24,7 @@ Accept: application/json
 Content-Type: application/json
 {
   "fullName": "John Ricardo Doe",
-  "email": "john.doe@email.com",
-  "role": 1
+  "email": "john.doe@email.com"
 }
 
 ###

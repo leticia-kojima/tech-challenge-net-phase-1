@@ -25,13 +25,15 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
-    <Using Include="AutoBogus" />
+    <Using Include="Bogus" /> 
+    <Using Include="AutoBogus" /> 
     <Using Include="NSubstitute" />
     <Using Include="Shouldly" />
     <Using Include="MediatR" />
     <Using Include="FCG.UnitTests._Common.Abstract" />
     <Using Include="FCG.UnitTests.Builders" />
     <Using Include="FCG.Domain.ValueObjects" />
+    <Using Include="FCG.Domain._Common.Exceptions" />
   </ItemGroup>
 
 </Project>

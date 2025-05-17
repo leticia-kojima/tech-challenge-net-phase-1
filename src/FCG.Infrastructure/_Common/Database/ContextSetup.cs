@@ -9,14 +9,15 @@ public static class ContextSetup
     public static async Task SetupDatabasesAsync(this IServiceProvider services, CancellationToken cancellationToken)
     {
         using var scope = services.CreateScope();
+        var serviceProvider = scope.ServiceProvider;
 
         await SetupMySqlDatabaseAsync(
-            scope.ServiceProvider.GetRequiredService<FCGCommandsDbContext>(),
+            serviceProvider.GetRequiredService<FCGCommandsDbContext>(),
             cancellationToken
         );
 
         await SetupMongoDatabaseAsync(
-            scope.ServiceProvider.GetRequiredService<FCGQueriesDbContext>(),
+            serviceProvider.GetRequiredService<FCGQueriesDbContext>(),
             cancellationToken
         );
     }

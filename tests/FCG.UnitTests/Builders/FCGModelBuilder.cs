@@ -1,5 +1,4 @@
-﻿using Bogus;
-using FCG.Application.Contracts.Users.Commands;
+﻿using FCG.Application.Contracts.Users.Commands;
 
 namespace FCG.UnitTests.Builders;
 public class FCGModelBuilder

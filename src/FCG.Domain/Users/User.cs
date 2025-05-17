@@ -1,6 +1,4 @@
-﻿using FCG.Domain._Common.Abstract;
-
-namespace FCG.Domain.Users;
+﻿namespace FCG.Domain.Users;
 
 public class User : EntityBase
 {
@@ -25,11 +23,11 @@ public class User : EntityBase
     public ERole Role { get; private set; }
     public Password PasswordHash { get; private set; }
 
-    public void SetData(string fullName, string email, ERole role)
+    public void SetData(string fullName, string email)
     {
         FullName = fullName;
         Email = new(email);
-        Role = role;
+
         WasUpdated();
     }
 }

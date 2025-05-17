@@ -1,21 +1,20 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.Application.Commands.Users;
 public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommandRequest, UpdateUserCommandResponse>
 {
-    private readonly IUserCommandRepository _userCommandRepository;
     private readonly IMediator _mediator;
+    private readonly IUserCommandRepository _userCommandRepository;
 
     public UpdateUserCommandHandler(
-        IUserCommandRepository userCommandRepository,
-        IMediator mediator
+        IMediator mediator,
+        IUserCommandRepository userCommandRepository
     )
     {
-        _userCommandRepository = userCommandRepository;
         _mediator = mediator;
+        _userCommandRepository = userCommandRepository;
     }
 
     public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
@@ -32,24 +31,18 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommandRequest
                 $"{nameof(request.Email)} is required."
             );
 
-        if (!Enum.IsDefined(request.Role))
-            throw new FCGValidationException(
-                nameof(request.Role),
-                $"{nameof(request.Role)} is required."
-            );
-
         var user = await _userCommandRepository.GetByIdAsync(request.Key, cancellationToken);
 
-        if (user is null) throw new FCGNotFoundException(request.Key, nameof(User), "User not found.");
+        if (user is null) throw new FCGNotFoundException(request.Key, nameof(User), $"User with key '{request.Key}' was not found.");
 
         var existUserWithSameEmail = await _userCommandRepository.ExistByEmailAsync(
             request.Email,
             request.Key,
             cancellationToken
         );
-        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), "An user with this email already exists.");
+        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), $"The email '{request.Email}' is already in use.");
 
-        user.SetData(request.FullName, request.Email, request.Role);
+        user.SetData(request.FullName, request.Email);
 
         await _userCommandRepository.UpdateAsync(user, cancellationToken);
 

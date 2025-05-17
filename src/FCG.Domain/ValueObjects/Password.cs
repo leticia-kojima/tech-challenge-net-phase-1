@@ -1,5 +1,4 @@
-﻿using FCG.Domain._Common.Abstract;
-using FCG.Domain._Common.Exceptions;
+﻿using FCG.Domain._Common.Exceptions;
 using System.Text.RegularExpressions;
 
 namespace FCG.Domain.ValueObjects;
@@ -25,7 +24,6 @@ public class Password : ValueObjectBase<Password>
              );
 
         Hash = BCrypt.Net.BCrypt.HashPassword(password);
-
     }
 
     public static Password FromHash(string hash) => new Password { Hash = hash };

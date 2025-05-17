@@ -1,16 +1,17 @@
 ﻿using FCG.Application.Commands.Users;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
 
 namespace FCG.UnitTests.Users;
 public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHandler>
 {
-    private readonly IUserCommandRepository _repository;
+    private readonly IMediator _mediator;
+    private readonly IUserCommandRepository _userCommandRepository;
 
     public CreateUserCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
-        _repository = GetMock<IUserCommandRepository>();
+        _mediator = GetMock<IMediator>();
+        _userCommandRepository = GetMock<IUserCommandRepository>();
     }
 
     [Fact]
@@ -20,18 +21,18 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
 
         var result = await Handler.Handle(request, _cancellationToken);
 
+        result.ShouldNotBeNull();
         result.Key.ShouldNotBe(Guid.Empty);
         result.FullName.ShouldBe(request.FullName);
         result.Email.ShouldBe(request.Email);
-        result.Role.ShouldBe(request.Role);
-        await _repository
+        await _userCommandRepository
             .Received(1)
             .AddAsync(
                 Arg.Any<User>(),
                 _cancellationToken
             );
-        await GetMock<IMediator>()
-            .Received()
+        await _mediator
+            .Received(1)
             .Publish(
                 Arg.Any<UserCreatedEvent>(),
                 _cancellationToken
@@ -43,15 +44,27 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
     {
         var request = _modelBuilder.CreateUserCommandRequest.Generate();
 
-        _repository.ExistByEmailAsync(request.Email, cancellationToken: _cancellationToken)
+        _userCommandRepository.ExistByEmailAsync(request.Email, cancellationToken: _cancellationToken)
             .Returns(true);
 
         var duplicateException = await Should.ThrowAsync<FCGDuplicateException>(
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        duplicateException.ShouldNotBeNull();
-        duplicateException.Message.ShouldBe("An user with this email already exists.");
+        duplicateException.Message
+            .ShouldBe($"The email '{request.Email}' is already in use.");
+        await _userCommandRepository
+            .DidNotReceive()
+            .AddAsync(
+                Arg.Any<User>(),
+                _cancellationToken
+            );
+        await _mediator
+            .DidNotReceive()
+            .Publish(
+                Arg.Any<UserCreatedEvent>(),
+                _cancellationToken
+            );
     }
 
     [Theory]
@@ -75,7 +88,6 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
         var request = _modelBuilder.CreateUserCommandRequest
             .RuleFor(u => u.FullName, fullName)
             .RuleFor(u => u.Email, email)
-            .RuleFor(u => u.Role, role)
             .RuleFor(u => u.Password, password)
             .Generate();
 
@@ -83,12 +95,18 @@ public class CreateUserCommandHandlerTests : TestHandlerBase<CreateUserCommandHa
             () => Handler.Handle(request, _cancellationToken)
         );
 
-        validationException.ShouldNotBeNull();
-        validationException.Message.ShouldBe(expectedMessage);
-        await _repository
+        validationException.Message
+            .ShouldBe(expectedMessage);
+        await _userCommandRepository
             .DidNotReceive()
             .AddAsync(
                 Arg.Any<User>(),
+                _cancellationToken
+            );
+        await _mediator
+            .DidNotReceive()
+            .Publish(
+                Arg.Any<UserCreatedEvent>(),
                 _cancellationToken
             );
     }

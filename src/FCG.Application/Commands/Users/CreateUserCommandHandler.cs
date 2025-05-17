@@ -1,22 +1,20 @@
 ﻿using FCG.Application.Contracts.Users.Commands;
 using FCG.Application.Contracts.Users.Events;
-using FCG.Domain._Common.Exceptions;
 using FCG.Domain.Users;
-using FCG.Domain.ValueObjects;
 
 namespace FCG.Application.Commands.Users;
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
-    private readonly IUserCommandRepository _userCommandRepository;
     private readonly IMediator _mediator;
+    private readonly IUserCommandRepository _userCommandRepository;
 
     public CreateUserCommandHandler(
-        IUserCommandRepository userCommandRepository,
-        IMediator mediator
+        IMediator mediator,
+        IUserCommandRepository userCommandRepository
     )
     {
-        _userCommandRepository = userCommandRepository;
         _mediator = mediator;
+        _userCommandRepository = userCommandRepository;
     }
 
     public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
@@ -33,12 +31,6 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
                 $"{nameof(request.Email)} is required."
             );
 
-        if (!Enum.IsDefined(request.Role))
-            throw new FCGValidationException(
-                nameof(request.Role),
-                $"{nameof(request.Role)} is required."
-            );
-
         if (string.IsNullOrWhiteSpace(request.Password))
             throw new FCGValidationException(
                 nameof(request.Password),
@@ -46,13 +38,13 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommandRequest
             );
 
         var existUserWithSameEmail = await _userCommandRepository.ExistByEmailAsync(request.Email, cancellationToken: cancellationToken);
-        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), "An user with this email already exists.");
+        if (existUserWithSameEmail) throw new FCGDuplicateException(nameof(User), $"The email '{request.Email}' is already in use.");
 
         var user = new User(
             Guid.NewGuid(),
             request.FullName,
             new Email(request.Email),
-            request.Role,
+            ERole.User,
             new Password(request.Password)
         );
 

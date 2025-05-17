@@ -5,11 +5,11 @@ using FCG.Domain.Users;
 namespace FCG.UnitTests.Users;
 public class ListUsersQueryHandlerTests : TestHandlerBase<ListUsersQueryHandler>
 {
-    private readonly IUserQueryRepository _repository;
+    private readonly IUserQueryRepository _userQueryRepository;
 
     public ListUsersQueryHandlerTests(FCGFixture fixture) : base(fixture)
     {
-        _repository = GetMock<IUserQueryRepository>();
+        _userQueryRepository = GetMock<IUserQueryRepository>();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class ListUsersQueryHandlerTests : TestHandlerBase<ListUsersQueryHandler>
             .RuleFor(u => u.FullName, userName)
             .Generate(5);
         
-        _repository.SearchAsync(request.Search, _cancellationToken)
+        _userQueryRepository.SearchAsync(request.Search, _cancellationToken)
             .Returns(users);
 
         var result = await Handler.Handle(request, _cancellationToken);
