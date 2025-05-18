@@ -1,6 +1,6 @@
 using FCG.API.Endpoints;
 using FCG.Infrastructure;
-using FCG.Infrastructure.Contexts.FCGQueries;
+using FCG.Infrastructure._Common.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,14 +37,7 @@ app.MapUserEndpoints();
 
 #endregion
 
-#region Seed
-
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<FCGQueriesDbContext>();
-    await dbContext.SeedAllDataAsync(CancellationToken.None);
-}
-
-#endregion
+await app.Services
+    .SetupDatabasesAsync(CancellationToken.None);
 
 app.Run();

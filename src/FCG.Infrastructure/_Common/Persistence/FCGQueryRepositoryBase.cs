@@ -1,4 +1,5 @@
 ﻿using FCG.Domain._Common;
+using FCG.Domain._Common.Abstract;
 using Microsoft.EntityFrameworkCore;
 using MongoFramework;
 
@@ -43,8 +44,7 @@ public class FCGQueryRepositoryBase<TEntity> : IRepository<TEntity> where TEntit
 
     public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await Query
-            .FirstOrDefaultAsync(e => e.Key == id, cancellationToken);
+        return await Task.Run(() => Query.FirstOrDefault(e => e.Key == id), cancellationToken);
     }
 
     public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)

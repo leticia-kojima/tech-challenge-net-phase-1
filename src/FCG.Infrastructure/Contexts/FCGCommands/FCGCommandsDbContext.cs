@@ -1,4 +1,4 @@
-﻿using FCG.Domain._Common;
+﻿using FCG.Domain._Common.Abstract;
 using FCG.Domain.Catalogs;
 using FCG.Domain.Games;
 using FCG.Domain.Users;

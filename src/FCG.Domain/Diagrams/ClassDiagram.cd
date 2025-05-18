@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="FCG.Domain.Users.User">
+  <Class Name="FCG.Domain.Users.User" HideInheritanceLine="true">
     <Position X="6.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AACAAAAAACAAAIAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
@@ -10,14 +10,14 @@
       <Property Name="Role" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="FCG.Domain.Catalogs.Catalog">
+  <Class Name="FCG.Domain.Catalogs.Catalog" HideInheritanceLine="true">
     <Position X="1.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Catalogs\Catalog.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FCG.Domain.Games.Game">
+  <Class Name="FCG.Domain.Games.Game" HideInheritanceLine="true">
     <Position X="3.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAEAAAAAAAAABAAAAAAAABAEAAAAAAAA=</HashCode>
@@ -27,7 +27,7 @@
       <Property Name="Catalog" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="FCG.Domain.Games.GameEvaluation">
+  <Class Name="FCG.Domain.Games.GameEvaluation" HideInheritanceLine="true">
     <Position X="3.75" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEARAAAEAAAAAgAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
@@ -38,7 +38,7 @@
       <Property Name="Game" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="FCG.Domain.Games.GameDownload">
+  <Class Name="FCG.Domain.Games.GameDownload" HideInheritanceLine="true">
     <Position X="6.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAARAAAAAAAAAgAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
@@ -48,6 +48,13 @@
       <Property Name="User" />
       <Property Name="Game" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="FCG.Domain._Common.EntityBase">
+    <Position X="1.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAQAACAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>_Common\EntityBase.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Enum Name="FCG.Domain.Users.ERole">
     <Position X="8.75" Y="7.75" Width="1.5" />

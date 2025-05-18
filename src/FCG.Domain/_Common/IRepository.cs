@@ -1,4 +1,6 @@
-﻿namespace FCG.Domain._Common;
+﻿using FCG.Domain._Common.Abstract;
+
+namespace FCG.Domain._Common;
 public interface IRepository<TEntity> where TEntity : EntityBase
 {
     Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
