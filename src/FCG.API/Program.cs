@@ -1,4 +1,5 @@
 using FCG.API.Endpoints;
+using FCG.API.Middlewares;
 using FCG.Infrastructure;
 using FCG.Infrastructure._Common.Database;
 
@@ -29,6 +30,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 };
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 #region Endpoints
