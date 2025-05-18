@@ -7,9 +7,9 @@ public class User : EntityBase
     public User(
         Guid key,
         string fullName,
-        string email,
+        Email email,  
         ERole role,
-        string passwordHash
+        Password passwordHash
     ) : base(key)
     {
         FullName = fullName;
@@ -19,7 +19,15 @@ public class User : EntityBase
     }
 
     public string FullName { get; private set; }
-    public string Email { get; private set; }
+    public Email Email { get; private set; }
     public ERole Role { get; private set; }
-    public string PasswordHash { get; private set; }
+    public Password PasswordHash { get; private set; }
+
+    public void SetData(string fullName, string email)
+    {
+        FullName = fullName;
+        Email = new(email);
+
+        WasUpdated();
+    }
 }

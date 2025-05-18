@@ -1,5 +1,4 @@
-﻿using FCG.Application._Common.Contracts;
-using FCG.Domain.Users;
+﻿using FCG.Domain.Users;
 
 namespace FCG.Application.Contracts.Users.Events;
 public class UserCreatedEvent : IEvent

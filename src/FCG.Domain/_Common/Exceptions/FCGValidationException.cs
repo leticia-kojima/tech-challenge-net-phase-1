@@ -1,4 +1,4 @@
-﻿namespace FCG.Domain._Common;
+﻿namespace FCG.Domain._Common.Exceptions;
 public class FCGValidationException : Exception
 {
     public string Field { get; private set; }
