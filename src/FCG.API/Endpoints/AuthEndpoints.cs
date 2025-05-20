@@ -8,7 +8,8 @@ public static class AuthEndpoints
     {
         var authGroup = app.MapGroup("/auth");
 
-        authGroup.MapPost("/login", LoginAsync);
+        authGroup.MapPost("/login", LoginAsync)
+            .AllowAnonymous();
     }
 
     private static async Task<LoginCommandResponse> LoginAsync(

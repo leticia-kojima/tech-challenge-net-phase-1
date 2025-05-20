@@ -1,5 +1,7 @@
 @FCG.API_HostAddress = http://localhost:5045
-@UserKey = fb39f42b-b85d-4d10-9a6a-ad79c474f02c
+@UserKey = 4cc8bab9-3e64-4e99-81e3-0ccad0a727e3
+@AdminBearerToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhNmIwNGZlMC1lN2UxLTQzODUtOTk2Zi01NTI1YTk1NTczNGYiLCJyb2xlIjoiQWRtaW4iLCJ1bmlxdWVfbmFtZSI6IkFkbWluaXN0cmFkb3IiLCJlbWFpbCI6ImFkbWluQGZjZy50ZXN0LmNvbS5iciIsIm5iZiI6MTc0NzcwMTA1MiwiZXhwIjoxNzQ3NzQ0MjUyLCJpYXQiOjE3NDc3MDEwNTIsImlzcyI6Imh0dHBzOi8vYXV0aC5mY2cuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGkuZmNnLmNvbSJ9.zXG32tEWTfBHrhJesmGAoiktp2wDpCABpDO1qjteBzA
+@UserBearerToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3ZDE0NTZlYy0yNzJhLTRhZDYtOWVlNy0yMjgxZTg0ZDY4YzAiLCJyb2xlIjoiVXNlciIsInVuaXF1ZV9uYW1lIjoiVXN1w6FyaW8iLCJlbWFpbCI6InVzZXJAZmNnLnRlc3QuY29tLmJyIiwibmJmIjoxNzQ3NzAxMDcwLCJleHAiOjE3NDc3NDQyNzAsImlhdCI6MTc0NzcwMTA3MCwiaXNzIjoiaHR0cHM6Ly9hdXRoLmZjZy5jb20iLCJhdWQiOiJodHRwczovL2FwaS5mY2cuY29tIn0.f94lXfFxvnwuSgDwVMDVUSxSlUXA1ScAsaZ8fpUpcU4
 
 POST {{FCG.API_HostAddress}}/auth/login/
 Accept: application/json
@@ -20,14 +22,17 @@ Content-Type: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/users?search=jo
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/users/{{UserKey}}
+Authorization: {{UserBearerToken}}
 Accept: application/json
 
 ###
 POST {{FCG.API_HostAddress}}/users/
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -38,6 +43,7 @@ Content-Type: application/json
 
 ###
 PUT {{FCG.API_HostAddress}}/users/{{UserKey}}
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -47,18 +53,22 @@ Content-Type: application/json
 
 ###
 DELETE {{FCG.API_HostAddress}}/users/{{UserKey}}
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/catalogs?name=cloud
+Authorization: {{UserBearerToken}}
 Accept: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}
+Authorization: {{UserBearerToken}}
 Accept: application/json
 
 ###
 POST {{FCG.API_HostAddress}}/catalogs/
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -68,6 +78,7 @@ Content-Type: application/json
 
 ###
 PUT {{FCG.API_HostAddress}}/catalogs/{{$guid}}
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -77,18 +88,22 @@ Content-Type: application/json
 
 ###
 DELETE {{FCG.API_HostAddress}}/catalogs/{{$guid}}
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games?title=azure
+Authorization: {{UserBearerToken}}
 Accept: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}
+Authorization: {{UserBearerToken}}
 Accept: application/json
 
 ###
 POST {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/
+Authorization: {{UserBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -98,6 +113,7 @@ Content-Type: application/json
 
 ###
 POST {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/evaluate
+Authorization: {{UserBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -107,10 +123,12 @@ Content-Type: application/json
 
 ###
 GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/download
+Authorization: {{UserBearerToken}}
 Accept: application/json
 
 ###
 PUT {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}
+Authorization: {{AdminBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
@@ -120,4 +138,5 @@ Content-Type: application/json
 
 ###
 DELETE {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}
+Authorization: {{AdminBearerToken}}
 Accept: application/json
