@@ -25,6 +25,7 @@ app.UseHttpsRedirection();
 #region Endpoints
 
 app.MapUserEndpoints();
+app.MapCatalogEndpoints();
 
 #endregion
 
