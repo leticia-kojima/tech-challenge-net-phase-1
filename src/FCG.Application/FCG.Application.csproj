@@ -22,4 +22,9 @@
     <Using Include="FCG.Domain._Common.Exceptions" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Games\Commands\" />
+    <Folder Include="Contracts\Games\Queries\" />
+  </ItemGroup>
+
 </Project>

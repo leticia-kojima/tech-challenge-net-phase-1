@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B13C1DDE-130D-46DE-A69E-5C3DC8EEA1B3}"
+	ProjectSection(SolutionItems) = preProject
+		ContextSetup.cs = ContextSetup.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG.Domain", "src\FCG.Domain\FCG.Domain.csproj", "{BFC58507-F18A-4AAF-9C0D-F2B2FCF9C29C}"
 EndProject
