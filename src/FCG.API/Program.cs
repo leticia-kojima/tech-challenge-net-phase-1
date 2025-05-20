@@ -2,6 +2,7 @@ using FCG.API.Endpoints;
 using FCG.API.Middlewares;
 using FCG.Infrastructure;
 using FCG.Infrastructure._Common.Database;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,16 @@ services.AddOpenApi()
     .AddDatabases(configuration)
     .AddRepositories()
     .AddInfrastructureServices();
+
+#endregion
+
+#region Serilog
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 #endregion
 
