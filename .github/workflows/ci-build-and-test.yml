@@ -1,0 +1,66 @@
+name: CI - Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '9.x'
+
+        - name: Restore dependencies
+          run: dotnet restore
+
+        - name: Build solution
+          run: dotnet build --no-restore --configuration Release
+
+        - name: Run tests and generate coverage report
+          run: |
+            dotnet test \
+              --configuration Release \
+              --no-restore \
+              --logger trx \
+              --results-directory TestResults \
+              /p:CollectCoverage=true \
+              /p:CoverletOutputFormat=opencover \
+              --collect:"XPlat Code Coverage"
+
+        - name: Install ReportGenerator
+          run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+        - name: Generate coverage report
+          run: |
+            reportgenerator \
+              "-reports:**/coverage.*.xml" \
+              "-targetdir:Report" \
+              -reporttypes:Html
+          env:
+            PATH: ${{ runner.tool_cache }}/.dotnet/tools:$PATH
+
+        - name: Upload test results
+          if: always()
+          uses: actions/upload-artifact@v4
+          with:
+            name: test-results
+            path: '**/*.trx'
+
+        - name: Upload coverage report
+          if: always()
+          uses: actions/upload-artifact@v4
+          with:
+            name: coverage-report
+            path: 'Report/**'
