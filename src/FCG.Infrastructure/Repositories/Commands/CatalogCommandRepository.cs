@@ -1,15 +1,11 @@
-﻿using FCG.Infrastructure._Common.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FCG.Domain.Catalogs;
+using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure.Repositories.Commands;
 
 public class CatalogCommandRepository : FCGCommandRepositoryBase<Catalog>, ICatalogCommandRepository
 {
-    public CatalogCommandRepository()
+    public CatalogCommandRepository(FCGCommandsDbContext context) : base(context)
     {
         
     }

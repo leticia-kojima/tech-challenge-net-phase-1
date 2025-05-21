@@ -1,5 +1,6 @@
 ﻿using FCG.Application.Contracts.Catalogs.Commands;
 using FCG.Application.Contracts.Catalogs.Events;
+using FCG.Domain.Catalogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

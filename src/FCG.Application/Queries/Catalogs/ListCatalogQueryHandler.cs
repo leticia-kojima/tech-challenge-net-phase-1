@@ -1,10 +1,5 @@
-﻿using FCG.Application._Common;
-using FCG.Application.Contracts.Catalogs.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FCG.Application.Contracts.Catalogs.Queries;
+using FCG.Domain.Catalogs;
 
 namespace FCG.Application.Queries.Catalogs;
 

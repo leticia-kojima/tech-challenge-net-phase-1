@@ -1,4 +1,7 @@
-﻿namespace FCG.API.Endpoints
+﻿using FCG.Application.Contracts.Catalogs.Commands;
+using FCG.Application.Contracts.Catalogs.Queries;
+
+namespace FCG.API.Endpoints
 {
     public static class CatalogEndpoints
     {
@@ -16,13 +19,13 @@
         private static async Task<CatalogQueryResponse> GetCatalogAsync(
             [FromRoute] Guid key,
             [FromServices] IMediator mediator,
-            CancelattionToken cancelattionToken
-        ) => await mediator.Send(new GetCatalogQueryRequest { key = key }, cancelattionToken);
+            CancellationToken cancelattionToken
+        ) => await mediator.Send(new GetCatalogQueryRequest { Key = key }, cancelattionToken);
 
         private static async Task<IReadOnlyCollection<CatalogQueryResponse>> GetCatalogsAsync(
             [AsParameters] ListCatalogsQueryRequest request,
             [FromServices] IMediator mediator,
-            CancelattionToken cancelattionToken
+            CancellationToken cancelattionToken
         ) => await mediator.Send(request, cancelattionToken);
 
         private static async Task<CreateCatalogCommandResponse> CreateCatalogAsync(

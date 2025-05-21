@@ -1,9 +1,7 @@
-﻿using FCG.Infrastructure.Contexts.FCGQueries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FCG.Domain.Catalogs;
+using MongoFramework.Linq;
+using System.Text.RegularExpressions;
+
 
 namespace FCG.Infrastructure.Repositories.Queries;
 

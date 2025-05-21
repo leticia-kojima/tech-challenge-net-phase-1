@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace FCG.Domain.Catalogs;
 
-public class ICatalogRepository : IRepository<Catalog>
+public interface ICatalogRepository : IRepository<Catalog>
 {
 }

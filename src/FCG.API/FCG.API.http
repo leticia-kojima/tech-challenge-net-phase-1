@@ -32,7 +32,7 @@ DELETE {{FCG.API_HostAddress}}/users/{{UserKey}}
 Accept: application/json
 
 ###
-GET {{FCG.API_HostAddress}}/catalogs?name=cloud
+GET {{FCG.API_HostAddress}}/catalogs?search=Cotia
 Accept: application/json
 
 ###

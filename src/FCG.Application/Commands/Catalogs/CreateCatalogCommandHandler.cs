@@ -1,11 +1,6 @@
-﻿using FCG.Application._Common;
-using FCG.Application.Contracts.Catalogs.Commands;
+﻿using FCG.Application.Contracts.Catalogs.Commands;
 using FCG.Application.Contracts.Catalogs.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FCG.Domain.Catalogs;
 
 namespace FCG.Application.Commands.Catalogs;
 
@@ -39,7 +34,7 @@ public class CreateCatalogCommandHandler : ICommandHandler<CreateCatalogCommandR
 
         var existCatalogWithSameName = await _catalogCommandRepository.ExistByNameAsync(request.Name, cancellationToken: cancellationToken);
 
-        if (existCatalogWithSameName) throw new FCGDuplicateExeception(nameof(Catalog), $"The name '{request.Name}' is already in use.");
+        if (existCatalogWithSameName) throw new FCGDuplicateException(nameof(Catalog), $"The name '{request.Name}' is already in use.");
 
         var catalog = new Catalog(
             Guid.NewGuid(),
@@ -48,7 +43,7 @@ public class CreateCatalogCommandHandler : ICommandHandler<CreateCatalogCommandR
         );
         await _catalogCommandRepository.AddAsync(catalog, cancellationToken);
 
-        await _mediator.PublishAsync(new CatalogCreatedEvent(catalog), cancellationToken);
+        await _mediator.Publish(new CatalogCreatedEvent(catalog), cancellationToken);
 
         return new CreateCatalogCommandResponse(catalog);
 

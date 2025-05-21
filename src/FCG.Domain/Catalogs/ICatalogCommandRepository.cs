@@ -8,7 +8,7 @@ namespace FCG.Domain.Catalogs;
 
 public interface ICatalogCommandRepository : ICatalogRepository
 {
-    Task<bool> ExistByEmailAsync(
+    Task<bool> ExistByNameAsync(
         string name,
         Guid? ignoreKey = null,
         CancellationToken? cancellationToken = null

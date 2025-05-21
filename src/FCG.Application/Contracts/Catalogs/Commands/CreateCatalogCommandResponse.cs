@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Contracts.Catalogs.Abstract;
+using FCG.Domain.Catalogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
