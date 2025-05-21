@@ -11,7 +11,9 @@ public static class FCGInfrastructureModule
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateUserCommandHandler>());
+        services.AddMediatR(cfg => {
+            cfg.RegisterServicesFromAssemblyContaining<CreateUserCommandHandler>();
+        });
 
         return services;
     }

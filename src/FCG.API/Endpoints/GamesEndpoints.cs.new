@@ -1,0 +1,60 @@
+using FCG.Application.Contracts.Games.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FCG.API.Endpoints;
+
+public static class GamesEndpoints
+{
+    public static void MapGamesEndpoints(this WebApplication app)
+    {
+        var gamesGroup = app.MapGroup("/games");
+
+        gamesGroup.MapGet("/", GetAllGamesAsync);
+        gamesGroup.MapGet("/{key:guid}", GetGameByKeyAsync);
+        gamesGroup.MapGet("/catalog/{catalogKey:guid}", GetGamesByCatalogAsync);
+        gamesGroup.MapPost("/", CreateGameAsync);
+        gamesGroup.MapPut("/{key:guid}", UpdateGameAsync);
+        gamesGroup.MapDelete("/{key:guid}", DeleteGameAsync);
+    }
+
+    private static async Task<GetGameByKeyQueryResponse> GetGameByKeyAsync(
+        [FromRoute] Guid key,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(new GetGameByKeyQueryRequest { Key = key }, cancellationToken);
+
+    private static async Task<IEnumerable<GetAllGamesQueryResponse>> GetAllGamesAsync(
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(new GetAllGamesQueryRequest(), cancellationToken);
+
+    private static async Task<IEnumerable<GetGamesByCatalogQueryResponse>> GetGamesByCatalogAsync(
+        [FromRoute] Guid catalogKey,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(new GetGamesByCatalogQueryRequest { CatalogKey = catalogKey }, cancellationToken);
+
+    private static async Task<CreateGameCommandResponse> CreateGameAsync(
+        [FromBody] CreateGameCommandRequest request,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(request, cancellationToken);
+
+    private static async Task<UpdateGameCommandResponse> UpdateGameAsync(
+        [FromRoute] Guid key,
+        [FromBody] UpdateGameCommandRequest request,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    )
+    {
+        request.Key = key;
+        return await mediator.Send(request, cancellationToken);
+    }
+
+    private static async Task DeleteGameAsync(
+        [FromRoute] Guid key,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(new DeleteGameCommandRequest { Key = key }, cancellationToken);
+}

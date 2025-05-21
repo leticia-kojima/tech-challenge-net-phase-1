@@ -1,0 +1,48 @@
+@host = http://localhost:5045
+
+### Listar todos os jogos
+GET {{host}}/games
+Accept: application/json
+
+### Obter jogo específico por chave (substitua pelo ID retornado após criar um jogo)
+GET {{host}}/games/33e5f631-4833-4301-b081-b6c398331235
+Accept: application/json
+
+### Criar novo jogo (sem precisar especificar catalogKey)
+POST {{host}}/games
+Content-Type: application/json
+
+{
+  "title": "The Legend of Zelda: Breath of the Wild",
+  "description": "Um jogo de aventura e ação em um vasto mundo aberto"
+}
+
+### Criar outro jogo (sem precisar especificar catalogKey)
+POST {{host}}/games
+Content-Type: application/json
+
+{
+  "title": "Super Mario Odyssey",
+  "description": "Um jogo de plataforma 3D onde Mario viaja entre reinos"
+}
+
+### Criar mais um jogo (sem precisar especificar catalogKey)
+POST {{host}}/games
+Content-Type: application/json
+
+{
+  "title": "God of War Ragnarök",
+  "description": "Um jogo de ação e aventura baseado na mitologia nórdica"
+}
+
+### Atualizar jogo existente (substitua pelo ID retornado após criar um jogo)
+PUT {{host}}/games/31a82a6a-5dad-4e69-a6ad-d3e76a6e5705
+Content-Type: application/json
+
+{
+  "title": "Teste de atualização de jogo",
+  "description": "Versão completa do aclamado jogo de aventura em mundo aberto com todas as DLCs"
+}
+
+### Excluir jogo (substitua pelo ID retornado após criar um jogo)
+DELETE {{host}}/games/850dc5df-9aea-4dd4-a53d-de4938104024

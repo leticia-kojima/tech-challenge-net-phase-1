@@ -1,4 +1,5 @@
 using FCG.API.Endpoints;
+using FCG.API.Middlewares;
 using FCG.Infrastructure;
 using FCG.Infrastructure._Common.Database;
 
@@ -20,11 +21,15 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
+// Adiciona o middleware de tratamento global de exceções
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
 app.UseHttpsRedirection();
 
 #region Endpoints
 
 app.MapUserEndpoints();
+app.MapGamesEndpoints();
 
 #endregion
 
