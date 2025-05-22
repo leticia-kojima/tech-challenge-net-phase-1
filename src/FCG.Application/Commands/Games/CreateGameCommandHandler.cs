@@ -1,5 +1,6 @@
 using FCG.Application.Contracts.Games.Commands;
 using FCG.Domain.Games;
+using MediatR;
 
 namespace FCG.Application.Commands.Games;
 public class CreateGameCommandHandler : IRequestHandler<CreateGameCommandRequest, CreateGameCommandResponse>

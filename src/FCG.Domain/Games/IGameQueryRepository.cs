@@ -15,4 +15,3 @@ public interface IGameQueryRepository : IGameRepository
         CancellationToken? cancellationToken = null
     );
 }
-

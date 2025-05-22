@@ -1,8 +1,9 @@
 ﻿using FCG.Application.Contracts.Games.Queries;
 using FCG.Domain.Games;
+using MediatR;
 
 namespace FCG.Application.Queries.Games;
-public class GetAllGamesQueryHandler : IQueryHandler<GetAllGamesQueryRequest, IEnumerable<GetAllGamesQueryResponse>>
+public class GetAllGamesQueryHandler : IRequestHandler<GetAllGamesQueryRequest, IEnumerable<GetAllGamesQueryResponse>>
 {
     private readonly IGameQueryRepository _gameQueryRepository;
 
@@ -25,6 +26,6 @@ public class GetAllGamesQueryHandler : IQueryHandler<GetAllGamesQueryRequest, IE
             CreatedAt = game.CreatedAt,
             UpdatedAt = game.UpdatedAt,
             DeletedAt = game.DeletedAt
-        });
+        }).ToList();
     }
 }
