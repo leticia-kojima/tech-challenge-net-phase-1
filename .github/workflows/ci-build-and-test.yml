@@ -44,12 +44,11 @@ jobs:
 
         - name: Generate coverage report
           run: |
+            export PATH="$PATH:~/.dotnet/tools"
             reportgenerator \
               "-reports:**/coverage.*.xml" \
               "-targetdir:Report" \
               -reporttypes:Html
-          env:
-            PATH: ${{ runner.tool_cache }}/.dotnet/tools:$PATH
 
         - name: Upload test results
           if: always()
