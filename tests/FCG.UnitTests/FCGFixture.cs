@@ -8,10 +8,10 @@ public class FCGFixture : IDisposable
     public FCGFixture()
     {
         _cancellationTokenSource = new();
+        CancellationToken = _cancellationTokenSource.Token;
         EntityBuilder = new();
         ModelBuilder = new();
         Faker = new();
-        CancellationToken = _cancellationTokenSource.Token;
 
         AutoFaker.Configure(builder =>
         {

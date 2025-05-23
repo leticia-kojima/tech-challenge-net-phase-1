@@ -34,4 +34,11 @@ public class Password : ValueObjectBase<Password>
     {
         yield return Hash;
     }
+
+    public bool Matches(string password)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(password);
+
+        return BCrypt.Net.BCrypt.Verify(password, Hash);
+    }
 }

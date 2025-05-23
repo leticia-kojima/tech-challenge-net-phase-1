@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Commands.Users;
+using FCG.Domain._Common.Settings;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +44,16 @@ public static class FCGInfrastructureModule
             .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Repository")))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureSettings(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
         return services;
     }
