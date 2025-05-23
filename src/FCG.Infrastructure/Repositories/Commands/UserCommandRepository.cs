@@ -9,8 +9,8 @@ public class UserCommandRepository : FCGCommandRepositoryBase<User>, IUserComman
 
     }
 
-    public Task<bool> ExistByEmailAsync(string email, Guid? ignoreKey = null, CancellationToken? cancellationToken = null)
-        => _dbSet.AnyAsync(u => u.Email == email && u.Key != ignoreKey, cancellationToken ?? CancellationToken.None);
+    public Task<bool> ExistByEmailAsync(string email, Guid? ignoreKey = null, CancellationToken cancellationToken = default)
+        => _dbSet.AnyAsync(u => u.Email == email && u.Key != ignoreKey, cancellationToken);
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         => _dbSet.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);

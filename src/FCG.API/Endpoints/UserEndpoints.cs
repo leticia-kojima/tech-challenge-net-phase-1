@@ -8,8 +8,9 @@ public static class UserEndpoints
 {
     public static void MapUserEndpoints(this WebApplication app)
     {
-        var usersGroup = app.MapGroup("/users");
-        var usersGroupOnlyForAdmin = app.MapGroup("/users")
+        const string usersRoute = "/users";
+        var usersGroup = app.MapGroup(usersRoute);
+        var usersGroupOnlyForAdmin = app.MapGroup(usersRoute)
             .RequireAuthorization(Policies.OnlyAdmin);
 
         usersGroupOnlyForAdmin.MapGet("/", GetUsersAsync);

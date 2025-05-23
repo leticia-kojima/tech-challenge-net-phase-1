@@ -1,4 +1,5 @@
-﻿using FCG.Application.Contracts.Auth;
+﻿using FCG.Application._Common.Extensions;
+using FCG.Application.Contracts.Auth;
 using FCG.Domain._Common.Settings;
 using FCG.Domain.Users;
 using Microsoft.Extensions.Options;
@@ -49,23 +50,17 @@ public class LoginCommandHandler : ICommandHandler<LoginCommandRequest, LoginCom
             new(ClaimTypes.Email, user.Email)
         ]);
 
-        var symmetricSecurityKey = new SymmetricSecurityKey(
-            Convert.FromBase64String(_jwtSettings.Secret)
-        );
-        var signingCredentials = new SigningCredentials(
-            symmetricSecurityKey,
-            SecurityAlgorithms.HmacSha256
-        );
+        var utcNow = DateTime.UtcNow;
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = _jwtSettings.Issuer,
             Audience = _jwtSettings.Audience,
             Subject = claims,
-            IssuedAt = DateTime.UtcNow,
-            NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpirationInHours),
-            SigningCredentials = signingCredentials
+            IssuedAt = utcNow,
+            NotBefore = utcNow,
+            Expires = utcNow.AddHours(_jwtSettings.ExpirationInHours),
+            SigningCredentials = _jwtSettings.GetSigningCredentials()
         };
         
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -29,7 +29,8 @@ public class PasswordTests : TestBase
     [InlineData("12345678", "Password must contain letters, numbers and special characters.")]
     [InlineData("1234", "Password must be at least 8 characters long.")]
     public void ShouldThrowExceptionForInvalidOrShortPassword(
-        string password, string expectedMessage
+        string password,
+        string expectedMessage
     )
     {
         var validationException = Should.Throw<FCGValidationException>(

@@ -48,9 +48,9 @@ public class LoginCommandHandlerTests : TestBase
         var utcNow = DateTime.UtcNow;
         var jwt = new JwtSecurityToken(result.Token);
 
-        utcNow.ShouldBeGreaterThan(jwt.ValidFrom);
-        utcNow.ShouldBeLessThan(jwt.ValidTo);
-        utcNow.ShouldBeLessThan(result.Expiration);
+        jwt.ValidFrom.ShouldBeLessThan(utcNow);
+        jwt.ValidTo.ShouldBeGreaterThan(utcNow);
+        result.Expiration.ShouldBeGreaterThan(utcNow);
         jwt.Claims.ShouldNotBeEmpty();
     }
 
@@ -59,7 +59,7 @@ public class LoginCommandHandlerTests : TestBase
     [InlineData("", "somepassword", "Email is required.")]
     [InlineData("user@fcg.test.com", null, "Password is required.")]
     [InlineData("user@fcg.test.com", "", "Password is required.")]
-    public async Task ShouldThrowExceptionForMissingEmailOrPasswordAsync(
+    public async Task ShouldThrowExceptionForMissingFieldsAsync(
         string? email,
         string? password,
         string expectedMessage
