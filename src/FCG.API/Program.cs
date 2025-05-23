@@ -24,7 +24,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-// Adiciona o middleware de tratamento global de exceções
+// Add global exception handling middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
@@ -168,5 +168,4 @@ static bool IsConnectionException(Exception ex, out string databaseType, out str
     
     return false;
 }
-
 

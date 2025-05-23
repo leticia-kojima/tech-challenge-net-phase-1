@@ -1,4 +1,6 @@
 ﻿using FCG.Application.Commands.Users;
+using FCG.Domain.Games;
+using FCG.Infrastructure.Repositories.Games;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,11 +42,15 @@ public static class FCGInfrastructureModule
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
+        // Registra os repositórios automaticamente usando Assembly Scanning
         services.Scan(scan => scan
             .FromAssemblies(Assembly.GetExecutingAssembly())
-            .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Repository")))
+            .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Repository") && !c.Name.Contains("Dapper")))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
+        
+        // Registra explicitamente o repositório Dapper para consultas de jogos
+        services.AddScoped<IGameQueryRepository, DapperGameQueryRepository>();
 
         return services;
     }
