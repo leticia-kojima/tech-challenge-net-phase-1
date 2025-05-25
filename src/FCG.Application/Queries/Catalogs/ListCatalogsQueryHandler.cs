@@ -3,11 +3,11 @@ using FCG.Domain.Catalogs;
 
 namespace FCG.Application.Queries.Catalogs;
 
-public class ListCatalogQueryHandler : IQueryHandler<ListCatalogsQueryRequest, IReadOnlyCollection<CatalogQueryResponse>>
+public class ListCatalogsQueryHandler : IQueryHandler<ListCatalogsQueryRequest, IReadOnlyCollection<CatalogQueryResponse>>
 {
     private readonly ICatalogQueryRepository _catalogQueryRepository;
 
-    public ListCatalogQueryHandler(ICatalogQueryRepository catalogQueryRepository)
+    public ListCatalogsQueryHandler(ICatalogQueryRepository catalogQueryRepository)
     {
         _catalogQueryRepository = catalogQueryRepository;
     }
