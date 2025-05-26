@@ -60,12 +60,5 @@ public class UnauthorizedMiddleware
             context.Response.Body = originalBodyStream;
         }
     }
-    public static class UnauthorizedMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseUnauthorizedMiddleware(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<UnauthorizedMiddleware>();
-        }
-    }
 }
 
