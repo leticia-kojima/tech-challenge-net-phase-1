@@ -42,6 +42,8 @@ if (app.Environment.IsDevelopment())
 };
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<UnauthorizedMiddleware>();
+app.UseMiddleware<BadRequestMiddleware>();
 app.UseHttpsRedirection();
 
 #region Endpoints
