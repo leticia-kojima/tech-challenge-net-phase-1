@@ -1,6 +1,6 @@
 ﻿using FCG.Domain.Users;
 
-namespace FCG.UnitTests.Builders;
+namespace FCG.UnitTests._Builders;
 public class FCGEntityBuilder
 {
     public Faker<User> User => new AutoFakerBase<User>()
