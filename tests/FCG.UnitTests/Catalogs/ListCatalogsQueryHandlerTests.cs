@@ -6,6 +6,7 @@ namespace FCG.UnitTests.Catalogs;
 public class ListCatalogsQueryHandlerTests : TestHandlerBase<ListCatalogsQueryHandler>
 {
     private readonly ICatalogQueryRepository _catalogQueryRepository;
+
     public ListCatalogsQueryHandlerTests(FCGFixture fixture) : base(fixture)
     {
         _catalogQueryRepository = GetMock<ICatalogQueryRepository>();

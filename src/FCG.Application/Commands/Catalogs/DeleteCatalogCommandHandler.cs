@@ -1,11 +1,6 @@
 ﻿using FCG.Application.Contracts.Catalogs.Commands;
 using FCG.Application.Contracts.Catalogs.Events;
 using FCG.Domain.Catalogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FCG.Application.Commands.Catalogs;
 

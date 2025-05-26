@@ -46,6 +46,5 @@ public class CreateCatalogCommandHandler : ICommandHandler<CreateCatalogCommandR
         await _mediator.Publish(new CatalogCreatedEvent(catalog), cancellationToken);
 
         return new CreateCatalogCommandResponse(catalog);
-
     }
 }

@@ -7,6 +7,7 @@ public class UpdateCatalogCommandHandlerTests : TestHandlerBase<UpdateCatalogCom
 {
     private readonly IMediator _mediator;
     private readonly ICatalogCommandRepository _catalogCommandRepository;
+
     public UpdateCatalogCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
         _mediator = GetMock<IMediator>();
@@ -36,7 +37,6 @@ public class UpdateCatalogCommandHandlerTests : TestHandlerBase<UpdateCatalogCom
                     && c.Name == request.Name
                     && c.Description == request.Description),
                 _cancellationToken
-
             );
         await _mediator
             .Received(1)
