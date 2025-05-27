@@ -33,6 +33,7 @@ app.UseHttpsRedirection()
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
+app.MapCatalogEndpoints();
 
 #endregion
 
