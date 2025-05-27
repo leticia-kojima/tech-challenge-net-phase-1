@@ -1,5 +1,6 @@
 ﻿using FCG.Application.Contracts.Catalogs.Commands;
 using FCG.Application.Contracts.Catalogs.Queries;
+using FCG.Domain._Common.Consts;
 
 namespace FCG.API.Endpoints;
 
@@ -8,12 +9,14 @@ public static class CatalogEndpoints
     public static void MapCatalogEndpoints(this WebApplication app)
     {
         var catalogsGroup = app.MapGroup("/catalogs");
+        var catalogsGroupOnlyForAdmin = app.MapGroup("/catalogs")
+            .RequireAuthorization(Policies.OnlyAdmin);
 
         catalogsGroup.MapGet("/", GetCatalogsAsync);
         catalogsGroup.MapGet("/{key:guid}", GetCatalogAsync);
-        catalogsGroup.MapPost("/", CreateCatalogAsync);
-        catalogsGroup.MapPut("/{key:guid}", UpdateCatalogAsync);
-        catalogsGroup.MapDelete("/{key:guid}", DeleteCatalogAsync);
+        catalogsGroupOnlyForAdmin.MapPost("/", CreateCatalogAsync);
+        catalogsGroupOnlyForAdmin.MapPut("/{key:guid}", UpdateCatalogAsync);
+        catalogsGroupOnlyForAdmin.MapDelete("/{key:guid}", DeleteCatalogAsync);
     }
 
     private static async Task<CatalogQueryResponse> GetCatalogAsync(

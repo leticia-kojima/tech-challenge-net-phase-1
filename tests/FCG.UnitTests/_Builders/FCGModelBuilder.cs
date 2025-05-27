@@ -1,7 +1,6 @@
 ﻿using FCG.Application.Contracts.Auth;
 using FCG.Application.Contracts.Catalogs.Commands;
 using FCG.Application.Contracts.Users.Commands;
-using FCG.Domain._Common.Settings;
 
 namespace FCG.UnitTests._Builders;
 public class FCGModelBuilder
