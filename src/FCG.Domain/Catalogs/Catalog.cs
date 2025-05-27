@@ -19,4 +19,12 @@ public class Catalog : EntityBase
     public string Description { get; private set; }
 
     public virtual IReadOnlyCollection<Game> Games { get; private set; }
+
+    public void SetData(string name, string description)
+    {
+        Name = name;
+        Description = description;
+
+        WasUpdated();
+    }
 }

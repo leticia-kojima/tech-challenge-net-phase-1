@@ -6,8 +6,7 @@ public abstract class TestHandlerBase<THandler> : TestBase
 {
     protected readonly NSubstituteAutoMocker<THandler> _autoMocker;
 
-    protected TestHandlerBase(FCGFixture fixture) : base(fixture)
-        => _autoMocker = new();
+    protected TestHandlerBase(FCGFixture fixture) : base(fixture) => _autoMocker = new();
 
     protected THandler Handler => _autoMocker.ClassUnderTest;
 

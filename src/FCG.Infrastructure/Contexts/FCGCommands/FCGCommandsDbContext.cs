@@ -48,17 +48,19 @@ public class FCGCommandsDbContext : DbContext
 
     private static void HandleEntityStateTransitions(ChangeTracker changeTracker)
     {
+        var utcNow = DateTime.UtcNow;
+
         foreach (var entry in changeTracker.Entries<EntityBase>())
         {
             if (entry.State == EntityState.Added)
-                entry.CurrentValues[nameof(EntityBase.CreatedAt)] = DateTime.UtcNow;
+                entry.CurrentValues[nameof(EntityBase.CreatedAt)] = utcNow;
 
             if (entry.State == EntityState.Modified)
-                entry.CurrentValues[nameof(EntityBase.UpdatedAt)] = DateTime.UtcNow;
+                entry.CurrentValues[nameof(EntityBase.UpdatedAt)] = utcNow;
 
             if (entry.State == EntityState.Deleted)
             {
-                entry.CurrentValues[nameof(EntityBase.DeletedAt)] = DateTime.UtcNow;
+                entry.CurrentValues[nameof(EntityBase.DeletedAt)] = utcNow;
                 entry.State = EntityState.Modified;
             }
         }
