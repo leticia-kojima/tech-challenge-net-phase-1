@@ -1,4 +1,5 @@
 ﻿using FCG.Application.Commands.Users;
+using FCG.Domain._Common.Settings;
 using FCG.Domain.Games;
 using FCG.Infrastructure.Repositories.Games;
 using MediatR;
@@ -51,6 +52,16 @@ public static class FCGInfrastructureModule
         
         // Registra explicitamente o repositório Dapper para consultas de jogos
         services.AddScoped<IGameQueryRepository, DapperGameQueryRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureSettings(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
         return services;
     }

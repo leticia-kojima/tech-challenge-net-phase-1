@@ -1,6 +1,7 @@
 using FCG.API.Endpoints;
 using FCG.API.Middlewares;
 using FCG.Infrastructure;
+using FCG.Infrastructure._Common.Auth;
 using FCG.Infrastructure._Common.Database;
 using MongoDB.Driver;
 using MySqlConnector;
@@ -18,20 +19,26 @@ services.AddOpenApi()
     .AddRepositories()
     .AddInfrastructureServices();
 
+services.ConfigureSettings(configuration)
+    .ConfigureAuthentication(configuration)
+    .ConfigureAuthorization();
+
 #endregion
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-// Add global exception handling middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-
-app.UseHttpsRedirection();
+app.UseHttpsRedirection()
+    .UseAuthentication()
+    .UseAuthorization();
 
 #region Endpoints
 
+app.MapAuthEndpoints();
 app.MapUserEndpoints();
+app.MapCatalogEndpoints();
 app.MapGamesEndpoints();
 
 #endregion

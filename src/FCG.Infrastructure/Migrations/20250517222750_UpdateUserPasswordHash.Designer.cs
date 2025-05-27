@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FCG.Infrastructure.Migrations
 {
     [DbContext(typeof(FCGCommandsDbContext))]
-    [Migration("20250514212654_UpdateUserPasswordHash")]
+    [Migration("20250517222750_UpdateUserPasswordHash")]
     partial class UpdateUserPasswordHash
     {
         /// <inheritdoc />
@@ -259,7 +259,7 @@ namespace FCG.Infrastructure.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@fcg.test.com.br",
                             FullName = "Administrador",
-                            PasswordHash = "$2a$11$bmADClM6Rg/A51PbN4YZA.8iMU2p9mPakBp1TaJB8FtMZS22AFqHG",
+                            PasswordHash = "$2a$11$PCCNp26qNsiEdRsX1iStfOe5mDjfnK2UL/tFnYT96CIOjMvCBWVbe",
                             Role = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -269,7 +269,7 @@ namespace FCG.Infrastructure.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@fcg.test.com.br",
                             FullName = "Usuário",
-                            PasswordHash = "$2a$11$1RZ55jTgKvXaaK2jN4qmF.x1DNI2vJqS27.ePmYE1smPSTyB7AXDO",
+                            PasswordHash = "$2a$11$TKxDQGXY/rzdA0LJBE3.yO6FGHrgwMplsOkiSctXl4nBNaJlS9h6y",
                             Role = 2,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
