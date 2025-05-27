@@ -1,5 +1,6 @@
 using FCG.API.Endpoints;
 using FCG.Infrastructure;
+using FCG.Infrastructure._Common.Auth;
 using FCG.Infrastructure._Common.Database;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,16 +15,23 @@ services.AddOpenApi()
     .AddRepositories()
     .AddInfrastructureServices();
 
+services.ConfigureSettings(configuration)
+    .ConfigureAuthentication(configuration)
+    .ConfigureAuthorization();
+
 #endregion
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection()
+    .UseAuthentication()
+    .UseAuthorization();
 
 #region Endpoints
 
+app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapCatalogEndpoints();
 
