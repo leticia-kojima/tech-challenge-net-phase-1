@@ -1,10 +1,4 @@
-﻿using FCG.Application._Common.Contracts;
-using FCG.Application.Contracts.Catalogs.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FCG.Application.Contracts.Catalogs.Abstract;
 
 namespace FCG.Application.Contracts.Catalogs.Commands;
 

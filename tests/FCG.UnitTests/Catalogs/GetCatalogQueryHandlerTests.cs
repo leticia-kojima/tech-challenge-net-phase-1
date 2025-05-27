@@ -7,6 +7,7 @@ namespace FCG.UnitTests.Catalogs;
 public class GetCatalogQueryHandlerTests : TestHandlerBase<GetCatalogQueryHandler>
 {
     private readonly ICatalogQueryRepository _catalogQueryRepository;
+
     public GetCatalogQueryHandlerTests(FCGFixture fixture) : base(fixture)
     {
         _catalogQueryRepository = GetMock<ICatalogQueryRepository>();
@@ -41,6 +42,5 @@ public class GetCatalogQueryHandlerTests : TestHandlerBase<GetCatalogQueryHandle
         );
 
         notFoundException.Message.ShouldBe($"Catalog with key '{request.Key}' was not found.");
-
     }
 }

@@ -8,6 +8,7 @@ public class DeleteCatalogCommandHandlerTests : TestHandlerBase<DeleteCatalogCom
 {
     private readonly IMediator _mediator;
     private readonly ICatalogCommandRepository _catalogCommandRepository;
+
     public DeleteCatalogCommandHandlerTests(FCGFixture fixture) : base(fixture)
     {
         _mediator = GetMock<IMediator>();

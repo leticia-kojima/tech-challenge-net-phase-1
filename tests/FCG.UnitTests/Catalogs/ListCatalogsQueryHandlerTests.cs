@@ -3,6 +3,7 @@ using FCG.Application.Queries.Catalogs;
 using FCG.Domain.Catalogs;
 
 namespace FCG.UnitTests.Catalogs;
+
 public class ListCatalogsQueryHandlerTests : TestHandlerBase<ListCatalogsQueryHandler>
 {
     private readonly ICatalogQueryRepository _catalogQueryRepository;

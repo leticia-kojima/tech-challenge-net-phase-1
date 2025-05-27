@@ -48,7 +48,7 @@ public class UpdateCatalogCommandHandler : ICommandHandler<UpdateCatalogCommandR
         await _catalogCommandRepository.UpdateAsync(catalog, cancellationToken);
 
         await _mediator.Publish(new CatalogUpdatedEvent(catalog), cancellationToken);
-
+         
         return new UpdateCatalogCommandResponse(catalog);
     }
 }

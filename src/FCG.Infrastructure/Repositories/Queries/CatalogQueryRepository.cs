@@ -2,7 +2,6 @@
 using MongoFramework.Linq;
 using System.Text.RegularExpressions;
 
-
 namespace FCG.Infrastructure.Repositories.Queries;
 
 public class CatalogQueryRepository : FCGQueryRepositoryBase<Catalog>, ICatalogQueryRepository
@@ -23,5 +22,4 @@ public class CatalogQueryRepository : FCGQueryRepositoryBase<Catalog>, ICatalogQ
 
         return await query.ToArrayAsync(cancellationToken);
     }
-
 }

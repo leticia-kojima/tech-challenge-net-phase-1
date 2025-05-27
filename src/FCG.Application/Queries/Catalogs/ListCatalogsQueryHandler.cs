@@ -17,6 +17,6 @@ public class ListCatalogsQueryHandler : IQueryHandler<ListCatalogsQueryRequest, 
     {
         var catalogs = await _catalogQueryRepository.SearchAsync(request.Search, cancellationToken);
 
-        return catalogs.Select(u => new CatalogQueryResponse(u)).ToArray();
+        return catalogs.Select(c => new CatalogQueryResponse(c)).ToArray();
     }
 }

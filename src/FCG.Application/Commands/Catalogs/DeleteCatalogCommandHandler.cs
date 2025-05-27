@@ -20,9 +20,11 @@ public class DeleteCatalogCommandHandler
     public async Task Handle(DeleteCatalogCommandRequest request, CancellationToken cancellationToken)
     {
         var catalog = await _catalogCommandRepository.GetByIdAsync(request.Key, cancellationToken);
+        
         if (catalog is null) throw new FCGNotFoundException(request.Key, nameof(Catalog), $"Catalog with key '{request.Key}' was not found.");
 
         await _catalogCommandRepository.DeleteAsync(catalog, cancellationToken);
+
         await _mediator.Publish(new CatalogDeletedEvent(catalog), cancellationToken);
     }
 }

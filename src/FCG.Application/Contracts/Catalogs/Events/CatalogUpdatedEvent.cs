@@ -9,5 +9,5 @@ public class CatalogUpdatedEvent : IEvent
         Catalog = catalog;
     }
 
-    public Catalog Catalog { get;}
+    public Catalog Catalog { get; }
 }
