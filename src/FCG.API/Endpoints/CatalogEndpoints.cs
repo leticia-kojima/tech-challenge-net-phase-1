@@ -8,8 +8,9 @@ public static class CatalogEndpoints
 {
     public static void MapCatalogEndpoints(this WebApplication app)
     {
-        var catalogsGroup = app.MapGroup("/catalogs");
-        var catalogsGroupOnlyForAdmin = app.MapGroup("/catalogs")
+        const string catalogsRoute = "/catalogs";
+        var catalogsGroup = app.MapGroup(catalogsRoute);
+        var catalogsGroupOnlyForAdmin = app.MapGroup(catalogsRoute)
             .RequireAuthorization(Policies.OnlyAdmin);
 
         catalogsGroup.MapGet("/", GetCatalogsAsync);
