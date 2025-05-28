@@ -1,5 +1,11 @@
 ## FCG - FIAP Cloud Games
 
+<p align="left">
+    <a href="https://github.com/leticia-kojima/tech-challenge-net-phase-1/actions/workflows/ci-build-and-test.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/leticia-kojima/tech-challenge-net-phase-1/ci-build-and-test.yml?label=CI%20-%20Build%20%26%20Test&style=for-the-badge&logo=github" alt="CI - Build and Test Status"/>
+    </a>
+</p>
+
 **MVP para uma plataforma de jogos voltados para a educação de tecnologia.**
 
 A plataforma **FCG - FIAP Cloud Games** é um MVP voltado para a educação em tecnologia, com foco na venda de jogos digitais e gestão de servidores para partidas online. Este documento detalha a organização do projeto, ferramentas utilizadas, diagramas explicativos, arquitetura planejada, requisitos técnicos e instruções para execução e migrações. Confira as seções abaixo para mais informações:
@@ -10,6 +16,7 @@ A plataforma **FCG - FIAP Cloud Games** é um MVP voltado para a educação em t
 - **[Diagramas](#diagramas):** Representações visuais do sistema, como Storytelling e Event Storming.
 - **[Arquitetura](#arquitetura):** Estrutura do projeto e bibliotecas empregadas.
 - **[Execução](#execução):** Requisitos, configuração e instruções para rodar o projeto.
+- **[Testes](#testes):** Execução dos testes unitários, geração de relatórios de cobertura e funcionamento do pipeline automatizado.
 - **[Migrations](#migrations):** Comandos para gerenciar alterações no banco de dados.
 
 ## Organização
@@ -121,11 +128,11 @@ graph LR
 
 | Projeto                | Responsabilidade                                                                                                                        |
 |------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| **FCG.API**            | Camada de apresentação, implementando Minimal APIs do ASP.NET Core e expondo endpoints HTTP.                                           |
-| **FCG.Application**    | Lógica de orquestração, contratos, handlers e serviços de aplicação.                                                                   |
-| **FCG.Domain**         | Núcleo do domínio, com entidades, value objects e agregados, seguindo DDD.                                                             |
-| **FCG.Infrastructure** | Persistência de dados, repositórios, integrações com MySQL/MongoDB e serviços de infraestrutura.                                       |
-| **FCG.UnitTests**      | Testes unitários automatizados, utilizando xUnit e NSubstitute para garantir a qualidade do código.                                    |
+| [**FCG.API**](src/FCG.API/) | Camada de apresentação, implementando Minimal APIs do ASP.NET Core e expondo endpoints HTTP. |
+| [**FCG.Application**](src/FCG.Application/) | Lógica de orquestração, contratos, handlers e serviços de aplicação. |
+| [**FCG.Domain**](src/FCG.Domain/) | Núcleo do domínio, com entidades, value objects e agregados, seguindo DDD. |
+| [**FCG.Infrastructure**](src/FCG.Infrastructure/) | Persistência de dados, repositórios, integrações com MySQL/MongoDB e serviços de infraestrutura. |
+| [**FCG.UnitTests**](src/FCG.UnitTests/) | Testes unitários automatizados, utilizando xUnit e NSubstitute para garantir a qualidade do código. |
 
 ### Principais Bibliotecas Utilizadas
 
@@ -150,17 +157,68 @@ Para trabalhar no projeto, é necessário garantir a execução dos servidores d
  - **[MySQL Community Server](https://dev.mysql.com/downloads/mysql/):** Banco de dados relacional utilizado para comandos.
 
 ### Configuração
-
-A conexão com cada um dos banco de dados é configurada no arquivo `appsettings.json`. Caso necessário, atualize com o usuário e senha definidos no servidor. A tabela abaixo detalha estas configurações.
+A conexão com cada um dos bancos de dados é configurada no arquivo [`appsettings.json`](src/FCG.API/appsettings.json). Caso necessário, atualize com o usuário e senha definidos no servidor. A tabela abaixo detalha estas configurações.
 
 | Chave | Descrição |
 | - | - |
 | `ConnectionStrings:FCGCommands` | String de conexão com o banco de dados **MySQL**. |
 | `ConnectionStrings:FCGQueries` | String de conexão com o banco de dados **MongoDB**. |
 
-### Debug e Teste
+### Debug
 
-É necessário definir o projeto `FCG.API` como sendo de inicialização e escolher a opção `http` para executar a API. O arquivo `FCG.API.http` presente neste projeto, contempla os endpoints existentes. No Visual Studio aparecerá a opção para fazer debug e envio de requisições.
+O arquivo `FCG.API.http`, incluído neste repositório, foi criado para facilitar o processo de depuração (debug) da API durante o desenvolvimento. Ele reúne exemplos de requisições para todos os endpoints disponíveis, permitindo testar e validar rapidamente as rotas implementadas diretamente pelo Visual Studio, sem a necessidade de ferramentas externas. Para utilizá-lo:
+
+1. Defina o projeto `FCG.API` como projeto de inicialização no Visual Studio.
+2. Selecione o perfil de execução `http` para iniciar a API em modo de depuração.
+3. Abra o arquivo `FCG.API.http` e utilize os recursos integrados do Visual Studio para enviar requisições diretamente à API, facilitando o teste e a validação dos endpoints implementados.
+
+Com esse recurso, é possível agilizar o desenvolvimento, testar as rotas implementadas e analisar as respostas diretamente no Visual Studio, sem depender de ferramentas externas.
+
+## Testes
+
+A solução possui uma suíte de testes unitários que cobre os principais componentes da aplicação. Os testes validam o comportamento dos handlers na camada de aplicação, além das entidades, agregados e value objects no domínio, assegurando a integridade das regras de negócio e a robustez do sistema.
+
+A criação e execução dos testes são facilitadas por ferramentas que automatizam a geração de dados, simulam dependências e tornam as asserções mais legíveis, promovendo um desenvolvimento orientado à qualidade.
+
+### Execução
+
+É possível rodar os testes unitários tanto pelo [Visual Studio](#visual-studio) quanto pelo [terminal](#terminal):
+
+#### Visual Studio
+
+1. Abra a solução no Visual Studio.
+2. No menu, acesse **Test > Run All Tests** ou pressione `Ctrl + R, A`.
+3. Os resultados aparecerão na janela **Test Explorer**.
+
+#### Terminal
+
+Execute o comando a seguir na raiz do projeto:
+
+```
+dotnet test
+```
+
+
+### Relatório
+
+O relatório de cobertura de testes fornece uma visão detalhada sobre quais partes do código estão sendo exercitadas pelos testes automatizados. Isso ajuda a identificar áreas não testadas, promovendo maior qualidade e confiança nas entregas.
+
+Para gerar o relatório de cobertura, utilize o script `GenerateReport.ps1` localizado na pasta `tests`:
+
+1. Abra o PowerShell como administrador no diretório `tests` do projeto.
+
+2. Execute o comando abaixo para gerar o relatório de testes:  
+
+    ```
+    .\GenerateReport.ps1
+    ```
+Abra o arquivo `Report/index.html` para visualizar os resultados.
+
+### Pipeline
+
+Este repositório possui uma GitHub Action configurada para validar os testes automatizados a cada push, pull request na branch `main` ou execução manual. O pipeline executa o build e os testes do projeto .NET, gerando relatórios de cobertura em HTML e arquivos `.trx` compatíveis com o Visual Studio. Todos os relatórios e resultados dos testes são disponibilizados como artefatos para download, permitindo análise detalhada e acompanhamento da qualidade do código diretamente pelo GitHub.
+
+> **Nota:** O workflow está localizado em [`/.github/workflows/ci-build-and-test.yml`](.github/workflows/ci-build-and-test.yml).
 
 ## Migrations
 
