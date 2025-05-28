@@ -22,16 +22,14 @@ public abstract class FCGCommandRepositoryBase<TEntity> : IRepository<TEntity> w
 
     public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        // Implementando soft delete
-        entity.Delete();
-        _dbSet.Update(entity);
+        _dbSet.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await GetByIdAsync(id, cancellationToken);
-        if (entity != null)
+        if (entity is not null)
         {
             await DeleteAsync(entity, cancellationToken);
         }

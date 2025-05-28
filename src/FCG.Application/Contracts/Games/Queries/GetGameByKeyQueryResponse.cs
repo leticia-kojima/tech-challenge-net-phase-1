@@ -1,10 +1,21 @@
-﻿namespace FCG.Application.Contracts.Games.Queries;
+﻿using FCG.Domain.Games;
+
+namespace FCG.Application.Contracts.Games.Queries;
 public class GetGameByKeyQueryResponse
 {
-    public required Guid Key { get; set; }
-    public required string Title { get; set; }
-    public required string Description { get; set; }
-    public required Guid CatalogKey { get; set; }
-    public required string CatalogName { get; set; }
+    public GetGameByKeyQueryResponse(Game game)
+    {
+        Key = game.Key;
+        Title = game.Title;
+        Description = game.Description;
+        CatalogKey = game.CatalogKey;
+        CatalogName = game.Catalog.Name;
+    }
+
+    public Guid Key { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public Guid CatalogKey { get; set; }
+    public string CatalogName { get; set; }
 }
 

@@ -1,14 +1,20 @@
+using FCG.Application.Contracts.Catalogs.Events;
 using FCG.Application.Contracts.Games.Commands;
 using FCG.Domain.Games;
-using FCG.Domain._Common.Exceptions;
+using FCG.Domain.Users;
 
 namespace FCG.Application.Commands.Games;
 public class UpdateGameCommandHandler : IRequestHandler<UpdateGameCommandRequest, UpdateGameCommandResponse>
 {
+    private readonly IMediator _mediator;
     private readonly IGameCommandRepository _gameCommandRepository;
 
-    public UpdateGameCommandHandler(IGameCommandRepository gameCommandRepository)
+    public UpdateGameCommandHandler(
+        IMediator mediator,
+        IGameCommandRepository gameCommandRepository
+    )
     {
+        _mediator = mediator;
         _gameCommandRepository = gameCommandRepository;
     }
 
@@ -26,9 +32,21 @@ public class UpdateGameCommandHandler : IRequestHandler<UpdateGameCommandRequest
                 $"{nameof(request.Description)} is required."
             );
 
+        if (request.Title.Length > 100)
+            throw new FCGValidationException(nameof(request.Title), "Title cannot exceed 100 characters.");
+
+        if (request.Description.Length > 500)
+            throw new FCGValidationException(nameof(request.Description), "Description cannot exceed 500 characters.");
+
         var game = await _gameCommandRepository.GetByIdAsync(request.Key, cancellationToken);
-        if (game is null)
-            throw new FCGNotFoundException(request.Key, nameof(Game), $"Game with id {request.Key} not found");
+        
+        if (game is null) throw new FCGNotFoundException(request.Key, nameof(Game), $"Game with key '{request.Key}' was not found.");
+
+        if (game.CatalogKey != request.CatalogKey)
+            throw new FCGValidationException(
+                nameof(request.CatalogKey),
+                $"Game with key '{request.Key}' does not belong to catalog with key '{request.CatalogKey}'."
+            );
 
         var existGameWithSameTitle = await _gameCommandRepository.ExistByTitleAsync(
             request.Title, 
@@ -39,23 +57,15 @@ public class UpdateGameCommandHandler : IRequestHandler<UpdateGameCommandRequest
         if (existGameWithSameTitle) 
             throw new FCGDuplicateException(nameof(Game), $"The title '{request.Title}' is already in use.");
 
-        // Atualizar os campos da entidade existente
-        var catalogKey = request.CatalogKey == Guid.Empty ? game.CatalogKey : request.CatalogKey;
-        
-        // Obter a entidade atualizada (sem criar uma nova instância)
-        var updatedGame = new Game(
-            game.Key,
+        game.SetData(
             request.Title,
-            request.Description,
-            catalogKey
+            request.Description
         );
         
-        // Desanexar a entidade atual antes de anexar a nova
-        _gameCommandRepository.Detach(game);
-        
-        // Agora podemos atualizar com a nova entidade
-        await _gameCommandRepository.UpdateAsync(updatedGame, cancellationToken);
+        await _gameCommandRepository.UpdateAsync(game, cancellationToken);
 
-        return new UpdateGameCommandResponse { Key = updatedGame.Key };
+        await _mediator.Publish(new GameUpdatedEvent(game), cancellationToken);
+
+        return new UpdateGameCommandResponse { Key = game.Key };
     }
 }

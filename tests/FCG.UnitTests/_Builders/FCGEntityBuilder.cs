@@ -1,4 +1,5 @@
 ﻿using FCG.Domain.Catalogs;
+using FCG.Domain.Games;
 using FCG.Domain.Users;
 
 namespace FCG.UnitTests._Builders;
@@ -10,6 +11,9 @@ public class FCGEntityBuilder
 
     public Faker<Catalog> Catalog => new AutoFakerBase<Catalog>()
         .RuleFor(u => u.Name, f => f.Commerce.Categories(1).First())
-        .RuleFor(u => u.Description, f => f.Commerce.ProductDescription())
-        .Ignore(c => c.Games);
+        .RuleFor(u => u.Description, f => f.Commerce.ProductDescription());
+
+    public Faker<Game> Game => new AutoFakerBase<Game>()
+        .Ignore(c => c.Evaluations)
+        .Ignore(c => c.Downloads);
 }

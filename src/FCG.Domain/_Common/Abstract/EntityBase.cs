@@ -7,7 +7,7 @@ public abstract class EntityBase
 
     protected EntityBase(Guid key) => Key = key;
 
-    public Guid Key { get; private set; }
+    public Guid Key { get; protected set; }
 
     public DateTime CreatedAt { get; private set; }
     
@@ -16,6 +16,4 @@ public abstract class EntityBase
     public DateTime? DeletedAt { get; private set; }
 
     protected void WasUpdated() => UpdatedAt = DateTime.UtcNow;
-    
-    public void Delete() => DeletedAt = DateTime.UtcNow;
 }

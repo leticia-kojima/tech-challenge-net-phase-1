@@ -14,9 +14,13 @@ public static class CatalogEndpoints
             .RequireAuthorization(Policies.OnlyAdmin);
 
         catalogsGroup.MapGet("/", GetCatalogsAsync);
+
         catalogsGroup.MapGet("/{key:guid}", GetCatalogAsync);
+
         catalogsGroupOnlyForAdmin.MapPost("/", CreateCatalogAsync);
+
         catalogsGroupOnlyForAdmin.MapPut("/{key:guid}", UpdateCatalogAsync);
+
         catalogsGroupOnlyForAdmin.MapDelete("/{key:guid}", DeleteCatalogAsync);
     }
 

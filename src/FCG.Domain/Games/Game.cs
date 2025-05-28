@@ -24,4 +24,12 @@ public class Game : EntityBase
     public virtual Catalog Catalog { get; private set; }
     public virtual IReadOnlyCollection<GameEvaluation> Evaluations { get; private set; }
     public virtual IReadOnlyCollection<GameDownload> Downloads { get; private set; }
+
+    public void SetData(string title, string description)
+    {
+        Title = title;
+        Description = description;
+
+        WasUpdated();
+    }
 }
