@@ -1,9 +1,10 @@
-﻿using FCG.Domain._Common.Abstract;
+﻿namespace FCG.Domain._Common;
+public interface IRepository;
 
-namespace FCG.Domain._Common;
-public interface IRepository<TEntity> where TEntity : EntityBase
+public interface IRepository<TEntity> : IRepository
+    where TEntity : EntityBase
 {
-    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<TEntity?> GetByIdAsync(Guid key, CancellationToken cancellationToken);
 
     Task<IReadOnlyCollection<TEntity>> GetAllAsync(CancellationToken cancellationToken);
 
@@ -13,5 +14,5 @@ public interface IRepository<TEntity> where TEntity : EntityBase
 
     Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
 
-    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid key, CancellationToken cancellationToken);
 }

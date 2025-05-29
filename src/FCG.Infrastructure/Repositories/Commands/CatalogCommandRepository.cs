@@ -10,6 +10,6 @@ public class CatalogCommandRepository : FCGCommandRepositoryBase<Catalog>, ICata
         
     }
 
-    public Task<bool> ExistByNameAsync(string name, Guid? ignoreKey = null, CancellationToken? cancellationToken = null)
-        => _dbSet.AnyAsync(u => u.Name == name && u.Key != ignoreKey);
+    public Task<bool> ExistByNameAsync(string name, Guid? ignoreKey = null, CancellationToken cancellationToken = default)
+        => _dbSet.AnyAsync(u => u.Name == name && u.Key != ignoreKey, cancellationToken);
 }

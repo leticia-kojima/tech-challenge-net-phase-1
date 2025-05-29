@@ -1,4 +1,5 @@
 using FCG.API.Endpoints;
+using FCG.API.Middlewares;
 using FCG.Infrastructure;
 using FCG.Infrastructure._Common.Auth;
 using FCG.Infrastructure._Common.Database;
@@ -25,6 +26,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseHttpsRedirection()
     .UseAuthentication()
     .UseAuthorization();
@@ -34,6 +36,7 @@ app.UseHttpsRedirection()
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapCatalogEndpoints();
+app.MapGamesEndpoints();
 
 #endregion
 

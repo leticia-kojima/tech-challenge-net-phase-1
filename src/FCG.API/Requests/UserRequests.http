@@ -1,0 +1,40 @@
+@FCG.API_HostAddress = http://localhost:5045
+@AdminBearerToken = Bearer paste_here
+@UserBearerToken = Bearer paste_here
+@UserKey = paste_here
+
+### Search users by name (admin only)
+GET {{FCG.API_HostAddress}}/users?search=jo
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+
+### Get user details by key (user)
+GET {{FCG.API_HostAddress}}/users/{{UserKey}}
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Create a new user (admin only)
+POST {{FCG.API_HostAddress}}/users/
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "fullName": "John Doe",
+  "email": "john.doe@email.com",
+  "password": "FX9v&6sKx8<6"
+}
+
+### Update user details (admin only)
+PUT {{FCG.API_HostAddress}}/users/{{UserKey}}
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "fullName": "John Ricardo Doe",
+  "email": "john.doe@email.com"
+}
+
+### Delete a user (admin only)
+DELETE {{FCG.API_HostAddress}}/users/{{UserKey}}
+Authorization: {{AdminBearerToken}}
+Accept: application/json

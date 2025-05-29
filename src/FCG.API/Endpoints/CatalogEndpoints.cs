@@ -1,4 +1,4 @@
-﻿using FCG.Application.Contracts.Catalogs.Commands;
+using FCG.Application.Contracts.Catalogs.Commands;
 using FCG.Application.Contracts.Catalogs.Queries;
 using FCG.Domain._Common.Consts;
 
@@ -14,9 +14,13 @@ public static class CatalogEndpoints
             .RequireAuthorization(Policies.OnlyAdmin);
 
         catalogsGroup.MapGet("/", GetCatalogsAsync);
+
         catalogsGroup.MapGet("/{key:guid}", GetCatalogAsync);
+
         catalogsGroupOnlyForAdmin.MapPost("/", CreateCatalogAsync);
+
         catalogsGroupOnlyForAdmin.MapPut("/{key:guid}", UpdateCatalogAsync);
+
         catalogsGroupOnlyForAdmin.MapDelete("/{key:guid}", DeleteCatalogAsync);
     }
 
