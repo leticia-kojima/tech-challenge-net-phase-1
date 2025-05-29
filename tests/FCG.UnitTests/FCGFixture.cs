@@ -7,18 +7,18 @@ public class FCGFixture : IDisposable
 
     public FCGFixture()
     {
-        _cancellationTokenSource = new();
-        CancellationToken = _cancellationTokenSource.Token;
-        EntityBuilder = new();
-        ModelBuilder = new();
-        Faker = new();
-
         AutoFaker.Configure(builder =>
         {
             builder
                 .WithLocale("pt_BR")
                 .WithConventions();
         });
+
+        _cancellationTokenSource = new();
+        CancellationToken = _cancellationTokenSource.Token;
+        EntityBuilder = new();
+        ModelBuilder = new();
+        Faker = new();
     }
 
     public CancellationToken CancellationToken { get; private set; }

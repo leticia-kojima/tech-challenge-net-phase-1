@@ -5,7 +5,6 @@ using FCG.Infrastructure._Common.Interfaces;
 namespace FCG.Infrastructure.Seeders;
 public class UserSeeder : ISeeder<User>
 {
-    // TODO: Update the hash pass
     public IReadOnlyCollection<User> GetData() => new List<User> {
         new (
             new ("a6b04fe0-e7e1-4385-996f-5525a955734f"),

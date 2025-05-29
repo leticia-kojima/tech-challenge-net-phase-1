@@ -1,4 +1,4 @@
-﻿namespace FCG.UnitTests.ValueObjects;
+﻿namespace FCG.UnitTests.Auth;
 public class PasswordTests : TestBase
 {
     public PasswordTests(FCGFixture fixture) : base(fixture)

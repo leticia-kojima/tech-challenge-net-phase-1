@@ -1,0 +1,39 @@
+@FCG.API_HostAddress = http://localhost:5045
+@AdminBearerToken = Bearer paste_here
+@UserBearerToken = Bearer paste_here
+@CatalogKey = paste_here
+
+### Search catalogs by name (user)
+GET {{FCG.API_HostAddress}}/catalogs?name=cloud
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Get catalog details by id (user)
+GET {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Create a new catalog (admin only)
+POST {{FCG.API_HostAddress}}/catalogs/
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "name": "Cloud",
+  "description": "Azure Functions..."
+}
+
+### Update catalog details (admin only)
+PUT {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "name": "Cloud",
+  "description": "Azure Functions Updated..."
+}
+
+### Delete a catalog (admin only)
+DELETE {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}
+Authorization: {{AdminBearerToken}}
+Accept: application/json

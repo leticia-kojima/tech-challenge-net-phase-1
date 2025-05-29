@@ -49,8 +49,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<UnauthorizedMiddleware>();
 app.UseMiddleware<BadRequestMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-app.UseHttpsRedirection();
 app.UseHttpsRedirection()
     .UseAuthentication()
     .UseAuthorization();
@@ -59,6 +59,8 @@ app.UseHttpsRedirection()
 
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
+app.MapCatalogEndpoints();
+app.MapGamesEndpoints();
 
 #endregion
 

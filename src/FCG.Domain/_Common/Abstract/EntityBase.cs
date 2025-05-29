@@ -7,7 +7,7 @@ public abstract class EntityBase
 
     protected EntityBase(Guid key) => Key = key;
 
-    public Guid Key { get; private set; }
+    public Guid Key { get; protected set; }
 
     public DateTime CreatedAt { get; private set; }
     

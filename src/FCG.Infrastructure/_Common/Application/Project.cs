@@ -18,7 +18,7 @@ public static class Project
             if (!string.IsNullOrWhiteSpace(projectPath))
                 return Path.GetDirectoryName(projectPath);
         }
-        while (directoryInfo.Parent != null);
+        while (directoryInfo.Parent is not null);
 
         throw new Exception($"Project root could not be located using the application root {applicationBasePath}.");
     }

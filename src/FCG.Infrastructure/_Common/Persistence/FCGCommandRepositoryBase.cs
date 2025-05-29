@@ -29,8 +29,10 @@ public abstract class FCGCommandRepositoryBase<TEntity> : IRepository<TEntity> w
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await GetByIdAsync(id, cancellationToken);
-        _dbSet.Remove(entity);
-        await _context.SaveChangesAsync(cancellationToken);
+        if (entity is not null)
+        {
+            await DeleteAsync(entity, cancellationToken);
+        }
     }
 
     public async Task<IReadOnlyCollection<TEntity>> GetAllAsync(CancellationToken cancellationToken)
