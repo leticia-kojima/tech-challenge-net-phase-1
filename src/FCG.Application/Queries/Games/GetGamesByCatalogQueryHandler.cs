@@ -1,6 +1,5 @@
 using FCG.Application.Contracts.Games.Queries;
 using FCG.Domain.Catalogs;
-using FCG.Domain.Games;
 
 public class GetGamesByCatalogQueryHandler : IRequestHandler<GetGamesByCatalogQueryRequest, IReadOnlyCollection<GetGamesByCatalogQueryResponse>>
 {

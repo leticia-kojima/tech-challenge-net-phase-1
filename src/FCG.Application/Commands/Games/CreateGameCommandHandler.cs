@@ -51,6 +51,6 @@ public class CreateGameCommandHandler : IRequestHandler<CreateGameCommandRequest
 
         await _mediator.Publish(new GameCreatedEvent(game), cancellationToken);
 
-        return new CreateGameCommandResponse { Key = game.Key };
+        return new CreateGameCommandResponse(game);
     }
 }

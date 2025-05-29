@@ -1,8 +1,8 @@
-﻿namespace FCG.Application.Contracts.Games.Commands;
-public class CreateGameCommandRequest : IRequest<CreateGameCommandResponse>
+﻿using FCG.Application.Contracts.Games.Abstract;
+
+namespace FCG.Application.Contracts.Games.Commands;
+public class CreateGameCommandRequest : GameCommandModelBase, IRequest<CreateGameCommandResponse>
 {
-    public required string Title { get; set; }
-    public required string Description { get; set; }
     public Guid CatalogKey { get; set; }
 }
 

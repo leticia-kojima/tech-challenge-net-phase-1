@@ -66,6 +66,6 @@ public class UpdateGameCommandHandler : IRequestHandler<UpdateGameCommandRequest
 
         await _mediator.Publish(new GameUpdatedEvent(game), cancellationToken);
 
-        return new UpdateGameCommandResponse { Key = game.Key };
+        return new UpdateGameCommandResponse(game);
     }
 }
