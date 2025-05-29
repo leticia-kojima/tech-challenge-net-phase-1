@@ -3,13 +3,13 @@
 namespace FCG.Application.Contracts.Games.Queries;
 public class GetGameByKeyQueryResponse
 {
-    public GetGameByKeyQueryResponse(Game game)
+    public GetGameByKeyQueryResponse(Game game, string catalogName)
     {
         Key = game.Key;
         Title = game.Title;
         Description = game.Description;
         CatalogKey = game.CatalogKey;
-        CatalogName = game.Catalog.Name;
+        CatalogName = catalogName;
     }
 
     public Guid Key { get; set; }

@@ -1,6 +1,5 @@
 ﻿using FCG.Application.Contracts.Catalogs.Events;
 using FCG.Domain.Catalogs;
-using MediatR;
 
 namespace FCG.Application.Events.Games;
 public class GameCreatedEventHandler : IEventHandler<GameCreatedEvent>

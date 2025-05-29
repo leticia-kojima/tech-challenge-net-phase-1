@@ -57,14 +57,12 @@ public class GlobalExceptionHandlerMiddleware
                 exception.GetFullMessageString()
             );
         }
-        finally
-        {
-            ArgumentNullException.ThrowIfNull(errorResponse);
 
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)errorResponse.StatusCode;
+        if (errorResponse is null) return;
 
-            await context.Response.WriteAsJsonAsync(errorResponse);
-        }
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)errorResponse.StatusCode;
+
+        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 }

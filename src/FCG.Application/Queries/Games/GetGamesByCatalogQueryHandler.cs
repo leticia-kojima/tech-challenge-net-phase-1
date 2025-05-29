@@ -17,6 +17,6 @@ public class GetGamesByCatalogQueryHandler : IRequestHandler<GetGamesByCatalogQu
 
         if (catalog is null) throw new FCGNotFoundException(request.CatalogKey, nameof(Catalog), $"Catalog with key '{request.CatalogKey}' was not found.");
 
-        return catalog.Games.Select(g => new GetGamesByCatalogQueryResponse(g)).ToArray();
+        return catalog.Games.Select(g => new GetGamesByCatalogQueryResponse(g, catalog.Name)).ToArray();
     }
 }

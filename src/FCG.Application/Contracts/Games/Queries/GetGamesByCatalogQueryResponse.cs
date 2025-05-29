@@ -1,15 +1,16 @@
+using FCG.Domain.Catalogs;
 using FCG.Domain.Games;
 
 namespace FCG.Application.Contracts.Games.Queries;
 public class GetGamesByCatalogQueryResponse
 {
-    public GetGamesByCatalogQueryResponse(Game game)
+    public GetGamesByCatalogQueryResponse(Game game, string catalogName)
     {
         Key = game.Key;
         Title = game.Title;
         Description = game.Description;
         CatalogKey = game.CatalogKey;
-        CatalogName = game.Catalog.Name;
+        CatalogName = catalogName;
     }
 
     public Guid Key { get; set; }

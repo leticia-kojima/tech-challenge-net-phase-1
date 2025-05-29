@@ -19,6 +19,6 @@ public class GetGameByKeyQueryHandler : IRequestHandler<GetGameByKeyQueryRequest
 
         if (catalog is null) throw new FCGNotFoundException(request.CatalogKey, nameof(Catalog), $"Catalog with key '{request.CatalogKey}' was not found.");
 
-        return new GetGameByKeyQueryResponse(catalog.GetGame(request.Key));
+        return new GetGameByKeyQueryResponse(catalog.GetGame(request.Key), catalog.Name);
     }
 }

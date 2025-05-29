@@ -4,7 +4,7 @@ using FCG.Domain.Games;
 namespace FCG.Domain.Catalogs;
 public class Catalog : EntityBase
 {
-    private readonly List<Game> _games = new();
+    private List<Game> _games = new();
 
     protected Catalog() : base() { }
 
@@ -21,7 +21,11 @@ public class Catalog : EntityBase
     public string Name { get; private set; }
     public string Description { get; private set; }
 
-    public virtual IReadOnlyCollection<Game> Games => _games.AsReadOnly();
+    public virtual IReadOnlyCollection<Game> Games
+    {
+        get => _games.AsReadOnly();
+        private set => _games = [.. value];
+    }
 
     public void SetData(string name, string description)
     {
