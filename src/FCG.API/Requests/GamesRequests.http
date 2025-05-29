@@ -1,0 +1,62 @@
+@FCG.API_HostAddress = http://localhost:5045
+@AdminBearerToken = Bearer paste_here
+@UserBearerToken = Bearer paste_here
+@CatalogKey = paste_here
+@GameKey = paste_here
+
+### Search games in a catalog by title (user)
+@CatalogKey = paste_here
+@GameKey = paste_here
+GET {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games?title=azure
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Get game details by id in a catalog (user)
+GET {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/{{GameKey}}
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Create a new game in a catalog (admin only)
+POST {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "title": "The Legend of Zelda: Breath of the Wild10",
+  "description": "Um jogo de aventura e ação em um vasto mundo aberto"
+}
+
+### Add evaluation to a game (user)
+POST {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/{{GameKey}}/evaluations
+Authorization: {{UserBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "stars": 5,
+  "comment": "I've learned a lot with this game :)"
+}
+
+### Get evaluations for a game (user)
+GET {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/{{GameKey}}/evaluations
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Download a game (user)
+GET {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/{{GameKey}}/download
+Authorization: {{UserBearerToken}}
+Accept: application/json
+
+### Update game details (admin only)
+PUT {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/{{GameKey}}
+Authorization: {{AdminBearerToken}}
+Accept: application/json
+Content-Type: application/json
+{
+  "title": "The Legend of Zelda: Breath of the Wild (Atualizado)",
+  "description": "Versão completa do aclamado jogo de aventura em mundo aberto com todas as DLCs"
+}
+
+### Delete a game from a catalog (admin only)
+DELETE {{FCG.API_HostAddress}}/catalogs/{{CatalogKey}}/games/{{GameKey}}
+Authorization: {{AdminBearerToken}}
+Accept: application/json

@@ -1,0 +1,19 @@
+@FCG.API_HostAddress = http://localhost:5045
+
+### Login as admin
+POST {{FCG.API_HostAddress}}/auth/login/
+Accept: application/json
+Content-Type: application/json
+{
+  "email": "admin@fcg.test.com.br",
+  "password": "adm@demoPass312"
+}
+
+### Login as user
+POST {{FCG.API_HostAddress}}/auth/login/
+Accept: application/json
+Content-Type: application/json
+{
+  "email": "user@fcg.test.com.br",
+  "password": "usr@demoPass312"
+}
