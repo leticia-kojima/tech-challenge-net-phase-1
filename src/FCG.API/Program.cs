@@ -10,13 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 #region Dependency Injection - DI
 
 var services = builder.Services;
-// Adiciona servi�os do Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var configuration = builder.Configuration;
 
-services.AddOpenApi()
+services.AddEndpointsApiExplorer()
+    .AddFcgApiSwagger()
+    .AddOpenApi()
     .AddDatabases(configuration)
     .AddRepositories()
     .AddInfrastructureServices();
@@ -39,19 +37,17 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) 
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FCG API"));
+
     app.MapOpenApi();
-};
+}
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<UnauthorizedMiddleware>();
-app.UseMiddleware<BadRequestMiddleware>();
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-
-app.UseHttpsRedirection()
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>()
+    .UseHttpsRedirection()
     .UseAuthentication()
     .UseAuthorization();
 
