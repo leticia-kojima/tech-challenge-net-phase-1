@@ -15,6 +15,7 @@ A plataforma **FCG - FIAP Cloud Games** é um MVP voltado para a educação em t
 - **[Ferramentas](#ferramentas):** Tecnologias e plataformas utilizadas no projeto.
 - **[Diagramas](#diagramas):** Representações visuais do sistema, como Storytelling e Event Storming.
 - **[Arquitetura](#arquitetura):** Estrutura do projeto e bibliotecas empregadas.
+- **[Endpoints](#endpoints):** Lista dos principais endpoints da API, métodos HTTP, caminhos e descrições das funcionalidades.
 - **[Execução](#execução):** Requisitos, configuração e instruções para rodar o projeto.
 - **[Testes](#testes):** Execução dos testes unitários, geração de relatórios de cobertura e funcionamento do pipeline automatizado.
 - **[Migrations](#migrations):** Comandos para gerenciar alterações no banco de dados.
@@ -147,6 +148,59 @@ graph LR
 
 Essas bibliotecas são fundamentais para a estruturação do projeto, facilitando a adoção de padrões arquiteturais, automação de testes e integração eficiente com os bancos de dados.
 
+## Endpoints
+
+Abaixo estão listados os principais endpoints da API, organizados por recurso. Cada tabela apresenta o método HTTP, o caminho do endpoint e uma breve descrição da funcionalidade.
+
+> Para visualizar a documentação interativa e sempre atualizada da API, acesse o [Swagger UI](https://localhost:44334/swagger/index.html) após iniciar o projeto localmente.
+
+### Auth
+
+Tabela de endpoints relacionados à autenticação de usuários.
+
+| Método | Caminho        | Descrição                                                      | Papel   |
+|--------|----------------|----------------------------------------------------------------|---------|
+| POST   | `/auth/login`  | Autentica um usuário com credenciais válidas e retorna um token JWT para acesso à API. | Anônimo |
+
+### Usuários
+
+Endpoints para gerenciamento de usuários na plataforma.
+
+| Método | Caminho           | Descrição                                                                 | Papel         |
+|--------|-------------------|---------------------------------------------------------------------------|---------------|
+| GET    | `/users`          | Retorna uma lista de usuários cadastrados, com opção de filtro por pesquisa. | Admin         |
+| POST   | `/users`          | Cria um novo usuário no sistema.                                          | Admin         |
+| GET    | `/users/{key}`    | Obtém detalhes de um usuário específico pelo identificador.                | Usuário/Admin |
+| PUT    | `/users/{key}`    | Atualiza as informações de um usuário existente.                           | Admin         |
+| DELETE | `/users/{key}`    | Remove um usuário do sistema.                                             | Admin         |
+
+### Catálogos
+
+Endpoints para gerenciamento dos catálogos de jogos.
+
+| Método | Caminho             | Descrição                                                                 | Papel         |
+|--------|---------------------|---------------------------------------------------------------------------|---------------|
+| GET    | `/catalogs`         | Lista todos os catálogos disponíveis, com opção de filtro por pesquisa.    | Usuário/Admin |
+| POST   | `/catalogs`         | Cria um novo catálogo de jogos.                                           | Admin         |
+| GET    | `/catalogs/{key}`   | Obtém detalhes de um catálogo específico pelo identificador.               | Usuário/Admin |
+| PUT    | `/catalogs/{key}`   | Atualiza as informações de um catálogo existente.                          | Admin         |
+| DELETE | `/catalogs/{key}`   | Remove um catálogo do sistema.                                            | Admin         |
+
+### Jogos
+
+Endpoints para gerenciamento dos jogos dentro de um catálogo.
+
+| Método | Caminho                                 | Descrição                                                                 | Papel         |
+|--------|-----------------------------------------|---------------------------------------------------------------------------|---------------|
+| GET    | `/catalogs/{catalogKey}/games`          | Lista todos os jogos de um catálogo específico.                            | Usuário/Admin |
+| POST   | `/catalogs/{catalogKey}/games`          | Cria um novo jogo dentro de um catálogo.                                   | Admin         |
+| GET    | `/catalogs/{catalogKey}/games/{key}`    | Obtém detalhes de um jogo específico pelo identificador.                   | Usuário/Admin |
+| PUT    | `/catalogs/{catalogKey}/games/{key}`    | Atualiza as informações de um jogo existente.                              | Admin         |
+| DELETE | `/catalogs/{catalogKey}/games/{key}`    | Remove um jogo de um catálogo.                                             | Admin         |
+
+
+> Para exemplos de requisições para todos os endpoints, consulte os arquivos na pasta `Requests` do repositório, como `AuthRequests.http`, `CatalogRequests.http`, `GamesRequests.http` e `UserRequests.http`.
+
 ## Execução
 
 Para trabalhar no projeto, é necessário garantir a execução dos servidores dos bancos de dados. Entretanto, se não os tiver, é possível fazer download nos links descritos na sub-seção seguinte.
@@ -166,11 +220,11 @@ A conexão com cada um dos bancos de dados é configurada no arquivo [`appsettin
 
 ### Debug
 
-O arquivo `FCG.API.http`, incluído neste repositório, foi criado para facilitar o processo de depuração (debug) da API durante o desenvolvimento. Ele reúne exemplos de requisições para todos os endpoints disponíveis, permitindo testar e validar rapidamente as rotas implementadas diretamente pelo Visual Studio, sem a necessidade de ferramentas externas. Para utilizá-lo:
+Os arquivos `AuthRequests.http`, `CatalogRequests.http`, `GamesRequests.http` e `UserRequests.http` estão localizados na pasta `Requests` dentro do projeto `FCG.API`. Eles foram criados para facilitar o processo de depuração (debug) da API durante o desenvolvimento. Cada arquivo reúne exemplos de requisições para os respectivos endpoints, permitindo testar e validar rapidamente as rotas implementadas diretamente pelo Visual Studio, sem a necessidade de ferramentas externas. Para utilizá-los:
 
 1. Defina o projeto `FCG.API` como projeto de inicialização no Visual Studio.
 2. Selecione o perfil de execução `http` para iniciar a API em modo de depuração.
-3. Abra o arquivo `FCG.API.http` e utilize os recursos integrados do Visual Studio para enviar requisições diretamente à API, facilitando o teste e a validação dos endpoints implementados.
+3. Abra qualquer um dos arquivos `.http` na pasta `Requests` e utilize os recursos integrados do Visual Studio para enviar requisições diretamente à API, facilitando o teste e a validação dos endpoints implementados.
 
 Com esse recurso, é possível agilizar o desenvolvimento, testar as rotas implementadas e analisar as respostas diretamente no Visual Studio, sem depender de ferramentas externas.
 
@@ -236,4 +290,4 @@ As migrações do banco de dados são aplicadas automaticamente quando a aplica�
     Update-Database
     ```
 
-Também é possível fazer a remoção e reversão das *migrations* e alterações no banco de dados, caso necessário consulte a opção de ajuda do EF Core `Get-Help EntityFramework`. Para informações detalhadas sobre comandos, parâmetros adicionais ou solução de problemas, consulte a [documentação oficial do EF Core](https://learn.microsoft.com/ef/core/cli/powershell). 
+Também é possível fazer a remoção e reversão das *migrations* e alterações no banco de dados, caso necessário consulte a opção de ajuda do EF Core `Get-Help EntityFramework`. Para informações detalhadas sobre comandos, parâmetros adicionais ou solução de problemas, consulte a [documentação oficial do EF Core](https://learn.microsoft.com/ef/core/cli/powershell).

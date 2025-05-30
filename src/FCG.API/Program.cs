@@ -3,6 +3,7 @@ using FCG.API.Middlewares;
 using FCG.Infrastructure;
 using FCG.Infrastructure._Common.Auth;
 using FCG.Infrastructure._Common.Database;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-services.AddOpenApi()
+services.AddEndpointsApiExplorer()
+    .AddFcgApiSwagger()
+    .AddOpenApi()
     .AddDatabases(configuration)
     .AddRepositories()
     .AddInfrastructureServices();
@@ -22,12 +25,29 @@ services.ConfigureSettings(configuration)
 
 #endregion
 
+#region Serilog
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+#endregion
+
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
 
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-app.UseHttpsRedirection()
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FCG API"));
+
+    app.MapOpenApi();
+}
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>()
+    .UseHttpsRedirection()
     .UseAuthentication()
     .UseAuthorization();
 
