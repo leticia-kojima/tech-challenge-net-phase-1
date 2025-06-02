@@ -6,7 +6,11 @@ public class Catalog : EntityBase
 {
     private List<Game> _games = new();
 
-    protected Catalog() : base() { }
+    protected Catalog() : base() 
+    {
+        Name = string.Empty;
+        Description = string.Empty;
+    }
 
     public Catalog(
         Guid key,
@@ -19,12 +23,10 @@ public class Catalog : EntityBase
     }
 
     public string Name { get; private set; }
-    public string Description { get; private set; }
-
-    public virtual IReadOnlyCollection<Game> Games
+    public string Description { get; private set; }    public virtual IReadOnlyCollection<Game> Games
     {
         get => _games.AsReadOnly();
-        private set => _games = [.. value];
+        private set => _games = value == null ? new() : [.. value];
     }
 
     public void SetData(string name, string description)

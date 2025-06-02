@@ -50,4 +50,18 @@ public class FCGModelBuilder
     public Faker<GetGameByKeyQueryRequest> GetGameByKeyQueryRequestFromGame(Game game) => GetGameByKeyQueryRequest
         .RuleFor(x => x.Key, game.Key)
         .RuleFor(x => x.CatalogKey, game.CatalogKey);
+
+    public Faker<CreateGameEvaluationCommandRequest> CreateGameEvaluationCommandRequest
+        => new AutoFakerBase<CreateGameEvaluationCommandRequest>()
+        .RuleFor(x => x.Stars, f => f.PickRandom<EFiveStars>())
+        .RuleFor(x => x.Comment, f => f.Lorem.Sentence());
+
+    public Faker<CreateGameDownloadCommandRequest> CreateGameDownloadCommandRequest
+        => new AutoFakerBase<CreateGameDownloadCommandRequest>();
+
+    public Faker<GetGameEvaluationsQueryRequest> GetGameEvaluationsQueryRequest
+        => new AutoFakerBase<GetGameEvaluationsQueryRequest>();
+
+    public Faker<GetGameDownloadsQueryRequest> GetGameDownloadsQueryRequest
+        => new AutoFakerBase<GetGameDownloadsQueryRequest>();
 }

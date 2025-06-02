@@ -29,4 +29,14 @@ public class FCGEntityBuilder
         .Ignore(c => c.Evaluations)
         .Ignore(c => c.Downloads)
         .Ignore(c => c.Catalog);
+
+    public Faker<GameEvaluation> GameEvaluation => new AutoFakerBase<GameEvaluation>()
+        .RuleFor(e => e.Stars, f => f.PickRandom<EFiveStars>())
+        .RuleFor(e => e.Comment, f => f.Lorem.Sentence())
+        .Ignore(e => e.User)
+        .Ignore(e => e.Game);
+
+    public Faker<GameDownload> GameDownload => new AutoFakerBase<GameDownload>()
+        .Ignore(d => d.User)
+        .Ignore(d => d.Game);
 }

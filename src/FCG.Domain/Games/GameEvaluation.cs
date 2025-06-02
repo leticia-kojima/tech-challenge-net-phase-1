@@ -21,8 +21,6 @@ public class GameEvaluation : EntityBase
     public EFiveStars Stars { get; private set; }
     public string? Comment { get; private set; }
     public Guid UserKey { get; private set; }
-    public Guid GameKey { get; private set; }
-
-    public virtual User User { get; private set; }
-    public virtual Game Game { get; private set; }
+    public Guid GameKey { get; private set; }    public virtual User? User { get; private set; }
+    public virtual Game? Game { get; private set; }
 }

@@ -1,6 +1,8 @@
 using FCG.Application.Contracts.Games.Commands;
 using FCG.Application.Contracts.Games.Queries;
 using FCG.Domain._Common.Consts;
+using FCG.Domain._Common.Exceptions;
+using System.Security.Claims;
 
 namespace FCG.API.Endpoints;
 
@@ -15,15 +17,15 @@ public static class GamesEndpoints
 
         gamesGroup.MapGet("/", GetGamesAsync);
 
-        gamesGroup.MapGet("/{key:guid}", GetGameAsync);
+        gamesGroup.MapGet("/{key:guid}", GetGameAsync);        gamesGroup.MapPost("/", CreateGameAsync);
 
-        gamesGroup.MapPost("/", CreateGameAsync);
+        gamesGroup.MapPost("/{gameKey:guid}/evaluations", CreateGameEvaluationAsync)
+            .RequireAuthorization();
 
-        // TODO: POST {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/evaluations
+        gamesGroup.MapGet("/{gameKey:guid}/evaluations", GetGameEvaluationsAsync);
 
-        // TODO: GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/evaluations
-
-        // TODO: GET {{FCG.API_HostAddress}}/catalogs/{{$guid}}/games/{{$guid}}/download
+        gamesGroup.MapGet("/{gameKey:guid}/download", CreateGameDownloadAsync)
+            .RequireAuthorization();
 
         gamesGroup.MapPut("/{key:guid}", UpdateGameAsync);
 
@@ -75,8 +77,7 @@ public static class GamesEndpoints
         request.CatalogKey = catalogKey;
         return await mediator.Send(request, cancellationToken);
     }
-    
-    private static async Task DeleteGameAsync(
+      private static async Task DeleteGameAsync(
         [FromRoute] Guid catalogKey,
         [FromRoute] Guid key,
         [FromServices] IMediator mediator,
@@ -87,5 +88,63 @@ public static class GamesEndpoints
                 Key = key
             },
             cancellationToken
+        );    private static async Task<CreateGameEvaluationCommandResponse> CreateGameEvaluationAsync(
+        [FromRoute] Guid catalogKey,
+        [FromRoute] Guid gameKey,
+        [FromBody] CreateGameEvaluationCommandRequest request,
+        [FromServices] IMediator mediator,
+        HttpContext httpContext,
+        CancellationToken cancellationToken
+    )
+    {
+        // Extract user key from claims
+        var userKeyClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userKeyClaim) || !Guid.TryParse(userKeyClaim, out var userKey))
+        {
+            throw new FCGValidationException("User", "User not authenticated or invalid user identifier.");
+        }
+
+        request.CatalogKey = catalogKey;
+        request.GameKey = gameKey;
+        request.UserKey = userKey;
+        return await mediator.Send(request, cancellationToken);
+    }
+
+    private static async Task<IReadOnlyCollection<GetGameEvaluationsQueryResponse>> GetGameEvaluationsAsync(
+        [FromRoute] Guid catalogKey,
+        [FromRoute] Guid gameKey,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken
+    ) => await mediator.Send(
+            new GetGameEvaluationsQueryRequest
+            {
+                CatalogKey = catalogKey,
+                GameKey = gameKey
+            },
+            cancellationToken
+        );    private static async Task<CreateGameDownloadCommandResponse> CreateGameDownloadAsync(
+        [FromRoute] Guid catalogKey,
+        [FromRoute] Guid gameKey,
+        [FromServices] IMediator mediator,
+        HttpContext httpContext,
+        CancellationToken cancellationToken
+    )
+    {
+        // Extract user key from claims
+        var userKeyClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userKeyClaim) || !Guid.TryParse(userKeyClaim, out var userKey))
+        {
+            throw new FCGValidationException("User", "User not authenticated or invalid user identifier.");
+        }
+
+        return await mediator.Send(
+            new CreateGameDownloadCommandRequest
+            {
+                CatalogKey = catalogKey,
+                GameKey = gameKey,
+                UserKey = userKey
+            },
+            cancellationToken
         );
+    }
 }

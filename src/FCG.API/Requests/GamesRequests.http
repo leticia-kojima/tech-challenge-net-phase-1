@@ -22,8 +22,8 @@ Authorization: {{AdminBearerToken}}
 Accept: application/json
 Content-Type: application/json
 {
-  "title": "The Legend of Zelda: Breath of the Wild10",
-  "description": "Um jogo de aventura e ação em um vasto mundo aberto"
+  "title": "The Legend of Zelfda: Breath of the Wild10",
+  "description": "Um jogo de aventura e aï¿½ï¿½o em um vasto mundo aberto"
 }
 
 ### Add evaluation to a game (user)
@@ -53,7 +53,7 @@ Accept: application/json
 Content-Type: application/json
 {
   "title": "The Legend of Zelda: Breath of the Wild (Atualizado)",
-  "description": "Versão completa do aclamado jogo de aventura em mundo aberto com todas as DLCs"
+  "description": "Versï¿½o completa do aclamado jogo de aventura em mundo aberto com todas as DLCs"
 }
 
 ### Delete a game from a catalog (admin only)
