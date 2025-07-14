@@ -3,32 +3,39 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Removendo global.json para evitar conflito de SDK"
-      - rm -f /codebuild/global.json || true
-      - echo "Baixando script de instalação do .NET"
-      - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
-      - chmod +x dotnet-install.sh
-      - echo "Instalando .NET SDK 9.0.302"
-      - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
-      - export PATH=/root/dotnet:$PATH
-      - dotnet --version
-      - echo "Instalando ReportGenerator global tool"
+      - echo "Instalando .NET SDK 9.0.302 via tar.gz"
+      - mkdir -p $HOME/dotnet
+      - cd $HOME
+      - wget https://download.visualstudio.microsoft.com/download/pr/0c37d2ec-5a80-43b9-a82e-740eea17b2dc/5b8ff5d3f024213bf3be6c2ec71e65e6/dotnet-sdk-9.0.302-linux-x64.tar.gz
+      - tar -zxf dotnet-sdk-9.0.302-linux-x64.tar.gz -C $HOME/dotnet
+      - export DOTNET_ROOT=$HOME/dotnet
+      - export PATH=$HOME/dotnet:$PATH
+      - dotnet --info
+
+      - echo "Instalando ReportGenerator como ferramenta global"
       - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
-      - export PATH="$PATH:/root/.dotnet/tools"
+      - export PATH="$PATH:$HOME/.dotnet/tools"
+      - reportgenerator --version
 
   pre_build:
     commands:
-      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
+      - echo "Reaplicando variáveis na fase de pre_build"
+      - export DOTNET_ROOT=$HOME/dotnet
+      - export PATH=$HOME/dotnet:$PATH:$HOME/.dotnet/tools
       - echo "Restaurando dependências"
       - dotnet restore
 
   build:
     commands:
-      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
-      - echo "Construindo solução"
+      - echo "Reaplicando variáveis na fase de build"
+      - export DOTNET_ROOT=$HOME/dotnet
+      - export PATH=$HOME/dotnet:$PATH:$HOME/.dotnet/tools
+      - echo "Compilando projeto"
       - dotnet build --no-restore --configuration Release
-      - echo "Executando testes"
+
+      - echo "Executando testes com cobertura"
       - dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage"
+
       - echo "Gerando relatório de cobertura"
       - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
 
