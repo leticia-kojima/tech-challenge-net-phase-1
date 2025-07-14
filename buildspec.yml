@@ -31,8 +31,8 @@ phases:
       - dotnet build --no-restore --configuration Release
       - echo "Executando testes"
       - dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage"
-      - echo "Gerando relatório de cobertura"
-      - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
+      # - echo "Gerando relatório de cobertura"
+      # - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
 
 artifacts:
   files:
