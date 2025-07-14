@@ -1,28 +1,24 @@
 version: 0.2
 
-env:
-  variables:
-    DOTNET_ROOT: "/root/dotnet"
-  paths:
-    - "/root/dotnet"
-    - "/root/.dotnet/tools"
-
 phases:
   install:
     commands:
       - echo "Installing .NET 9 Preview manually..."
       - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
       - chmod +x dotnet-install.sh
-      - ./dotnet-install.sh --version 9.0.302 --install-dir $DOTNET_ROOT
+      - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
+      - export PATH=/root/dotnet:$PATH
       - dotnet --version
       - echo "Installing ReportGenerator..."
-      - dotnet tool install -g dotnet-reportgenerator-globaltool
+      - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
   pre_build:
     commands:
+      - export PATH=/root/dotnet:$PATH
       - echo Restoring dependencies...
       - dotnet restore
   build:
     commands:
+      - export PATH=/root/dotnet:$PATH
       - echo Building solution...
       - dotnet build --no-restore --configuration Release
       - echo Running tests...
@@ -39,6 +35,7 @@ phases:
           "-reports:**/coverage.*.xml" \
           "-targetdir:Report" \
           -reporttypes:Html
+
 artifacts:
   files:
     - '**/*.trx'
