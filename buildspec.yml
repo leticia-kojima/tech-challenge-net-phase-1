@@ -11,14 +11,17 @@ phases:
       - dotnet --version
       - echo "Installing ReportGenerator..."
       - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
+      - export PATH=$PATH:/root/.dotnet/tools
+
   pre_build:
     commands:
       - export PATH=/root/dotnet:$PATH
       - echo Restoring dependencies...
       - dotnet restore
+
   build:
     commands:
-      - export PATH=/root/dotnet:$PATH
+      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
       - echo Building solution...
       - dotnet build --no-restore --configuration Release
       - echo Running tests...
