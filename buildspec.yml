@@ -3,19 +3,16 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Instalando .NET SDK 9.0.302 via tar.gz"
-      - mkdir -p $HOME/dotnet
-      - cd $HOME
-      - wget https://download.visualstudio.microsoft.com/download/pr/0c37d2ec-5a80-43b9-a82e-740eea17b2dc/5b8ff5d3f024213bf3be6c2ec71e65e6/dotnet-sdk-9.0.302-linux-x64.tar.gz
-      - tar -zxf dotnet-sdk-9.0.302-linux-x64.tar.gz -C $HOME/dotnet
+      - echo "Instalando .NET SDK 9.0.302 usando script oficial"
+      - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+      - chmod +x dotnet-install.sh
+      - ./dotnet-install.sh --version 9.0.302 --install-dir $HOME/dotnet
       - export DOTNET_ROOT=$HOME/dotnet
       - export PATH=$HOME/dotnet:$PATH
-      - dotnet --info
-
-      - echo "Instalando ReportGenerator como ferramenta global"
+      - dotnet --version
+      - echo "Instalando ReportGenerator global tool"
       - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
       - export PATH="$PATH:$HOME/.dotnet/tools"
-      - reportgenerator --version
 
   pre_build:
     commands:
