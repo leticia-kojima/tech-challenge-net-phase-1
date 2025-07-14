@@ -2,12 +2,16 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      dotnet: 9
     commands:
-      - echo Installing ReportGenerator...
+      - echo "Installing .NET 9 Preview manually..."
+      - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+      - chmod +x dotnet-install.sh
+      - ./dotnet-install.sh --version 9.0.100-preview.3 --install-dir /root/dotnet
+      - export PATH="/root/dotnet:$PATH"
+      - dotnet --version
+      - echo "Installing ReportGenerator..."
       - dotnet tool install -g dotnet-reportgenerator-globaltool
-      - export PATH="$PATH:~/.dotnet/tools"
+      - export PATH="$PATH:/root/.dotnet/tools"
   pre_build:
     commands:
       - echo Restoring dependencies...
