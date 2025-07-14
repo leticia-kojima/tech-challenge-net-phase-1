@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 9
+    commands:
+      - echo Installing ReportGenerator...
+      - dotnet tool install -g dotnet-reportgenerator-globaltool
+      - export PATH="$PATH:~/.dotnet/tools"
+  pre_build:
+    commands:
+      - echo Restoring dependencies...
+      - dotnet restore
+  build:
+    commands:
+      - echo Building solution...
+      - dotnet build --no-restore --configuration Release
+      - echo Running tests...
+      - dotnet test \
+          --configuration Release \
+          --no-restore \
+          --logger trx \
+          --results-directory TestResults \
+          /p:CollectCoverage=true \
+          /p:CoverletOutputFormat=opencover \
+          --collect:"XPlat Code Coverage"
+      - echo Generating coverage report...
+      - reportgenerator \
+          "-reports:**/coverage.*.xml" \
+          "-targetdir:Report" \
+          -reporttypes:Html
+artifacts:
+  files:
+    - '**/*.trx'
+    - 'Report/**/*'
