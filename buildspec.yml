@@ -17,7 +17,7 @@ phases:
       - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
       # Adiciona ferramentas globais ao PATH
       - export PATH="$PATH:/root/.dotnet/tools"
-      - echo "Caminho do ReportGenerator: $(which reportgenerator)"
+      - 'echo "Caminho do ReportGenerator: $(which reportgenerator)"'
       - reportgenerator --version
 
   pre_build:
