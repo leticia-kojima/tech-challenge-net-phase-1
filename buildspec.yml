@@ -6,8 +6,8 @@ phases:
       - echo "Installing .NET 9 Preview manually..."
       - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
       - chmod +x dotnet-install.sh
-      - ./dotnet-install.sh --version 9.0.100-preview.3 --install-dir /root/dotnet
-      - export PATH="/root/dotnet:$PATH"
+      - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
+      - export PATH=$PATH:/root/dotnet
       - dotnet --version
       - echo "Installing ReportGenerator..."
       - dotnet tool install -g dotnet-reportgenerator-globaltool
