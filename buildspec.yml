@@ -10,6 +10,8 @@ phases:
       - chmod +x dotnet-install.sh
       - echo "Instalando .NET SDK 9.0.302"
       - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
+      - echo "Instalando .NET Runtime 9.0"
+      - ./dotnet-install.sh --version 9.0.0 --runtime dotnet --install-dir /root/dotnet
       - export PATH=/root/dotnet:$PATH
       - dotnet --version
       - echo "Instalando ReportGenerator global tool"
@@ -24,14 +26,13 @@ phases:
 
   build:
     commands:
-      - |
-        export PATH=/root/dotnet:$PATH:/root/.dotnet/tools && \
-        echo "Construindo solução" && \
-        dotnet build --no-restore --configuration Release && \
-        echo "Executando testes" && \
-        dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage" && \
-        echo "Gerando relatório de cobertura" && \
-        reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
+      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
+      - echo "Construindo solução"
+      - dotnet build --no-restore --configuration Release
+      - echo "Executando testes"
+      - dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage"
+      - echo "Gerando relatório de cobertura"
+      - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
 
 artifacts:
   files:
