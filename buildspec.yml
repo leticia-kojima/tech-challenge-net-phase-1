@@ -3,28 +3,33 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing .NET 9 Preview manually..."
+      - echo "Removendo global.json do diretório /codebuild para evitar conflito de versão do SDK"
+      - rm -f /codebuild/global.json || true
+      - echo "Baixando script de instalação do .NET"
       - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
       - chmod +x dotnet-install.sh
+      - echo "Instalando .NET SDK 9.0.302"
       - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
       - export PATH=/root/dotnet:$PATH
       - dotnet --version
-      - echo "Installing ReportGenerator..."
+
+      - echo "Instalando ReportGenerator global tool"
+      - export PATH=/root/dotnet:$PATH
       - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
-      - export PATH=$PATH:/root/.dotnet/tools
+      - export PATH="$PATH:/root/.dotnet/tools"
 
   pre_build:
     commands:
-      - export PATH=/root/dotnet:$PATH
-      - echo Restoring dependencies...
+      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
+      - echo "Restaurando dependências"
       - dotnet restore
 
   build:
     commands:
       - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
-      - echo Building solution...
+      - echo "Construindo solução"
       - dotnet build --no-restore --configuration Release
-      - echo Running tests...
+      - echo "Executando testes"
       - dotnet test \
           --configuration Release \
           --no-restore \
@@ -33,11 +38,8 @@ phases:
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=opencover \
           --collect:"XPlat Code Coverage"
-      - echo Generating coverage report...
-      - reportgenerator \
-          "-reports:**/coverage.*.xml" \
-          "-targetdir:Report" \
-          -reporttypes:Html
+      - echo "Gerando relatório de cobertura"
+      - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
 
 artifacts:
   files:
