@@ -3,42 +3,33 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Removendo global.json do diretório /codebuild para evitar conflito de versão do SDK"
+      - echo "Removendo global.json para evitar conflito de SDK"
       - rm -f /codebuild/global.json || true
-      - echo "Baixando script de instalação do .NET"
+      - echo "Baixando script de instalaÃ§Ã£o do .NET"
       - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
       - chmod +x dotnet-install.sh
       - echo "Instalando .NET SDK 9.0.302"
       - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
       - export PATH=/root/dotnet:$PATH
       - dotnet --version
-
       - echo "Instalando ReportGenerator global tool"
-      - export PATH=/root/dotnet:$PATH
       - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
       - export PATH="$PATH:/root/.dotnet/tools"
 
   pre_build:
     commands:
       - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
-      - echo "Restaurando dependências"
+      - echo "Restaurando dependÃªncias"
       - dotnet restore
 
   build:
     commands:
       - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
-      - echo "Construindo solução"
+      - echo "Construindo soluÃ§Ã£o"
       - dotnet build --no-restore --configuration Release
       - echo "Executando testes"
-      - dotnet test \
-          --configuration Release \
-          --no-restore \
-          --logger trx \
-          --results-directory TestResults \
-          /p:CollectCoverage=true \
-          /p:CoverletOutputFormat=opencover \
-          --collect:"XPlat Code Coverage"
-      - echo "Gerando relatório de cobertura"
+      - dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage"
+      - echo "Gerando relatÃ³rio de cobertura"
       - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
 
 artifacts:
