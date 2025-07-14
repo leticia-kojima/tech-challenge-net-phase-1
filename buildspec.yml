@@ -14,8 +14,8 @@ phases:
       - ./dotnet-install.sh --version 9.0.0 --runtime dotnet --install-dir /root/dotnet
       - export PATH=/root/dotnet:$PATH
       - dotnet --version
-      - echo "Instalando ReportGenerator global tool"
-      - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
+      # - echo "Instalando ReportGenerator global tool"
+      # - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
       - export PATH="$PATH:/root/.dotnet/tools"
 
   pre_build:
