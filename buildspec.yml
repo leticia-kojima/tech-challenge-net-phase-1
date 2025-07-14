@@ -11,11 +11,12 @@ phases:
       - echo "Instalando .NET SDK 9.0.302"
       - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
       - echo "Instalando .NET Runtime 9.0"
+      - echo "BRANCH CI/CD"
       - ./dotnet-install.sh --version 9.0.0 --runtime dotnet --install-dir /root/dotnet
       - export PATH=/root/dotnet:$PATH
       - dotnet --version
       # - echo "Instalando ReportGenerator global tool"
-      # - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
+      # - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8      
       - export PATH="$PATH:/root/.dotnet/tools"
 
   pre_build:
