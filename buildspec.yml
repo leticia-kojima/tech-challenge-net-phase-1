@@ -12,31 +12,29 @@ phases:
       - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
       - echo "Instalando .NET Runtime 9.0"
       - ./dotnet-install.sh --version 9.0.0 --runtime dotnet --install-dir /root/dotnet
-      - export PATH="/root/dotnet:$PATH"
-      - echo "Instalando ReportGenerator global tool"
-      - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
-      # Adiciona ferramentas globais ao PATH
+      - export PATH=/root/dotnet:$PATH
+      - dotnet --version
+      # - echo "Instalando ReportGenerator global tool"
+      # - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8
       - export PATH="$PATH:/root/.dotnet/tools"
-      - 'echo "Caminho do ReportGenerator: $(which reportgenerator)"'
-      - reportgenerator --version
 
   pre_build:
     commands:
-      - export PATH="/root/dotnet:$PATH:/root/.dotnet/tools"
+      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
       - echo "Restaurando dependências"
       - dotnet restore
 
   build:
     commands:
-      - export PATH="/root/dotnet:$PATH:/root/.dotnet/tools"
+      - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
       - echo "Construindo solução"
       - dotnet build --no-restore --configuration Release
-      - echo "Executando testes com cobertura"
+      - echo "Executando testes"
       - dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage"
-      - echo "Gerando relatório de cobertura com ReportGenerator"
-      - reportgenerator -reports:**/coverage.*.xml -targetdir:Report -reporttypes:Html
+      # - echo "Gerando relatório de cobertura"
+      # - reportgenerator -reports:*/coverage..xml -targetdir:Report -reporttypes:Html
 
 artifacts:
   files:
-    - '**/*.trx'
-    - 'Report/**/*'
+    - '*/.trx'
+    - 'Report/*/'
