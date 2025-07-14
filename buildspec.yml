@@ -1,17 +1,22 @@
 version: 0.2
 
+env:
+  variables:
+    DOTNET_ROOT: "/root/dotnet"
+  paths:
+    - "/root/dotnet"
+    - "/root/.dotnet/tools"
+
 phases:
   install:
     commands:
       - echo "Installing .NET 9 Preview manually..."
       - curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
       - chmod +x dotnet-install.sh
-      - ./dotnet-install.sh --version 9.0.302 --install-dir /root/dotnet
-      - export PATH=$PATH:/root/dotnet
+      - ./dotnet-install.sh --version 9.0.302 --install-dir $DOTNET_ROOT
       - dotnet --version
       - echo "Installing ReportGenerator..."
       - dotnet tool install -g dotnet-reportgenerator-globaltool
-      - export PATH="$PATH:/root/.dotnet/tools"
   pre_build:
     commands:
       - echo Restoring dependencies...
