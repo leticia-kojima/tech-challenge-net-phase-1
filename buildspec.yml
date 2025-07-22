@@ -15,15 +15,20 @@ phases:
       - ./dotnet-install.sh --version 9.0.0 --runtime dotnet --install-dir /root/dotnet
       - export PATH=/root/dotnet:$PATH
       - dotnet --version
-      # - echo "Instalando ReportGenerator global tool"
-      # - dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.8      
       - export PATH="$PATH:/root/.dotnet/tools"
+      - echo "Instalando Docker (caso esteja em ambiente customizado)"
+      - nohup /usr/local/bin/dockerd-entrypoint.sh &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+      - echo "Docker disponível"
 
   pre_build:
     commands:
       - export PATH=/root/dotnet:$PATH:/root/.dotnet/tools
       - echo "Restaurando dependências"
       - dotnet restore
+      - echo "Autenticando com ECR"
+      - $(aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 120479167729.dkr.ecr.us-east-2.amazonaws.com)
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
     commands:
@@ -32,8 +37,15 @@ phases:
       - dotnet build --no-restore --configuration Release
       - echo "Executando testes"
       - dotnet test --configuration Release --no-restore --logger trx --results-directory TestResults /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"XPlat Code Coverage"
-      # - echo "Gerando relatório de cobertura"
-      # - reportgenerator -reports:*/coverage..xml -targetdir:Report -reporttypes:Html
+      - echo "Construindo imagem Docker"
+      - docker build -t fcg:$IMAGE_TAG -f src/FCG.API/Dockerfile .
+      - docker tag fcg:$IMAGE_TAG 120479167729.dkr.ecr.us-east-2.amazonaws.com/ecr/fcg:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo "Subindo imagem para o ECR"
+      - docker push 120479167729.dkr.ecr.us-east-2.amazonaws.com/ecr/fcg:$IMAGE_TAG
+      - echo "Build e push concluídos com sucesso."
 
 artifacts:
   files:
