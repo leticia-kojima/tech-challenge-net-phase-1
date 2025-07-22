@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Dependency Injection - DI
 
+builder.Configuration.AddEnvironmentVariables();
+
 var services = builder.Services;
 var configuration = builder.Configuration;
 
