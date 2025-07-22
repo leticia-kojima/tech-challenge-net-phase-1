@@ -27,7 +27,7 @@ phases:
       - echo "Restaurando dependências"
       - dotnet restore
       - echo "Autenticando com ECR"
-      - $(aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 120479167729.dkr.ecr.us-east-2.amazonaws.com)
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 120479167729.dkr.ecr.us-east-2.amazonaws.com
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
