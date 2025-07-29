@@ -26,9 +26,12 @@ services.ConfigureSettings(configuration)
 #endregion
 
 #region Serilog
-
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
+    .Enrich.FromLogContext()
+    .WriteTo.NewRelicLogs(
+        licenseKey: builder.Configuration["NewRelic:LicenseKey"],
+        applicationName: builder.Configuration["NewRelic:ApplicationName"])
     .CreateLogger();
 
 builder.Host.UseSerilog();
