@@ -25,6 +25,25 @@ RUN dotnet publish "./FCG.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
+
+# Install dependencies and New Relic .NET agent
+RUN apt-get update && apt-get install -y wget ca-certificates gnupg \
+ && echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
+ && wget https://download.newrelic.com/548C16BF.gpg \
+ && apt-key add 548C16BF.gpg \
+ && apt-get update \
+ && apt-get install -y newrelic-dotnet-agent \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Environment variables for New Relic
+ENV CORECLR_ENABLE_PROFILING=1 \
+    CORECLR_PROFILER={36032161-FFC0-4B61-B559-F6C5D41BAE5A} \
+    CORECLR_NEWRELIC_HOME=/usr/local/newrelic-dotnet-agent \
+    CORECLR_PROFILER_PATH=/usr/local/newrelic-dotnet-agent/libNewRelicProfiler.so \
+    NEW_RELIC_LICENSE_KEY=0d3720495f956ef5e1e571efffcac292FFFFNRAL \
+    NEW_RELIC_APP_NAME="FGC"
+
 ENTRYPOINT ["dotnet", "FCG.API.dll"]
