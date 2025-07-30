@@ -22,6 +22,11 @@ public static class FCGInfrastructureModule
         IConfiguration configuration
     )
     {
+        var connectionMySql = configuration.GetConnectionString("FCGCommands");
+        Console.WriteLine($"MySQL Connection String: {connectionMySql}");
+        
+        var connectionMongo = configuration.GetConnectionString("FCGQueries");
+        Console.WriteLine($"Mongo Connection String: {connectionMongo}");
         services.AddDbContext<FCGCommandsDbContext>(options => options
             .UseMySql(
                 configuration.GetConnectionString("FCGCommands"),
