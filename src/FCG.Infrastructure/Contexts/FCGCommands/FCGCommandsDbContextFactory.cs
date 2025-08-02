@@ -18,7 +18,18 @@ public class FCGCommandsDbContextFactory : IDesignTimeDbContextFactory<FCGComman
 
     public FCGCommandsDbContext CreateDbContext(string[] args)
     {
-        var connectionString = _configuration.GetConnectionString("FCGCommands");
+        var connectionString = Environment.GetEnvironmentVariable("FCGCommands");
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Project.GetDirectory("FCG.API"))
+                .AddJsonFile("appsettings.json", optional: true)
+                .Build();
+
+            connectionString = configuration.GetConnectionString("FCGCommands");
+        }
+
         var builder = new DbContextOptionsBuilder<FCGCommandsDbContext>();
 
         builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));

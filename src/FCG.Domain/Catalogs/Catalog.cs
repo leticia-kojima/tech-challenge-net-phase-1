@@ -24,7 +24,7 @@ public class Catalog : EntityBase
     public virtual IReadOnlyCollection<Game> Games
     {
         get => _games.AsReadOnly();
-        private set => _games = [.. value];
+        private set => _games = value is not null ? [.. value] : new List<Game>();
     }
 
     public void SetData(string name, string description)

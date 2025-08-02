@@ -22,14 +22,20 @@ public static class FCGInfrastructureModule
         IConfiguration configuration
     )
     {
+        var mySqlConnection = Environment.GetEnvironmentVariable("FCGCommands")
+                          ?? configuration.GetConnectionString("FCGCommands");
+
+        var mongoConnection = Environment.GetEnvironmentVariable("FCGQueries")
+                              ?? configuration.GetConnectionString("FCGQueries");
+
         services.AddDbContext<FCGCommandsDbContext>(options => options
             .UseMySql(
-                configuration.GetConnectionString("FCGCommands"),
-                ServerVersion.AutoDetect(configuration.GetConnectionString("FCGCommands"))
+                mySqlConnection,
+                ServerVersion.AutoDetect(mySqlConnection)
             )
         );
         services.AddScoped<IMongoDbConnection>(sp =>
-            MongoDbConnection.FromConnectionString(configuration.GetConnectionString("FCGQueries"))
+            MongoDbConnection.FromConnectionString(mongoConnection)
         );
 
         services.AddScoped<FCGQueriesDbContext>();
