@@ -291,3 +291,17 @@ As migrações do banco de dados são aplicadas automaticamente quando a aplica�
     ```
 
 Também é possível fazer a remoção e reversão das *migrations* e alterações no banco de dados, caso necessário consulte a opção de ajuda do EF Core `Get-Help EntityFramework`. Para informações detalhadas sobre comandos, parâmetros adicionais ou solução de problemas, consulte a [documentação oficial do EF Core](https://learn.microsoft.com/ef/core/cli/powershell).
+
+## Monitoramento com New Relic
+
+O New Relic é uma plataforma de monitoramento de aplicações que permite acompanhar métricas de desempenho, rastrear erros e obter insights em tempo real sobre o funcionamento do sistema. Ele facilita a identificação de gargalos e a análise de logs, contribuindo para a estabilidade e a evolução do projeto.
+
+No contexto deste projeto, o New Relic já está configurado para monitoramento automático:
+
+- **Docker:** O agente do New Relic está instalado e configurado no `Dockerfile` do projeto, garantindo que, ao subir o container, o monitoramento seja iniciado automaticamente sem necessidade de passos adicionais.
+- **Serilog:** O Serilog está integrado ao New Relic para envio de logs estruturados, permitindo rastreamento detalhado de eventos e erros diretamente no painel do New Relic.
+
+Com a conta e a licença já configuradas, basta executar a aplicação normalmente para que as métricas e logs sejam enviados automaticamente para o painel do New Relic.
+
+> Para ajustes avançados ou personalização, consulte a [documentação oficial do New Relic para .NET](https://docs.newrelic.com/docs/apm/agents/net-agent/).
+

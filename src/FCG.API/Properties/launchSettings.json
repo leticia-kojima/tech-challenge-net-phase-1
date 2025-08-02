@@ -3,7 +3,12 @@
     "http": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CORECLR_ENABLE_PROFILING": "1",
+        "CORECLR_PROFILER": "{36032161-FFC0-4B61-B559-F6C5D41BAE5A}",
+        "CORECLR_PROFILER_PATH": "C:\\Program Files\\New Relic\\.NET Agent\\NewRelic.Profiler.dll",
+        "NEW_RELIC_APP_NAME": "FCG.API",
+        "NEW_RELIC_LICENSE_KEY": "0d3720495f956ef5e1e571efffcac292FFFFNRAL"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5045"
