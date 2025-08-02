@@ -21,6 +21,11 @@ phases:
 
         echo "Última tag: $LATEST_TAG"
 
+        echo "Printando Connection Strings:"
+        echo "ConnectionStrings__FCGCommands: $FCGCommands"
+        echo "ConnectionStrings__FCGQueries: $FCGQueries"
+
+
         echo "Executa comandos via SSM na instância EC2"
 
         COMMAND_ID=$(aws ssm send-command \
