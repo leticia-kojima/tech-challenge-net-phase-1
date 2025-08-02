@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Buscando imagem ECR"
+      - IMAGE_TAG=$(aws ecr describe-images \
+          --repository-name ecr/fcg \
+          --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' \
+          --output text)
+      - echo "Push recente: $IMAGE_TAG"
+      - IMAGE_URI=120479167729.dkr.ecr.us-east-2.amazonaws.com/ecr/fcg:$IMAGE_TAG
+      - echo "Deploy na EC2 com imagem $IMAGE_URI"
+      - aws ssm send-command \
+          --document-name "DeployDockerImageFCG" \
+          --instance-ids i-02fc9599545e6e3d0 \
+          --parameters commands=["docker pull $IMAGE_URI", "docker stop app || true", "docker rm app || true", "docker run -d --name app $IMAGE_URI"] \
+          --region us-east-2
