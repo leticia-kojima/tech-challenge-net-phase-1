@@ -1,18 +1,37 @@
 version: 0.2
 
+env:
+  variables:
+    REPO_NAME: "ecr/fcg"
+    REGIAO: "us-east-2"
+    CONTA: "120479167729"
+    INSTANCE_ID: "i-02fc9599545e6e3d0"
+
 phases:
   build:
     commands:
-      - echo "Buscando imagem ECR"
-      - IMAGE_TAG=$(aws ecr describe-images \
-          --repository-name ecr/fcg \
-          --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' \
+      - |
+        echo "Busca última imagem publicada no ECR"
+
+        LATEST_TAG=$(aws ecr describe-images \
+          --repository-name $REPO_NAME \
+          --region $REGIAO \
+          --query 'sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]' \
           --output text)
-      - echo "Push recente: $IMAGE_TAG"
-      - IMAGE_URI=120479167729.dkr.ecr.us-east-2.amazonaws.com/ecr/fcg:$IMAGE_TAG
-      - echo "Deploy na EC2 com imagem $IMAGE_URI"
-      - aws ssm send-command \
-          --document-name "DeployDockerImageFCG" \
-          --instance-ids i-02fc9599545e6e3d0 \
-          --parameters commands=["docker pull $IMAGE_URI", "docker stop app || true", "docker rm app || true", "docker run -d --name app $IMAGE_URI"] \
-          --region us-east-2
+
+        echo "Última tag: $LATEST_TAG"
+
+        echo "Executa comandos via SSM na instância EC2"
+
+        aws ssm send-command \
+          --document-name "AWS-RunShellScript" \
+          --instance-ids "$INSTANCE_ID" \
+          --comment "Deploy via CodeBuild com imagem mais recente do ECR" \
+          --parameters "commands=[
+            \"aws ecr get-login-password --region $REGIAO | docker login --username AWS --password-stdin $CONTA.dkr.ecr.$REGIAO.amazonaws.com\",
+            \"docker pull $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:latest\",
+            \"docker stop app || true\",
+            \"docker rm app || true\",
+            \"docker run -d -p 8080:8080 --name app $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:latest\"
+          ]" \
+          --region $REGIAO
