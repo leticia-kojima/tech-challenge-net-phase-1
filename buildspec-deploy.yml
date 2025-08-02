@@ -23,7 +23,7 @@ phases:
 
         echo "Executa comandos via SSM na instância EC2"
 
-        aws ssm send-command \
+        COMMAND_ID=$(aws ssm send-command \
           --document-name "AWS-RunShellScript" \
           --instance-ids "$INSTANCE_ID" \
           --comment "Deploy via CodeBuild com imagem mais recente do ECR" \
@@ -33,6 +33,43 @@ phases:
             \"docker stop app || true\",
             \"docker rm app || true\",
             \"docker run -d -e ConnectionStrings__FCGCommands=$FCGCommands -e ConnectionStrings__FCGQueries=$FCGQueries -e ASPNETCORE_ENVIRONMENT=Production -p 8080:8080 --name app $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:$LATEST_TAG\"
-          ]" \ 
-          --region $REGIAO \ 
+          ]" \
+          --region $REGIAO \
+          --output text \
+          --query "Command.CommandId")
+
+        echo "Comando enviado: $COMMAND_ID"
+
+        # Loop to check execution status
+        echo "Aguardando execução do comando na instância EC2..."
+
+        STATUS="InProgress"
+        while [ "$STATUS" = "InProgress" ] || [ "$STATUS" = "Pending" ]; do
+          sleep 5
+          STATUS=$(aws ssm get-command-invocation \
+            --command-id "$COMMAND_ID" \
+            --instance-id "$INSTANCE_ID" \
+            --region "$REGIAO" \
+            --query "Status" \
+            --output text)
+          echo "Status atual: $STATUS"
+        done
+
+        if [ "$STATUS" != "Success" ]; then
+          echo "Comando falhou com status: $STATUS"
+          aws ssm get-command-invocation \
+            --command-id "$COMMAND_ID" \
+            --instance-id "$INSTANCE_ID" \
+            --region "$REGIAO" \
+            --query "StandardErrorContent" \
+            --output text
+          exit 1
+        fi
+
+        echo "Comando executado com sucesso:"
+        aws ssm get-command-invocation \
+          --command-id "$COMMAND_ID" \
+          --instance-id "$INSTANCE_ID" \
+          --region "$REGIAO" \
+          --query "StandardOutputContent" \
           --output text
