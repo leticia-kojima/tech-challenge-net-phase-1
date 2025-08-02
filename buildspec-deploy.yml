@@ -33,5 +33,6 @@ phases:
             \"docker stop app || true\",
             \"docker rm app || true\",
             \"docker run -d -e ConnectionStrings__FCGCommands=$FCGCommands -e ConnectionStrings__FCGQueries=$FCGQueries -e ASPNETCORE_ENVIRONMENT=Production -p 8080:8080 --name app $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:$LATEST_TAG\"
-          ]" \
-          --region $REGIAO
+          ]" \ 
+          --region $REGIAO \ 
+          --output text
