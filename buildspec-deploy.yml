@@ -21,6 +21,11 @@ phases:
 
         echo "Última tag: $LATEST_TAG"
 
+        echo "Printando Connection Strings:"
+        echo "ConnectionStrings__FCGCommands: $FCGCommands"
+        echo "ConnectionStrings__FCGQueries: $FCGQueries"
+
+
         echo "Executa comandos via SSM na instância EC2"
 
         COMMAND_ID=$(aws ssm send-command \
@@ -32,7 +37,7 @@ phases:
             \"docker pull $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:$LATEST_TAG\",
             \"docker stop app || true\",
             \"docker rm app || true\",
-            \"docker run -d -e ConnectionStrings__FCGCommands=$FCGCommands -e ConnectionStrings__FCGQueries=$FCGQueries -e ASPNETCORE_ENVIRONMENT=Production -p 8080:8080 --name app $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:$LATEST_TAG\"
+            \"docker run -d -e ConnectionStrings__FCGCommands='${FCGCommands}' -e ConnectionStrings__FCGQueries='${FCGQueries}' -e ASPNETCORE_ENVIRONMENT=Production -p 8080:8080 --name app $CONTA.dkr.ecr.$REGIAO.amazonaws.com/$REPO_NAME:$LATEST_TAG\"
           ]" \
           --region $REGIAO \
           --output text \
