@@ -305,3 +305,38 @@ Com a conta e a licença já configuradas, basta executar a aplicação normalme
 
 > Para ajustes avançados ou personalização, consulte a [documentação oficial do New Relic para .NET](https://docs.newrelic.com/docs/apm/agents/net-agent/).
 
+
+## 🚀 Pipeline de CI/CD na AWS
+
+Este projeto utiliza uma pipeline de CI (Integração Contínua) automatizada com a **AWS** para um projeto `.NET 9` hospedado no **GitHub**. A pipeline está configurada para compilar, testar e empacotar a aplicação como uma imagem Docker, que é armazenada no **Amazon ECR** (Elastic Container Registry). O processo é gerenciado pelo **AWS CodeBuild**, e definido no arquivo `buildspec.yml`.
+
+---
+
+### 🔗 Integração com GitHub
+
+- O repositório está hospedado no GitHub.
+- A branch monitorada para CI é: `feat/ci-cd`.
+- A AWS está conectada ao GitHub via integração direta.
+- Webhooks são utilizados para disparar builds automaticamente a cada **Pull Request (PR)** criado na branch `feat/ci-cd`.
+
+---
+
+### ⚙️ Etapas do CI
+
+O arquivo `buildspec.yml` orquestra todo o processo. Abaixo estão as etapas realizadas:
+
+1. **Restore e Build do Projeto**
+   - O SDK do .NET 9 é utilizado para restaurar dependências e compilar a aplicação.
+
+2. **Execução de Testes**
+   - Os testes automatizados são executados.
+   - Um relatório de cobertura de testes é gerado.
+
+3. **Criação da Imagem Docker**
+   - A imagem é construída com base no `Dockerfile` presente no projeto.
+
+4. **Push para o Amazon ECR**
+   - A imagem Docker é enviada para o repositório correspondente no ECR.
+
+---
+
