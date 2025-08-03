@@ -315,7 +315,7 @@ Este projeto é desenvolvido com **.NET 9** e utiliza um pipeline automatizado d
 
 ---
 
-## 🛠️ Visão Geral do Pipeline CI
+### 🛠️ Visão Geral do Pipeline CI
 
 O pipeline de CI é responsável por:
 
@@ -328,7 +328,7 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 ---
 
-## 🔗 Integração GitHub ↔️ AWS
+### 🔗 Integração GitHub ↔️ AWS
 
 - O repositório está conectado à AWS via integração direta com o GitHub.
 - A branch observada para CI é `feat/ci-cd`.
@@ -336,28 +336,28 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 ---
 
-## 🧪 Etapas do Pipeline
+### 🧪 Etapas do Pipeline
 
-### 1. Instalação
+#### 1. Instalação
 
 - Remove o arquivo `global.json` (caso presente) para evitar conflitos com SDKs instalados.
 - Faz download e instala manualmente o **.NET SDK 9.0.302** e o **.NET Runtime 9.0** via script oficial da Microsoft.
 - Inicializa e valida o ambiente Docker (necessário em ambientes personalizados do CodeBuild).
 
-### 2. Pré-Build
+#### 2. Pré-Build
 
 - Restaura as dependências com `dotnet restore`.
 - Realiza login no Amazon ECR.
 - Define a variável `IMAGE_TAG` com os 7 primeiros caracteres do hash do commit.
 
-### 3. Build
+#### 3. Build
 
 - Compila a solução em modo `Release`.
 - Executa os testes automatizados com geração de cobertura de código no formato `opencover`.
 - Constrói uma imagem Docker com base no `Dockerfile` localizado em `src/FCG.API/`.
 - Tagueia a imagem com o valor de `IMAGE_TAG`.
 
-### 4. Pós-Build
+#### 4. Pós-Build
 
 - Realiza o `push` da imagem Docker para o repositório no **Amazon ECR**.
 - Exporta os artefatos de teste (arquivos `.trx` e relatórios de cobertura).
@@ -366,14 +366,14 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 ---
 
 
-# 🎯 Entrega Contínua (CD) com AWS CodePipeline
+## 🎯 Entrega Contínua (CD) com AWS CodePipeline
 
 Este projeto utiliza o serviço **AWS CodePipeline** para orquestrar a etapa de **Entrega Contínua (CD)**, automatizando o deploy da aplicação sempre que há alterações relevantes na branch configurada.
 O arquivo `buildspec-deploy.yml` define as etapas de entrega contínua da aplicação, utilizando **AWS CodePipeline** e **AWS SSM** para orquestrar o deploy automático em uma instância **EC2** a partir da imagem mais recente publicada no **Amazon ECR**.
 
 ---
 
-## 🧬 Estrutura do Pipeline de CD
+### 🧬 Estrutura do Pipeline de CD
 
 O pipeline de CD é composto pelas seguintes fases:
 
@@ -473,7 +473,7 @@ aws ecr describe-images \
   --output text
 ---
 
-## 🔐 Segurança
+### 🔐 Segurança
 
 - O pipeline utiliza **permissões específicas via IAM** para acessar recursos como **GitHub, ECR e EC2**.
 - As **credenciais e variáveis de ambiente são tratadas de forma segura**, seguindo boas práticas da AWS.
@@ -481,7 +481,7 @@ aws ecr describe-images \
 ---
 
 
-## 📌 Resumo do Processo
+### 📌 Resumo do Processo
 
 1. Merge na branch `feat/ci-cd` no GitHub.
 2. Webhook aciona o pipeline no CodePipeline.
