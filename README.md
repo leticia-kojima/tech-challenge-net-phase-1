@@ -308,35 +308,56 @@ Com a conta e a licença já configuradas, basta executar a aplicação normalme
 
 ## 🚀 Pipeline de CI/CD na AWS
 
-Este projeto utiliza uma pipeline de CI (Integração Contínua) automatizada com a **AWS** para um projeto `.NET 9` hospedado no **GitHub**. A pipeline está configurada para compilar, testar e empacotar a aplicação como uma imagem Docker, que é armazenada no **Amazon ECR** (Elastic Container Registry). O processo é gerenciado pelo **AWS CodeBuild**, e definido no arquivo `buildspec.yml`.
+Este projeto é desenvolvido com **.NET 9** e utiliza um pipeline automatizado de **CI/CD** hospedado na **AWS**, utilizando os serviços **CodeBuild** e **Amazon ECR**. A integração contínua ocorre a partir de Pull Requests na branch `feat/ci-cd` do repositório no GitHub.
 
 ---
 
-### 🔗 Integração com GitHub
+## 🚀 Visão Geral do Pipeline
 
-- O repositório está hospedado no GitHub.
-- A branch monitorada para CI é: `feat/ci-cd`.
-- A AWS está conectada ao GitHub via integração direta.
-- Webhooks são utilizados para disparar builds automaticamente a cada **Pull Request (PR)** criado na branch `feat/ci-cd`.
+O pipeline de CI é responsável por:
+
+- Restaurar dependências e compilar a aplicação.
+- Executar testes automatizados e gerar relatório de cobertura.
+- Criar uma imagem Docker da aplicação.
+- Fazer push da imagem para um repositório privado no **Amazon ECR**.
+
+A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `buildspec.yml`.
 
 ---
 
-### ⚙️ Etapas do CI
+## 🔗 Integração GitHub ↔️ AWS
 
-O arquivo `buildspec.yml` orquestra todo o processo. Abaixo estão as etapas realizadas:
+- O repositório está conectado à AWS via integração direta com o GitHub.
+- A branch observada para CI é `feat/ci-cd`.
+- A cada **Pull Request** para essa branch, um **gatilho automático via webhook** dispara o processo de CI.
 
-1. **Restore e Build do Projeto**
-   - O SDK do .NET 9 é utilizado para restaurar dependências e compilar a aplicação.
+---
 
-2. **Execução de Testes**
-   - Os testes automatizados são executados.
-   - Um relatório de cobertura de testes é gerado.
+## 🧪 Etapas do Pipeline
 
-3. **Criação da Imagem Docker**
-   - A imagem é construída com base no `Dockerfile` presente no projeto.
+### 1. Instalação
 
-4. **Push para o Amazon ECR**
-   - A imagem Docker é enviada para o repositório correspondente no ECR.
+- Remove o arquivo `global.json` (caso presente) para evitar conflitos com SDKs instalados.
+- Faz download e instala manualmente o **.NET SDK 9.0.302** e o **.NET Runtime 9.0** via script oficial da Microsoft.
+- Inicializa e valida o ambiente Docker (necessário em ambientes personalizados do CodeBuild).
+
+### 2. Pré-Build
+
+- Restaura as dependências com `dotnet restore`.
+- Realiza login no Amazon ECR.
+- Define a variável `IMAGE_TAG` com os 7 primeiros caracteres do hash do commit.
+
+### 3. Build
+
+- Compila a solução em modo `Release`.
+- Executa os testes automatizados com geração de cobertura de código no formato `opencover`.
+- Constrói uma imagem Docker com base no `Dockerfile` localizado em `src/FCG.API/`.
+- Tagueia a imagem com o valor de `IMAGE_TAG`.
+
+### 4. Pós-Build
+
+- Realiza o `push` da imagem Docker para o repositório no **Amazon ECR**.
+- Exporta os artefatos de teste (arquivos `.trx` e relatórios de cobertura).
 
 ---
 
