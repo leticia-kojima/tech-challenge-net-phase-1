@@ -434,6 +434,7 @@ O pipeline de CD é composto pelas seguintes fases:
 
 #### Comandos executados via AWS SSM
 
+```bash
 aws ssm send-command \
   --document-name "AWS-RunShellScript" \
   --instance-ids "$INSTANCE_ID" \
@@ -443,6 +444,7 @@ aws ssm send-command \
     'docker rm app || true',
     'docker run -d -e VARS... -p 8080:8080 --name app <imagem>'
   ]"
+```
   
 #### EC2 com Docker
 - A aplicação roda em um container Docker escutando na porta 8080.
