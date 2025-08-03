@@ -470,6 +470,9 @@ aws ecr describe-images \
   --region $REGIAO \
   --query 'sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]' \
   --output text
+
+```
+
 ---
 
 ### 🔐 Segurança
