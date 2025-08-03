@@ -309,13 +309,13 @@ Com a conta e a licença já configuradas, basta executar a aplicação normalme
 
 
 
-## 🚀 Pipeline de CI/CD na AWS
+## Pipeline de CI/CD na AWS
 
 Este projeto é desenvolvido com **.NET 9** e utiliza um pipeline automatizado de **CI/CD** hospedado na **AWS**, utilizando os serviços **CodeBuild** e **Amazon ECR**. A integração contínua ocorre a partir de Pull Requests na branch `feat/ci-cd` do repositório no GitHub.
 
 ---
 
-### 🛠️ Visão Geral do Pipeline CI
+### Visão Geral do Pipeline CI
 
 O pipeline de CI é responsável por:
 
@@ -328,7 +328,7 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 ---
 
-### 🔗 Integração GitHub ↔️ AWS
+### Integração GitHub AWS
 
 - O repositório está conectado à AWS via integração direta com o GitHub.
 - A branch observada para CI é `feat/ci-cd`.
@@ -336,7 +336,7 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 ---
 
-### 🧪 Etapas do Pipeline
+### Etapas do Pipeline
 
 #### 1. Instalação
 
@@ -365,20 +365,20 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 ---
 
 
-## 🎯 Entrega Contínua (CD) com AWS CodePipeline
+## Entrega Contínua (CD) com AWS CodePipeline
 
 Este projeto utiliza o serviço **AWS CodePipeline** para orquestrar a etapa de **Entrega Contínua (CD)**, automatizando o deploy da aplicação sempre que há alterações relevantes na branch configurada.
 O arquivo `buildspec-deploy.yml` define as etapas de entrega contínua da aplicação, utilizando **AWS CodePipeline** e **AWS SSM** para orquestrar o deploy automático em uma instância **EC2** a partir da imagem mais recente publicada no **Amazon ECR**.
 
 ---
 
-### 🧬 Estrutura do Pipeline de CD
+### Estrutura do Pipeline de CD
 
 O pipeline de CD é composto pelas seguintes fases:
 
 ---
 
-### 🧩 1. Source (GitHub + Webhook)
+### 1. Source (GitHub + Webhook)
 
 - O **CodePipeline** está integrado com o **GitHub** como fonte do projeto.
 - Sempre que um **merge** é realizado na branch `feat/ci-cd`, um **webhook** é acionado automaticamente, iniciando o processo de deploy.
@@ -386,7 +386,7 @@ O pipeline de CD é composto pelas seguintes fases:
 
 ---
 
-### 🐳 2. Imagem Docker no ECR
+### 2. Imagem Docker no ECR
 
 - Após iniciado, o pipeline acessa o serviço **Amazon ECR (Elastic Container Registry)**.
 - Ele busca a **última imagem Docker** publicada durante o processo de CI (etapa de build).
@@ -394,7 +394,7 @@ O pipeline de CD é composto pelas seguintes fases:
 
 ---
 
-### 🧾 3. Docker Run com Variáveis de Ambiente
+### 3. Docker Run com Variáveis de Ambiente
 
 - Com a imagem em mãos, o pipeline executa o comando `docker run` utilizando:
   - As **variáveis de ambiente** (como conexão com MongoDB e MySQL).
@@ -403,7 +403,7 @@ O pipeline de CD é composto pelas seguintes fases:
 
 ---
 
-### 🖥️ 4. Instância EC2 (Execução)
+### 4. Instância EC2 (Execução)
 
 - A aplicação é implantada em uma **instância EC2** provisionada automaticamente.
 - A instância executa o **Docker com a imagem mais recente** e:
@@ -413,7 +413,7 @@ O pipeline de CD é composto pelas seguintes fases:
 
 ---
 
-### 🔁 Fluxo de Deploy Automatizado
+### Fluxo de Deploy Automatizado
 
 1. **Trigger de Deploy**
    - Toda vez que ocorre um **merge na branch `feat/ci-cd`**, um **webhook** do GitHub aciona o **CodePipeline**.
@@ -430,9 +430,9 @@ O pipeline de CD é composto pelas seguintes fases:
 
 ---
 
-### ⚙️ Detalhes Técnicos do buildspec-deploy.yml
+### Detalhes Técnicos do buildspec-deploy.yml
 
-####🧠 Comandos executados via AWS SSM
+#### Comandos executados via AWS SSM
 
 aws ssm send-command \
   --document-name "AWS-RunShellScript" \
@@ -444,16 +444,16 @@ aws ssm send-command \
     'docker run -d -e VARS... -p 8080:8080 --name app <imagem>'
   ]"
   
-####📡 EC2 com Docker
+#### EC2 com Docker
 - A aplicação roda em um container Docker escutando na porta 8080.
 - A instância EC2 é previamente configurada com Docker instalado e acesso via AWS SSM habilitado.
 
-####🔐 Autenticação com ECR
+#### Autenticação com ECR
 
 aws ecr get-login-password --region $REGIAO | \
 docker login --username AWS --password-stdin $CONTA.dkr.ecr.$REGIAO.amazonaws.com
 
-#####✅ Verificação de Status do Deploy
+##### Verificação de Status do Deploy
 O script realiza polling para verificar o status da execução remota via SSM:
 
 aws ssm get-command-invocation \
@@ -462,7 +462,7 @@ aws ssm get-command-invocation \
   --query "Status"
 Em caso de erro, os logs padrão de erro são exibidos e o build é interrompido automaticamente.
 
-#### 🔍 Busca da Última Imagem Publicada
+#### Busca da Última Imagem Publicada
 
 ```bash
 aws ecr describe-images \
@@ -475,7 +475,7 @@ aws ecr describe-images \
 
 ---
 
-### 🔐 Segurança
+### Segurança
 
 - O pipeline utiliza **permissões específicas via IAM** para acessar recursos como **GitHub, ECR e EC2**.
 - As **credenciais e variáveis de ambiente são tratadas de forma segura**, seguindo boas práticas da AWS.
@@ -483,7 +483,7 @@ aws ecr describe-images \
 ---
 
 
-### 📌 Resumo do Processo
+### Resumo do Processo
 
 1. Merge na branch `feat/ci-cd` no GitHub.
 2. Webhook aciona o pipeline no CodePipeline.
