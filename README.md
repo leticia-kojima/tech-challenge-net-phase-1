@@ -363,3 +363,127 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 ---
 
+
+# 🎯 Entrega Contínua (CD) com AWS CodePipeline
+
+Este projeto utiliza o serviço **AWS CodePipeline** para orquestrar a etapa de **Entrega Contínua (CD)**, automatizando o deploy da aplicação sempre que há alterações relevantes na branch configurada.
+O arquivo `buildspec-deploy.yml` define as etapas de entrega contínua da aplicação, utilizando **AWS CodePipeline** e **AWS SSM** para orquestrar o deploy automático em uma instância **EC2** a partir da imagem mais recente publicada no **Amazon ECR**.
+
+---
+
+## 🧬 Estrutura do Pipeline de CD
+
+O pipeline de CD é composto pelas seguintes fases:
+
+---
+
+### 🧩 1. Source (GitHub + Webhook)
+
+- O **CodePipeline** está integrado com o **GitHub** como fonte do projeto.
+- Sempre que um **merge** é realizado na branch `feat/ci-cd`, um **webhook** é acionado automaticamente, iniciando o processo de deploy.
+- Essa ação garante que o pipeline esteja sempre atualizado com as últimas alterações aprovadas no repositório.
+
+---
+
+### 🐳 2. Imagem Docker no ECR
+
+- Após iniciado, o pipeline acessa o serviço **Amazon ECR (Elastic Container Registry)**.
+- Ele busca a **última imagem Docker** publicada durante o processo de CI (etapa de build).
+- A imagem está previamente **tagueada com os 7 primeiros caracteres do commit SHA**, garantindo versionamento claro e rastreabilidade.
+
+---
+
+### 🧾 3. Docker Run com Variáveis de Ambiente
+
+- Com a imagem em mãos, o pipeline executa o comando `docker run` utilizando:
+  - As **variáveis de ambiente** (como conexão com MongoDB e MySQL).
+  - As configurações específicas de runtime da aplicação.
+- Essas variáveis são configuradas dentro do pipeline e mantidas **seguras e gerenciadas pela AWS**.
+
+---
+
+### 🖥️ 4. Instância EC2 (Execução)
+
+- A aplicação é implantada em uma **instância EC2** provisionada automaticamente.
+- A instância executa o **Docker com a imagem mais recente** e:
+  - Expõe a aplicação na **porta 8080**.
+  - Garante **alta disponibilidade** do container em execução.
+- O container passa a disponibilizar a **API .NET 9** acessível via endpoint da instância.
+
+---
+
+### 🔁 Fluxo de Deploy Automatizado
+
+1. **Trigger de Deploy**
+   - Toda vez que ocorre um **merge na branch `feat/ci-cd`**, um **webhook** do GitHub aciona o **CodePipeline**.
+   - O pipeline busca a imagem Docker mais recente do **ECR**.
+
+2. **Execução Remota via SSM**
+   - O `buildspec-deploy.yml` usa o **AWS SSM** para executar comandos remotamente na instância EC2.
+   - A imagem Docker mais recente é **baixada, parada anterior (se existir), removida** e uma nova instância do container é executada.
+
+3. **Injeção de Variáveis de Ambiente**
+   - As variáveis de conexão com o **MongoDB** e **MySQL** são injetadas dinamicamente no comando `docker run`, via:
+     - `ConnectionStrings__FCGCommands`
+     - `ConnectionStrings__FCGQueries`
+
+---
+
+### ⚙️ Detalhes Técnicos do buildspec-deploy.yml
+
+####🧠 Comandos executados via AWS SSM
+
+aws ssm send-command \
+  --document-name "AWS-RunShellScript" \
+  --instance-ids "$INSTANCE_ID" \
+  --parameters "commands=[
+    'docker pull <imagem>',
+    'docker stop app || true',
+    'docker rm app || true',
+    'docker run -d -e VARS... -p 8080:8080 --name app <imagem>'
+  ]"
+  
+####📡 EC2 com Docker
+- A aplicação roda em um container Docker escutando na porta 8080.
+- A instância EC2 é previamente configurada com Docker instalado e acesso via AWS SSM habilitado.
+
+####🔐 Autenticação com ECR
+
+aws ecr get-login-password --region $REGIAO | \
+docker login --username AWS --password-stdin $CONTA.dkr.ecr.$REGIAO.amazonaws.com
+
+#####✅ Verificação de Status do Deploy
+O script realiza polling para verificar o status da execução remota via SSM:
+
+aws ssm get-command-invocation \
+  --command-id "$COMMAND_ID" \
+  --instance-id "$INSTANCE_ID" \
+  --query "Status"
+Em caso de erro, os logs padrão de erro são exibidos e o build é interrompido automaticamente.
+
+#### 🔍 Busca da Última Imagem Publicada
+
+```bash
+aws ecr describe-images \
+  --repository-name $REPO_NAME \
+  --region $REGIAO \
+  --query 'sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]' \
+  --output text
+
+## 🔐 Segurança
+
+- O pipeline utiliza **permissões específicas via IAM** para acessar recursos como **GitHub, ECR e EC2**.
+- As **credenciais e variáveis de ambiente são tratadas de forma segura**, seguindo boas práticas da AWS.
+
+---
+
+## 📌 Resumo do Processo
+
+1. Merge na branch `feat/ci-cd` no GitHub.
+2. Webhook aciona o pipeline no CodePipeline.
+3. Busca da imagem mais recente no Amazon ECR.
+4. Instância EC2 provisionada automaticamente.
+5. Execução do `docker run` com variáveis de ambiente.
+6. Aplicação .NET 9 disponível na porta **8080**.
+
+---
