@@ -19,11 +19,7 @@ phases:
           --query 'sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]' \
           --output text)
 
-        echo "Última tag: $LATEST_TAG"
-
-        echo "Printando Connection Strings:"
-        echo "ConnectionStrings__FCGCommands: $FCGCommands"
-        echo "ConnectionStrings__FCGQueries: $FCGQueries"
+        echo "Última tag: $LATEST_TAG"       
 
 
         echo "Executa comandos via SSM na instância EC2"
