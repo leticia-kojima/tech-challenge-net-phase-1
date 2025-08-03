@@ -361,7 +361,6 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 - Realiza o `push` da imagem Docker para o repositório no **Amazon ECR**.
 - Exporta os artefatos de teste (arquivos `.trx` e relatórios de cobertura).
-- 
 
 ---
 
