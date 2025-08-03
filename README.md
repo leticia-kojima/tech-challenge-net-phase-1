@@ -456,10 +456,12 @@ docker login --username AWS --password-stdin $CONTA.dkr.ecr.$REGIAO.amazonaws.co
 ##### Verificação de Status do Deploy
 O script realiza polling para verificar o status da execução remota via SSM:
 
+```bash
 aws ssm get-command-invocation \
   --command-id "$COMMAND_ID" \
   --instance-id "$INSTANCE_ID" \
   --query "Status"
+```
 Em caso de erro, os logs padrão de erro são exibidos e o build é interrompido automaticamente.
 
 #### Busca da Última Imagem Publicada
