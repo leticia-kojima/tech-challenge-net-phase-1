@@ -308,6 +308,7 @@ Com a conta e a licença já configuradas, basta executar a aplicação normalme
 ---
 
 
+
 ## 🚀 Pipeline de CI/CD na AWS
 
 Este projeto é desenvolvido com **.NET 9** e utiliza um pipeline automatizado de **CI/CD** hospedado na **AWS**, utilizando os serviços **CodeBuild** e **Amazon ECR**. A integração contínua ocorre a partir de Pull Requests na branch `feat/ci-cd` do repositório no GitHub.
@@ -360,6 +361,7 @@ A automação é gerenciada via **AWS CodeBuild**, com definição no arquivo `b
 
 - Realiza o `push` da imagem Docker para o repositório no **Amazon ECR**.
 - Exporta os artefatos de teste (arquivos `.trx` e relatórios de cobertura).
+- 
 
 ---
 
@@ -469,6 +471,7 @@ aws ecr describe-images \
   --region $REGIAO \
   --query 'sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]' \
   --output text
+---
 
 ## 🔐 Segurança
 
@@ -476,6 +479,7 @@ aws ecr describe-images \
 - As **credenciais e variáveis de ambiente são tratadas de forma segura**, seguindo boas práticas da AWS.
 
 ---
+
 
 ## 📌 Resumo do Processo
 
@@ -485,5 +489,3 @@ aws ecr describe-images \
 4. Instância EC2 provisionada automaticamente.
 5. Execução do `docker run` com variáveis de ambiente.
 6. Aplicação .NET 9 disponível na porta **8080**.
-
----
