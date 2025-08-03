@@ -305,6 +305,8 @@ Com a conta e a licença já configuradas, basta executar a aplicação normalme
 
 > Para ajustes avançados ou personalização, consulte a [documentação oficial do New Relic para .NET](https://docs.newrelic.com/docs/apm/agents/net-agent/).
 
+---
+
 
 ## 🚀 Pipeline de CI/CD na AWS
 
@@ -312,7 +314,7 @@ Este projeto é desenvolvido com **.NET 9** e utiliza um pipeline automatizado d
 
 ---
 
-## 🚀 Visão Geral do Pipeline
+## 🛠️ Visão Geral do Pipeline CI
 
 O pipeline de CI é responsável por:
 
